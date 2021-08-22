@@ -1,0 +1,34 @@
+<template>
+	<view class="custom-fix-bottom-box" :style="{'z-index':zIndex,'background-color':bgColor,position}">
+		<slot></slot>
+	</view>
+</template>
+
+<script>
+	export default {
+		props: {
+			position: { // 定位
+				type: String,
+				default: 'fixed'
+			},
+			zIndex: { // 层级
+				type: [String, Number],
+				default: '7001'
+			},
+			bgColor: { // 背景颜色
+				type: String,
+				default: 'white'
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.custom-fix-bottom-box {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		@include safe-padding-bottom;
+	}
+</style>

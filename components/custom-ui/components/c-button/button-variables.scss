@@ -1,0 +1,175 @@
+@import  '../../theme.scss';
+
+@mixin getColor($color, $bg-color, $shadow-size, $shadow-color) {
+	color: $color;
+	background: $bg-color;
+	box-shadow: 0 4rpx $shadow-size $shadow-color;
+}
+
+
+.custom-button {
+	flex-shrink: 0;
+	padding: 0 12rpx;
+	text-align: center;
+	font-size: 0;
+	font-weight: 500;
+	@include getBorderRadius(16rpx);
+
+	image {
+		width: 40rpx;
+		height: 40rpx;
+		margin-right: 12rpx;
+		vertical-align: middle;
+	}
+
+	text {
+		font-size: 32rpx;
+		vertical-align: middle;
+	}
+
+	&::after {
+		border-color: transparent; //黑色边框去掉了
+		border-width: 4rpx;
+	}
+
+	&._bold {
+		font-weight: 700;
+	}
+
+	&._round {
+		@include getBorderRadius(160rpx);
+	}
+
+	&._success {
+		@include getColor(white, $success-color, 20rpx, rgba(128, 212, 127, 0.5));
+
+		&._plain {
+			color: $success-color;
+
+			&::after {
+				border-color: $success-color;
+			}
+		}
+	}
+
+	&._warning {
+		@include getColor(#333, $warning-color, 16rpx, rgba(246, 205, 101, 0.3));
+
+		&._plain {
+			color: $warning-color;
+
+			&::after {
+				border-color: $warning-color;
+			}
+		}
+	}
+
+	&._danger {
+		@include getColor(white, $danger-color, 20rpx, rgba(255, 137, 137, 0.5));
+
+		&._plain {
+			color: $danger-color;
+
+			&::after {
+				border-color: $danger-color;
+			}
+		}
+	}
+
+	&._info {
+		@include getColor(white, $info-color, 20rpx, rgba(192, 192, 192, 0.5));
+
+		&._plain {
+			color: #b2b2b2;
+
+			&::after {
+				border-color: #e6e6e6;
+			}
+		}
+	}
+
+	&._plain {
+		position: relative;
+		overflow: visible;
+		box-shadow: none;
+		background-color: transparent;
+	}
+
+	&._large,
+	&._middle,
+	&._small,
+	&._smallest {
+		height: 92rpx;
+		line-height: 92rpx;
+	}
+
+	&._large {
+		width: 690rpx;
+	}
+
+	&._big {
+		image {
+			width: 44rpx;
+			height: 44rpx;
+		}
+
+		width: 656rpx;
+		height: 108rpx;
+		line-height: 108rpx;
+	}
+
+	&._default {
+		width: 616rpx;
+		height: 96rpx;
+		line-height: 96rpx;
+	}
+
+	&._middle {
+		width: 580rpx;
+	}
+
+	&._small {
+		width: 420rpx;
+	}
+
+	&._smallest {
+		width: 240rpx;
+	}
+
+	&._mini {
+		width: 240rpx;
+		height: 80rpx;
+		line-height: 80rpx;
+		
+		text {
+			font-size: 30rpx;
+		}
+		
+	}
+
+	&._search {
+		width: 152rpx;
+		height: 72rpx;
+		line-height: 72rpx;
+
+		text {
+			font-size: 30rpx;
+		}
+	}
+
+	&._add {
+		width: 132rpx;
+		height: 48rpx;
+		line-height: 48rpx;
+
+		text {
+			font-size: 28rpx;
+		}
+
+		image {
+			width: 28rpx;
+			height: 28rpx;
+			margin-right: 8rpx;
+		}
+	}
+}
