@@ -14,7 +14,7 @@ export function readFile({
 	sync,
 	opts
 }) {
-	if (！encodingList.includes(encoding)) throw '编码不符合'
+	if (!encodingList.includes(encoding)) throw '编码不符合'
 	if (sync === true) {
 		try {
 			const res = fs.readFileSync(filePath, encoding, opts.position, opts.length)
@@ -51,7 +51,7 @@ export function writeFile({
 	opts
 }) {
 	encoding = encoding || 'binary'
-	if (！encodingList.includes(encoding)) throw '编码不符合'
+	if (!encodingList.includes(encoding)) throw '编码不符合'
 	if (sync === true) {
 		try {
 			$fs.writeFileSync(filePath, data, encoding)
