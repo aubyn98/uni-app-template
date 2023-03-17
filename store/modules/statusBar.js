@@ -10,10 +10,10 @@ export default {
 	mutations: {
 		initBarInfo(state) {
 			const statusBarHeight = state.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
-			const MenuButton = wx.getMenuButtonBoundingClientRect()
+			const MenuButton = uni.getMenuButtonBoundingClientRect()
 			while (!MenuButton || MenuButton.left == 0 || MenuButton.right == 0 || MenuButton.top == 0 || MenuButton.bottom == 0 ||
 				MenuButton.width == 0 || MenuButton.height == 0) {
-				MenuButton = wx.getMenuButtonBoundingClientRect()
+				MenuButton = uni.getMenuButtonBoundingClientRect()
 			}
 			state.MenuButton = {
 				marginTop: MenuButton.top - statusBarHeight,

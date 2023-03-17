@@ -11,6 +11,7 @@
 			...mapActions('location', ['onLocationChange'])
 		},
 		onLaunch: function() {
+			console.log(this.$utils)
 			this.initBarInfo();
 			this.logined()
 			this.onLocationChange()

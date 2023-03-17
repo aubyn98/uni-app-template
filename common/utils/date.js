@@ -1,22 +1,16 @@
+export function getDate(time = Date.now(), fmt = 'yyyy-MM-dd', join = '-') {
+	typeof time === 'string' && (time = new Date(time).getTime())
+	let date = new Date(time + 28800000).toISOString().replace('T', ' ')
+	if (join !== '-' && typeof join === 'string') date = date.replaceAll('-', join)
+	if (fmt === 'yyyy-MM-dd hh:mm') return date.slice(0, 16)
+	if (fmt === 'yyyy-MM-dd hh:mm:ss') return date.slice(0, 19)
+	if (fmt === 'yyyyMMdd') return date.slice(0, 10).replaceAll(join, '')
+	if (fmt === 'yyyyMMddhhmm') return date.slice(0, 16).replaceAll(join, '').replaceAll(' ', '').replaceAll(':', '')
+	if (fmt === 'yyyyMMddhhmmss') return date.slice(0, 19).replaceAll(join, '').replaceAll(' ', '').replaceAll(':', '')
+	return date.slice(0, 10)
+}
 export default {
-	getDate(time = Date.now(), fmt = 'yyyy-MM-dd') {
-		typeof time === 'string' && (time = new Date(time).getTime());
-		const date = new Date(time + 28800000).toISOString().replace('T',' ')
-		if(fmt === 'yyyy-MM-dd hh:mm') return date.slice(0,16)
-		if(fmt === 'yyyy-MM-dd hh:mm:ss') return date.slice(0,19)
-		return date.slice(0, 10)
-	},
-	getToday() {
-		let now = new Date();
-		let year = now.getFullYear();
-		let month = now.getMonth() + 1;
-		let day = now.getDate();
-		let date = now.getFullYear() + "-" + (now.getMonth() > 9 ? (now.getMonth() + 1) : "0" +
-			(
-				now.getMonth() + 1)) + "-" + (now.getDate() > 9 ? (now.getDate()) : "0" + (
-			now.getDate()));
-		return date
-	},
+	getDate,
 	initDate(date) {
 		let fdate = date.split('-');
 		return {

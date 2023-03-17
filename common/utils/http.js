@@ -1,11 +1,8 @@
-import {
-	Dev,
-	Pro
-} from '../config/index.js'
+import config from '../config'
 import store from '@/store'
 
 
-const default_baseURL = process.env.NODE_ENV === 'development' ? Dev.baseURL : Pro.baseURL
+const default_baseURL = config.baseURL
 // 106
 export function downloadFile(url, params) {
 	const hasParams = typeof params === 'object' && params !== null
@@ -51,7 +48,8 @@ export default function http(opt, intercept = false) {
 		}
 		uni.request({
 			header: {
-				'Content-Type': opt.method.toUpperCase === 'GET' ? 'application/json' : 'application/x-www-form-urlencoded; charset=UTF-8',
+				'Content-Type': opt.method.toUpperCase() === 'GET' ? 'application/json' :
+					'application/x-www-form-urlencoded; charset=UTF-8',
 				'x-token': store.state.token || uni.getStorageSync('x-token'),
 				...header
 			},

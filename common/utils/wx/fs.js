@@ -1,16 +1,57 @@
 export const $fs = wx.getFileSystemManager();
-/* const encodingList = ['ascii', 'base64', 'binary', 'hex', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'utf-8', 'utf8',
+
+const encodingList = ['ascii', 'base64', 'binary', 'hex', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'utf-8', 'utf8',
 	'latin1'
 ]
- */
+
+export function getImgBase64Prefix(imgType = 'png') {
+	return `data:image/${imgType};base64,`
+}
+
+export function readFile({
+	filePath,
+	encoding,
+	sync,
+	opts
+}) {
+	if (！encodingList.includes(encoding)) throw '编码不符合'
+	if (sync === true) {
+		try {
+			const res = fs.readFileSync(filePath, encoding, opts.position, opts.length)
+			return res
+		} catch (e) {
+			return null
+		}
+	}
+	return new Promise(function(resolve, reject) {
+		$fs.readFile({
+			filePath,
+			encoding,
+			...opts,
+			success(res) {
+				resolve(res)
+			},
+			fail: reject
+		})
+	})
+}
+readFile.sync = function(opts) {
+	return readFile({
+		...opts,
+		sync: true
+	})
+}
+
+
 export function writeFile({
 	filePath,
 	data,
 	encoding,
-	sync
+	sync,
+	opts
 }) {
 	encoding = encoding || 'binary'
-	typeof sync === 'undefined' && (sync = true);
+	if (！encodingList.includes(encoding)) throw '编码不符合'
 	if (sync === true) {
 		try {
 			$fs.writeFileSync(filePath, data, encoding)
@@ -20,7 +61,7 @@ export function writeFile({
 			}
 		} catch (e) {
 			console.error(e)
-			return {}
+			return null
 		}
 	}
 	return new Promise(function(resolve, reject) {
@@ -28,6 +69,7 @@ export function writeFile({
 			filePath,
 			encoding,
 			data,
+			...opts,
 			success(res) {
 				if (res.errMsg !== 'writeFile:ok') return reject(new Error(res.errMsg))
 				resolve({
@@ -39,9 +81,9 @@ export function writeFile({
 		})
 	})
 }
-writeFile.sync = function(opt) {
+writeFile.sync = function(opts) {
 	return writeFile({
-		opt,
+		...opts,
 		sync: true
 	})
 }
@@ -56,8 +98,9 @@ export function getArraybufferTempPath({
 	ctx,
 	sync,
 }) {
-	if (typeof arraybuffer !== 'object' || arraybuffer.toString().slice(8, -1) !== 'ArrayBuffer') return reject(new Error(
-		'ArrayBuffer must be a ArrayBuffer'))
+	if (typeof arraybuffer !== 'object' || arraybuffer.toString().slice(8, -1) !== 'ArrayBuffer') return reject(
+		new Error(
+			'ArrayBuffer must be a ArrayBuffer'))
 	method = method || 'canvas'
 	fileType = fileType || 'png'
 	if (method === 'fs') {
@@ -105,7 +148,43 @@ export function getArraybufferTempPath({
 		})
 	}
 }
+
+const canChooseMedia = wx.canIUse('chooseMedia')
+
+export function chooseImg({
+	count = 1
+} = {}) {
+	return new Promise((resolve, reject) => {
+		canChooseMedia ? wx.chooseMedia({
+			count,
+			mediaType: 'image',
+			success(res) {
+				if (res.errMsg == "chooseMedia:ok" && res.tempFiles[0]) {
+					const tempFilePaths = res.tempFiles.map(it => it.tempFilePath)
+					resolve(tempFilePaths)
+				} else {
+					reject(res.errMsg)
+				}
+			},
+			fail(err) {
+				reject(err)
+			}
+		}) : wx.chooseImage({
+			count,
+			success(res) {
+				resolve(res.tempFilePaths);
+			},
+			fail(err) {
+				reject(err)
+			}
+		})
+	})
+}
+
 export default {
 	getArraybufferTempPath,
-	writeFile
+	getImgBase64Prefix,
+	readFile,
+	writeFile,
+	chooseImg
 }

@@ -15,7 +15,7 @@
 <script>
 	import {
 		throttle
-	} from '@/common/utils';
+	} from '@/common/utils/magic';
 
 	function emit(key) {
 		return function(...argvs) {
