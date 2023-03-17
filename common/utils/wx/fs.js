@@ -12,14 +12,15 @@ export function readFile({
 	filePath,
 	encoding,
 	sync,
-	opts
+	opts = {}
 }) {
 	if (!encodingList.includes(encoding)) throw '编码不符合'
 	if (sync === true) {
 		try {
-			const res = fs.readFileSync(filePath, encoding, opts.position, opts.length)
+			const res = $fs.readFileSync(filePath, encoding, opts.position, opts.length)
 			return res
 		} catch (e) {
+			console.error(e)
 			return null
 		}
 	}
