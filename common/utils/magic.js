@@ -50,7 +50,7 @@ export function decodeURIParams(params) {
 // 路径参数对象化
 export function getSearchParams(str) {
 	const collect = {}
-	str.replace(/([^?^&]*?)=([^?^&]*)/g, (match, k, v) => {
+	decodeURIComponent(str).replace(/([^?^&]*?)=([^?^&]*)/g, (match, k, v) => {
 		const temp = collect[k]
 		if (!temp) return (collect[k] = v)
 		if (temp && typeof temp === 'string') return (collect[k] = [temp, v])
