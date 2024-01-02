@@ -1,13 +1,57 @@
-export function getDate(time = Date.now(), fmt = 'yyyy-MM-dd', join = '-') {
-	typeof time === 'string' && (time = new Date(time).getTime())
-	let date = new Date(time + 28800000).toISOString().replace('T', ' ')
-	if (join !== '-' && typeof join === 'string') date = date.replaceAll('-', join)
-	if (fmt === 'yyyy-MM-dd hh:mm') return date.slice(0, 16)
-	if (fmt === 'yyyy-MM-dd hh:mm:ss') return date.slice(0, 19)
-	if (fmt === 'yyyyMMdd') return date.slice(0, 10).replaceAll(join, '')
-	if (fmt === 'yyyyMMddhhmm') return date.slice(0, 16).replaceAll(join, '').replaceAll(' ', '').replaceAll(':', '')
-	if (fmt === 'yyyyMMddhhmmss') return date.slice(0, 19).replaceAll(join, '').replaceAll(' ', '').replaceAll(':', '')
-	return date.slice(0, 10)
+function _formatNormalize(formatter) {
+	if (typeof formatter === 'function') return formatter
+	if (typeof formatter !== 'string') throw new TypeError('formatter must be a string')
+	if (formatter === 'date') formatter = 'yyyy-MM-dd'
+	else if (formatter === 'datetime') formatter = 'yyyy-MM-dd HH:mm:ss'
+	const formatterFunc = dateInfo => {
+		const {
+			yyyy,
+			MM,
+			dd,
+			HH,
+			mm,
+			ss,
+			ms
+		} = dateInfo
+		return formatter.replaceAll('yyyy', yyyy).replaceAll('MM', MM).replaceAll('dd', dd).replaceAll('HH', HH)
+			.replaceAll('mm', mm).replaceAll('ss', ss).replaceAll('ms', ms)
+	}
+	return formatterFunc
+}
+
+export function getDate(date = new Date(), formatter = 'date', isPad = true) {
+	if (typeof date === 'number' || typeof date === 'string') date = new Date(date)
+	formatter = _formatNormalize(formatter)
+	const dataInfo = {
+		year: date.getFullYear(),
+		month: date.getMonth() + 1,
+		date: date.getDate(),
+		hour: date.getHours(),
+		minute: date.getMinutes(),
+		second: date.getSeconds(),
+		millisecond: date.getMilliseconds()
+	}
+	dataInfo.yyyy = dataInfo.year.toString()
+	dataInfo.MM = dataInfo.month.toString()
+	dataInfo.dd = dataInfo.date.toString()
+	dataInfo.HH = dataInfo.hour.toString()
+	dataInfo.mm = dataInfo.minute.toString()
+	dataInfo.ss = dataInfo.second.toString()
+	dataInfo.ms = dataInfo.millisecond.toString()
+
+	function _pad(prop, len) {
+		dataInfo[prop] = dataInfo[prop].padStart(len, '0')
+	}
+	if (isPad) {
+		_pad('yyyy', 4)
+		_pad('MM', 2)
+		_pad('dd', 2)
+		_pad('HH', 2)
+		_pad('mm', 2)
+		_pad('ss', 2)
+		_pad('ms', 3)
+	}
+	return formatter(dataInfo)
 }
 export default {
 	getDate,

@@ -1,5 +1,5 @@
 <template>
-	<u-popup :value="value" @input="$emit('input',$event)" mode="bottom" height="auto" safe-area-inset-bottom>
+	<u-popup :show="value" @close="close" @open="open" mode="bottom" height="auto" safe-area-inset-bottom>
 		<view class="p-action-sheet">
 			<view class="_action-sheet-item" v-for="item in list" :key="item.text" @tap.click="actionClick(item)">
 				<image v-if="item.image" :src="`/static/images/${item.image}.png`"></image>
@@ -32,9 +32,12 @@
 				this.close()
 				this.$emit('cancel')
 			},
+			open() {
+				this.$emit('open')
+			},
 			close() {
 				this.$emit('input', false)
-			}
+			},
 		}
 	}
 </script>

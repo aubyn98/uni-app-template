@@ -10,9 +10,12 @@
 			"style": {
 				"navigationBarTitleText": "组件展示"
 			}
-		},
-		{
-			"path": "pages/login/login",
+		}
+	],
+	"subPackages": [{
+		"root": "packageA",
+		"pages": [{
+			"path": "pages/placeholder/placeholder",
 			"style": {
 				"navigationBarTitleText": "快捷登陆",
 				"navigationBarTextStyle": "black",
@@ -20,8 +23,8 @@
 				"navigationStyle": "custom",
 				"backgroundColor": "#FFFFFF"
 			}
-		}
-	],
+		}]
+	}],
 	/* "tabBar": {
 		"color": "#aaaaaa",
 		"selectedColor": "#ff8400",
@@ -43,7 +46,8 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F8F8F8",
+		"onReachBottomDistance": 100
 	},
 	"condition": {
 		"current": 0, //当前激活的模式（list 的索引项）

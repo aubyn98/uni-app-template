@@ -10,20 +10,12 @@ export function compose(...fns) {
 
 // 防抖
 export function debounce(fn, delay) {
-	let last = 0,
-		timer = null
+	let timer = null
 	return function(...argvs) {
-		const now = Date.now()
-		if (now - last < delay) {
-			clearTimeout(timer)
-			timer = setTimeout(() => {
-				last = now
-				fn.apply(this, argvs)
-			}, delay)
-		} else {
-			last = now
+		if (timer) clearTimeout(timer)
+		timer = setTimeout(() => {
 			fn.apply(this, argvs)
-		}
+		}, delay)
 	}
 }
 
@@ -55,7 +47,7 @@ export function encodeURIParams(params) {
 export function decodeURIParams(params) {
 	return JSON.parse(decodeURIComponent(params || '{}'))
 }
-// 获取路径参数
+// 路径参数对象化
 export function getSearchParams(str) {
 	const collect = {}
 	str.replace(/([^?^&]*?)=([^?^&]*)/g, (match, k, v) => {
@@ -67,6 +59,11 @@ export function getSearchParams(str) {
 	return collect
 }
 
+// 获取路径参数
+export function getSearchStr(params) {
+	return '?' + Object.keys(params).map((key) => `${key}=${params[key]}`).join('&')
+}
+
 export default {
 	compose,
 	debounce,
@@ -74,4 +71,5 @@ export default {
 	encodeURIParams,
 	decodeURIParams,
 	getSearchParams,
+	getSearchStr
 }

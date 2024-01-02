@@ -1,5 +1,5 @@
 <template>
-	<u-popup :value="value" @input="$emit('input',$event)" mode="bottom" height="auto" safe-area-inset-bottom>
+	<u-popup :show="value" @close="close" @open="open" mode="bottom" height="auto" safe-area-inset-bottom>
 		<view class="custom-time-picker-contianer">
 			<view class="_time-picker-header">
 				<view class="_time-picker-cancel" @tap.stop="cancel">
@@ -9,8 +9,8 @@
 					确认
 				</view>
 			</view>
-			<picker-view v-if="value" :value="val" @change="bindChange" @pickstart="pickstart" @pickend="pickend" class="custom-time-picker"
-			 indicator-class="_time-picker-indicator">
+			<picker-view v-if="value" :value="val" @change="bindChange" @pickstart="pickstart" @pickend="pickend"
+				class="custom-time-picker" indicator-class="_time-picker-indicator">
 				<picker-view-column>
 					<view class="_time-picker-item" v-for="(item,index) in list.hours" :key="index">{{item}}</view>
 				</picker-view-column>
@@ -82,6 +82,12 @@
 			}
 		},
 		methods: {
+			open() {
+				this.$emit('open')
+			},
+			close() {
+				this.$emit('input', false)
+			},
 			// 确定
 			confirm() {
 				if (this.move) return
@@ -91,12 +97,12 @@
 					minutes
 				} = this.list
 				const res = hours[hIndex] + ':' + minutes[mIndex]
-				this.$emit('input', false)
+				this.close()
 				this.$emit('update:defaultValue', res)
 				this.$emit('change', res)
 			},
 			cancel() {
-				this.$emit('input', false)
+				this.close()
 			},
 			bindChange(e) {
 				this.val = e.detail.value

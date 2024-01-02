@@ -1,5 +1,5 @@
 <template>
-	<u-popup :value="value" @input="$emit('input',$event)" mode="center" :width="width" :height="height" border-radius="16"
+	<u-popup :show="value" @close="close" @open="open" mode="center" :width="width" :height="height" border-radius="16"
 	 :zoom="false" safe-area-inset-bottom>
 		<view class="p-input-modal" >
 			<view class="_input-modal-title">
@@ -79,6 +79,9 @@
 		methods: {
 			input(e) {
 				this.cacheVal = e.detail.value
+			},
+			open() {
+				this.$emit('open')
 			},
 			close() {
 				this.$emit('input', false)
