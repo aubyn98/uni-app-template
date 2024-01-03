@@ -13,7 +13,6 @@ apis = apis.keys().reduce((total, apiPath) => {
 }, {})
 module.exports = {
 	install(app) {
-		console.log(request)
 		app.prototype.$api = apis
 		app.prototype.$request = request
 	},

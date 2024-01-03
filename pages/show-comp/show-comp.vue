@@ -26,11 +26,7 @@
 <script>
 	export default {
 		created() {
-			console.log(this.$utils);
-			console.log(this.$api);
-			console.log(this.$request);
-			this.$store.dispatch('user/login')
-			console.log(this.$store.getters.hasLogin)
+			
 		},
 		methods: {
 			testhandle(e) {
