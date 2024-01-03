@@ -119,10 +119,3 @@ export function wxPayInWxBrowser(data, orderSn) {
 		)
 	})
 }
-
-export default {
-	formatQueryString,
-	payment,
-	getOpenid,
-	wxPayInWxBrowser,
-}

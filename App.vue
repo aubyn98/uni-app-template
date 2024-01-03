@@ -6,17 +6,13 @@
 	} from 'vuex';
 	export default {
 		methods: {
-			...mapMutations(['logined']),
-			...mapMutations('statusBar', ['initBarInfo']),
+			...mapMutations('statusBar', ['initBarInfo', 'setBottomBlackLineHeight']),
 			...mapActions('location', ['onLocationChange'])
 		},
 		onLaunch: function() {
-			console.log(this.$utils)
 			this.initBarInfo();
-			this.logined()
+			this.setBottomBlackLineHeight()
 			this.onLocationChange()
-			// uni.clearStorageSync()
-			// uni.setStorageSync('openid','o039Xs39BBKNuxZSbO2WtKd-bCaU')
 		}
 	};
 </script>

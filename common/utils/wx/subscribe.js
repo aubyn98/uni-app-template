@@ -29,4 +29,3 @@ export function subscribe(tmplIds, complete) {
 		})
 	})
 }
-export default subscribe

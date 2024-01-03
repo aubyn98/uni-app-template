@@ -6,62 +6,51 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	modules,
 	state: {
-		userInfo: {},
-		isLogin: false,
-		acls: [],
-		isManager: false,
-		token: null
+		showLoading: false,
+		currentStore: {},
+		storeId: uni.getStorageSync('storeId') || '',
+		deliveryType: uni.getStorageSync('deliveryType') || 'store_send'
+	},
+	getters: {
+		hasLogin(state, getters) {
+			return getters['user/hasLogin']
+		}
 	},
 	mutations: {
-		login(state, {
-			token,
-			acls,
-			status,
-			...userInfo
+		toggleLoading(state, status) {
+			state.showLoading = status;
+		},
+		setCurrentStore(state, store) {
+			state.currentStore = store
+		},
+		setStoreId(state, storeId = uni.getStorageSync('storeId') || 1) {
+			state.storeId = storeId
+			uni.setStorageSync('storeId', storeId)
+		},
+		changeDeliveryType(state, {
+			type,
+			pageParams,
+			storeId
 		}) {
-			state.isLogin = true
-			state.userInfo = userInfo
-			uni.setStorageSync('userInfo', userInfo)
-
-			state.isManager = acls.length !== 0
-			state.acls = acls
-			uni.setStorageSync('acls', acls)
-
-			state.token = token
-			uni.setStorageSync('x-token', token)
-			
-			uni.switchTab({
-				url: '/pages/meal-subscribe/meal-subscribe'
-			})
+			if (state.deliveryType == type) return
+			state.deliveryType = type
+			uni.setStorageSync('deliveryType', type)
+			uni.showToast({
+				title: `切换${deliveryTypeDict[type]}后,优惠活动可能发生变化,请核查`,
+				icon: 'none',
+				duration: 1200,
+			});
+			setTimeout(() => {
+				const pages = getCurrentPages();
+				const perpage = pages[pages.length - 1];
+				const res = {
+					...pageParams,
+					id: storeId,
+					DeliveryType: true
+				}
+				perpage.onLoad(res);
+			}, 1500)
 		},
-		logout(state) {
-			state.isLogin = false
-			state.userInfo = {}
-			uni.removeStorageSync('userInfo')
-
-			state.isManager = false
-			state.acls = []
-			uni.removeStorageSync('acls')
-
-			state.token = null
-			uni.removeStorageSync('x-token')
-			
-			uni.redirectTo({
-				url: '/pages/login/login'
-			})
-		},
-		logined(state) {
-			const token = uni.getStorageSync('x-token')
-			if (!token) return
-			state.token = token
-
-			state.isLogin = true
-			state.userInfo = uni.getStorageSync('userInfo')
-
-			state.acls = uni.getStorageSync('acls')
-			state.isManager = state.acls.length !== 0
-
-		}
 	},
 	actions: {},
 })

@@ -1,5 +1,4 @@
-import {
-	baseURL,
+import config, {
 	STORAGE_KEY_ENUMS
 } from '../config'
 import store from '@/store'
@@ -8,7 +7,7 @@ import {
 } from './object'
 
 
-const default_baseURL = baseURL
+const default_baseURL = config.baseURL
 
 
 let loadingCount = 0

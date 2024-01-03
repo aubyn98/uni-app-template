@@ -1,0 +1,6 @@
+export * as wx from './wx'
+export * from './aliPay'
+export * from './date'
+export * from './http'
+export * from './magic'
+export * from './object'

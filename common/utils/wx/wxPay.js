@@ -88,11 +88,3 @@ export function subscribeMessage(openId) {
 		})
 	})
 }
-
-
-
-export default {
-	payment,
-	wexpayMiniAppPayment,
-	subscribeMessage
-}

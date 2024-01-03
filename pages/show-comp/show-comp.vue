@@ -24,22 +24,24 @@
 </template>
 
 <script>
-export default {
-	created() {
-		console.log(this.$utils);
-		console.log(this.$api);
-		console.log(this.$request);
-	},
-	methods: {
-		testhandle(e){
-			console.log(55)
+	export default {
+		created() {
+			console.log(this.$utils);
+			console.log(this.$api);
+			console.log(this.$request);
+			this.$store.dispatch('user/login')
+			console.log(this.$store.getters.hasLogin)
+		},
+		methods: {
+			testhandle(e) {
+				console.log(55)
+			}
 		}
-	}
-};
+	};
 </script>
 
 <style lang="scss">
-.custom-button {
-	margin: 12px auto;
-}
+	.custom-button {
+		margin: 12px auto;
+	}
 </style>

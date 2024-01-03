@@ -1,5 +1,5 @@
 import {
-	http
+	request
 } from '@/common/utils'
 let apis = require.context('./', true, /\.js$/)
 apis = apis.keys().reduce((total, apiPath) => {
@@ -13,8 +13,9 @@ apis = apis.keys().reduce((total, apiPath) => {
 }, {})
 module.exports = {
 	install(app) {
+		console.log(request)
 		app.prototype.$api = apis
-		app.prototype.$request = http
+		app.prototype.$request = request
 	},
 	...apis,
 }

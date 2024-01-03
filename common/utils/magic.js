@@ -63,13 +63,3 @@ export function getSearchParams(str) {
 export function getSearchStr(params) {
 	return '?' + Object.keys(params).map((key) => `${key}=${params[key]}`).join('&')
 }
-
-export default {
-	compose,
-	debounce,
-	throttle,
-	encodeURIParams,
-	decodeURIParams,
-	getSearchParams,
-	getSearchStr
-}

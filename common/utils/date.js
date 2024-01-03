@@ -53,30 +53,3 @@ export function getDate(date = new Date(), formatter = 'date', isPad = true) {
 	}
 	return formatter(dataInfo)
 }
-export default {
-	getDate,
-	initDate(date) {
-		let fdate = date.split('-');
-		return {
-			year: Number(fdate[0] || 1920),
-			month: Number(fdate[1] || 1),
-			day: Number(fdate[2] || 1)
-		}
-	},
-	nextAndprevDate(paramDay, type = "next") {
-		const time = type == 'next' ? Number((new Date(paramDay)).getTime()) + Number(24 * 60 * 60 * 1000) :
-			Number((new Date(paramDay)).getTime()) - Number(24 * 60 * 60 * 1000)
-		let d = new Date(time);
-		const month = d.getMonth();
-		const day = d.getDate();
-		d = d.getFullYear() + "-" + (d.getMonth() > 9 ? (d.getMonth() + 1) : "0" +
-			(
-				d.getMonth() + 1)) + "-" + (d.getDate() > 9 ? (d.getDate()) : "0" + (
-			d.getDate()));
-		let obj = {
-			date: d,
-			...this.initDate(d)
-		}
-		return obj
-	},
-}

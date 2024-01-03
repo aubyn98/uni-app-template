@@ -3,8 +3,8 @@ const scopeDict = {
 	userFuzzyLocation: 'scope.userFuzzyLocation', // 模糊地理位置 wx.getFuzzyLocation	
 	userLocationBackground: 'scope.userLocationBackground', // 后台定位 wx.startLocationUpdateBackground
 	record: 'scope.record', // 	麦克风 live-pusher组件, wx.startRecord, wx.joinVoIPChat, RecorderManager.start
-	camera: 'scope.camera' ,// 摄像头 camera组件, live-pusher组件, wx.createVKSession
-	bluetooth: 'scope.bluetooth' ,// 蓝牙 wx.openBluetoothAdapter, wx.createBLEPeripheralServer
+	camera: 'scope.camera', // 摄像头 camera组件, live-pusher组件, wx.createVKSession
+	bluetooth: 'scope.bluetooth', // 蓝牙 wx.openBluetoothAdapter, wx.createBLEPeripheralServer
 	writePhotosAlbum: 'scope.writePhotosAlbum', // 	添加到相册 wx.saveImageToPhotosAlbum, wx.saveVideoToPhotosAlbum
 	addPhoneContact: 'scope.addPhoneContact', // 	添加到联系人 wx.addPhoneContact
 	addPhoneCalendar: 'scope.addPhoneCalendar', // 	添加到日历 	wx.addPhoneRepeatCalendar, wx.addPhoneCalendar
@@ -41,5 +41,3 @@ export function authorize({
 		})
 	})
 }
-
-export default authorize

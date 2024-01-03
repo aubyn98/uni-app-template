@@ -1,12 +1,9 @@
 export const Dev = {
-	baseURL: 'http://192.168.41.187:88', // pz
-
-	// baseURL: 'http://192.168.41.140:88', // fq
-
+	baseURL: 'https://mp.api.360hwj.com'
 }
 
 export const Pro = {
-	baseURL: 'https://ft.360hwj.com',
+	baseURL: 'https://mp.api.360hwj.com',
 }
 
 export const STORAGE_KEY_ENUMS = {

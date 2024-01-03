@@ -181,11 +181,3 @@ export function chooseImg({
 		})
 	})
 }
-
-export default {
-	getArraybufferTempPath,
-	getImgBase64Prefix,
-	readFile,
-	writeFile,
-	chooseImg
-}
