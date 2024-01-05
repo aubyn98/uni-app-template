@@ -2,9 +2,9 @@
 	<view class="custom-page-title-placeholder" :style="{height:titleHeight+'px'}">
 		<view id="_custom-page-title" class="custom-page-title" :class="classList" :style="[getStyle]">
 			<view class="title-container" :style="{'min-height':getStyle['min-height']}">
-				<view class="_left-container" @tap.stop="$emit('go')">
-					<image class="_left-icon" :style="imageStyle" :class="imageClass" v-if="image"
-						:src="`${imagePath}icon_fh.png`" mode="aspectFit"></image>
+				<view class="_left-container" @tap.stop="goBack" v-if="back">
+					<image class="_left-icon" :style="imageStyle" :class="imageClass" :src="`${imagePath}icon_fh.png`"
+						mode="aspectFit"></image>
 				</view>
 				<slot name="title">
 					<text :style="textStyle" :class="textClass">
@@ -40,7 +40,15 @@
 				type: [String, Object],
 				default: ''
 			},
-			image: { // 是否显示图片
+			home: { // 是否显示图片
+				type: Boolean,
+				default: false
+			},
+			back: { // 是否显示图片
+				type: Boolean,
+				default: false
+			},
+			customBack: {
 				type: Boolean,
 				default: false
 			},
@@ -87,6 +95,12 @@
 					.push(key));
 				return classList;
 			}
+		},
+		methods: {
+			goBack() {
+				if (this.customBack) this.$emit('goBack')
+				else uni.navigateBack()
+			},
 		}
 	};
 </script>
