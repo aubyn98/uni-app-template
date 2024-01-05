@@ -25,7 +25,7 @@
 	/*每个页面公共css */
 	@import '@/components/uview-ui/index.scss';
 	@import '@/components/custom-ui/index.scss';
-	@import '@/common/styles/common.scss';
+	@import '@/common/styles/index.scss';
 
 	page {
 		background-color: #f8f8f8;
