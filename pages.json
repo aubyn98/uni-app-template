@@ -64,13 +64,10 @@
 		{
 			"root": "packageOther",
 			"pages": [{
-				"path": "pages/placeholder/placeholder",
+				"path": "pages/errorPage/errorPage",
 				"style": {
-					"navigationBarTitleText": "快捷登陆",
-					"navigationBarTextStyle": "black",
-					"navigationBarBackgroundColor": "#FFFFFF",
-					"navigationStyle": "custom",
-					"backgroundColor": "#FFFFFF"
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
 				}
 			}]
 		}

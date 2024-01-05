@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<c-page-title>placeholder</c-page-title>
+		
 	</view>
 </template>
 
