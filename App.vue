@@ -13,7 +13,7 @@
 			this.initBarInfo();
 			this.setBottomBlackLineHeight()
 			this.onLocationChange()
-			
+
 			console.log(this.$utils);
 			console.log(this.$api);
 			console.log(this.$request);

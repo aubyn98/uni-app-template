@@ -6,42 +6,107 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/show-comp/show-comp",
+			"path": "pages/home/home",
 			"style": {
-				"navigationBarTitleText": "组件展示"
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
 			}
+
+		}, {
+			"path": "pages/findMedicine/findMedicine",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/myCart/myCart",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	],
 	"subPackages": [{
-		"root": "packageA",
-		"pages": [{
-			"path": "pages/placeholder/placeholder",
-			"style": {
-				"navigationBarTitleText": "快捷登陆",
-				"navigationBarTextStyle": "black",
-				"navigationBarBackgroundColor": "#FFFFFF",
-				"navigationStyle": "custom",
-				"backgroundColor": "#FFFFFF"
-			}
-		}]
-	}],
-	/* "tabBar": {
-		"color": "#aaaaaa",
-		"selectedColor": "#ff8400",
+			"root": "packageGoods",
+			"pages": [{
+				"path": "pages/placeholder/placeholder",
+				"style": {
+					"navigationBarTitleText": "快捷登陆",
+					"navigationBarTextStyle": "black",
+					"navigationBarBackgroundColor": "#FFFFFF",
+					"navigationStyle": "custom",
+					"backgroundColor": "#FFFFFF"
+				}
+			}]
+		},
+		{
+			"root": "packageMine",
+			"pages": [{
+				"path": "pages/placeholder/placeholder",
+				"style": {
+					"navigationBarTitleText": "快捷登陆",
+					"navigationBarTextStyle": "black",
+					"navigationBarBackgroundColor": "#FFFFFF",
+					"navigationStyle": "custom",
+					"backgroundColor": "#FFFFFF"
+				}
+			}]
+		},
+		{
+			"root": "packageOther",
+			"pages": [{
+				"path": "pages/placeholder/placeholder",
+				"style": {
+					"navigationBarTitleText": "快捷登陆",
+					"navigationBarTextStyle": "black",
+					"navigationBarBackgroundColor": "#FFFFFF",
+					"navigationStyle": "custom",
+					"backgroundColor": "#FFFFFF"
+				}
+			}]
+		}
+	],
+	"tabBar": {
+		"color": "#333333",
+		"selectedColor": "#04AA58",
 		"borderStyle": "white",
 		"backgroundColor": "#ffffff",
 		"height": "20px",
 		"fontSize": "10px",
-		"iconWidth": "10px",
+		"iconWidth": "22px",
 		"spacing": "3px",
 		// "custom": true,
 		"list": [{
-			"pagePath": "pages/subscribe/subscribe",
-			"iconPath": "/static/images/icon_page.png",
-			"selectedIconPath": "/static/images/icon_page_acon.png",
-			"text": "报餐"
+			"pagePath": "pages/home/home",
+			"iconPath": "/static/images/tabs/icon_sy@2x.png",
+			"selectedIconPath": "/static/images/tabs/icon_sy2@2x.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/findMedicine/findMedicine",
+			"iconPath": "/static/images/tabs/icon_fl@2x.png",
+			"selectedIconPath": "/static/images/tabs/icon_fl2@2x.png",
+			"text": "找药"
+		}, {
+			"pagePath": "pages/myCart/myCart",
+			"iconPath": "/static/images/tabs/icon_gwc@2x.png",
+			"selectedIconPath": "/static/images/tabs/icon_gwc2@2x.png",
+			"text": "购物车"
+		}, {
+			"pagePath": "pages/mine/mine",
+			"iconPath": "/static/images/tabs/icon_my@2x.png",
+			"selectedIconPath": "/static/images/tabs/icon_my2@2x.png",
+			"text": "我的"
 		}]
-	}, */
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
