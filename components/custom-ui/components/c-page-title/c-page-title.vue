@@ -2,9 +2,9 @@
 	<view class="custom-page-title-placeholder" :style="{height:titleHeight+'px'}">
 		<view id="_custom-page-title" class="custom-page-title" :class="classList" :style="[getStyle]">
 			<view class="title-container" :style="{'min-height':getStyle['min-height']}">
-				<view class="_left-container"  @tap.stop="$emit('go')">
-					<image class="_left-icon" :style="imageStyle" :class="imageClass" v-if="image" :src="`${imagePath}icon_fh.png`"
-					 mode="aspectFit"></image>
+				<view class="_left-container" @tap.stop="$emit('go')">
+					<image class="_left-icon" :style="imageStyle" :class="imageClass" v-if="image"
+						:src="`${imagePath}icon_fh.png`" mode="aspectFit"></image>
 				</view>
 				<slot name="title">
 					<text :style="textStyle" :class="textClass">
@@ -59,6 +59,10 @@
 			bold: { // 是否加粗
 				type: Boolean,
 				default: true
+			},
+			background: {
+				type: String,
+				default: '#fff'
 			}
 		},
 		computed: {
@@ -67,6 +71,7 @@
 				const statusBarHeight = this.statusBarHeight;
 				const MenuButton = this.MenuButton;
 				return {
+					background: this.background,
 					'padding-top': statusBarHeight + MenuButton.marginTop + 'px',
 					'min-height': MenuButton.height + 'px',
 					'line-height': MenuButton.height + 'px',
@@ -78,7 +83,8 @@
 				this.bold && classList.push('_bold');
 				const customClass = this.customClass;
 				if (typeof customClass === 'string') classList.push(customClass);
-				if (typeof customClass === 'object') Object.keys(customClass).forEach(key => customClass[key] && classList.push(key));
+				if (typeof customClass === 'object') Object.keys(customClass).forEach(key => customClass[key] && classList
+					.push(key));
 				return classList;
 			}
 		}
@@ -102,7 +108,6 @@
 		font-size: 0;
 		font-weight: 500;
 		color: #333333;
-		background-color: white;
 		transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
 
 		&._bold {
@@ -113,7 +118,8 @@
 			width: 100%;
 			position: relative;
 			font-size: 36rpx;
-			._left-container{
+
+			._left-container {
 				position: absolute;
 				display: block;
 				top: 50%;
@@ -124,6 +130,7 @@
 				font-size: 0;
 				line-height: 56rpx;
 			}
+
 			._left-icon {
 				width: 28rpx;
 				height: 28rpx;
