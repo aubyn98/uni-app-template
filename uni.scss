@@ -75,57 +75,11 @@ $uni-font-size-subtitle:36rpx;
 $uni-color-paragraph: #3F536E; // 文章段落颜色
 $uni-font-size-paragraph:30rpx;
 
-@mixin flex-c {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+view,scroll-view,swiper,swiper-item,movable-area,movable-view,cover-view,cover-image,icon,text,rich-text,progress,button,checkbox-group,checkbox,form,input,label,picker,picker-view,radio-group,radio,slider,switch,textarea,navigator,functional-page-navigator,image,video,camera,live-player,live-pusher,map,canvas,open-data,web-view,ad{
+    box-sizing: border-box;
 }
-@mixin abs-c {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%,-50%);
-}
-@mixin textLineClamp($num) {
-  @if $num == 1 {
-    white-space: nowrap;
-  } @else if $num > 1 {
-    display: -webkit-box;
-    -webkit-line-clamp: $num;
-    -webkit-box-orient: vertical;
-  }
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-@mixin borderHalfPx($borderColor: #ddd, $borderRadius: 0, $borderTop: 0, $borderRight: 0, $borderBottom: 0, $borderLeft: 0, $borderStyle: solid) {
-    position: relative;
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 200%;
-        height: 200%;
-		    box-sizing: border-box;
-        border-radius: $borderRadius * 2;
-        border: $borderTop $borderStyle $borderColor;
-        border-right-width: $borderRight;
-        border-bottom-width: $borderBottom;
-        border-left-width: $borderLeft;
-        transform-origin: 0 0;
-        -webkit-transform-origin: 0 0;
-        transform: scale(.5, .5);
-        -webkit-transform: scale(.5, .5);
-    }
-}
-// 0.5px
-@mixin borderHalfPxRound($borderColor: #ddd, $borderRadius: 0) {
-     @include borderHalfPx($borderColor, $borderRadius, 1rpx, 1rpx, 1rpx, 1rpx);
-}
-
-
 
 @import  '@/components/uview-ui/theme.scss';
 @import  '@/components/custom-ui/theme.scss';
+@import  '@/common/styles/mixins.scss';
+@import  '@/common/styles/project/variables.scss';
