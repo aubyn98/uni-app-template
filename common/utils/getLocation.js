@@ -1,7 +1,8 @@
 import {
 	getSearchStr
 } from './magic'
-async function getLocation(check = false) {
+
+export function getLocation(check = false) {
 	return new Promise((success, reject) => {
 		uni.getLocation({
 			altitude: true,
