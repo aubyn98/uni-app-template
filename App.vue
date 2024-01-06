@@ -29,18 +29,6 @@
 
 	page {
 		background-color: #f8f8f8;
-		@include safe-padding-bottom;
-
-		.meal-release-record,
-		.manage-company,
-		.release-record-edit,
-		.manage-canteen,
-		.meal-subscribe {
-			padding-bottom: 60rpx;
-		}
-
-		// >view {
-		// 	padding: 0 0 150rpx 0;
-		// }
+		@include safe-padding-bottom(1px);
 	}
 </style>
