@@ -131,6 +131,9 @@ request.post = simplify('post')
 
 export default function http(opt, loading = true, qs = true) {
 	loading && startLoading()
+	const cacheOpt = {
+		...opt
+	}
 	const {
 		header,
 		...res
@@ -150,6 +153,11 @@ export default function http(opt, loading = true, qs = true) {
 			success(res) {
 				const data = res.data
 				if (hasOwnProperty(data, 'status') && !data.status) {
+					if (data.responseCode === 'invalidAuthorization') {
+						return store.dispatch('user/login')
+							.then(() => http(cacheOpt, loading, qs))
+							.then(resolve)
+					}
 					if (hasOwnProperty(data, 'message')) uni.showToast({
 						title: data.message,
 						icon: 'none',

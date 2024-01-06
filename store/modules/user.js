@@ -82,7 +82,6 @@ export default {
 			commit,
 			dispatch
 		}, storeId) {
-			if (state.hasLogin) return Promise.resolve()
 			return wx.login({
 				provider: 'weixin',
 			}).then(result => apis.get_openid({
