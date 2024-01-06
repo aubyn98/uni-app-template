@@ -63,3 +63,15 @@ export function getSearchParams(str) {
 export function getSearchStr(params) {
 	return '?' + Object.keys(params).map((key) => `${key}=${params[key]}`).join('&')
 }
+
+// 获取页面参数
+export function getOnLoadParams(e) {
+	const scene = e.scene
+	if (scene) {
+		e = {
+			...e,
+			...getSearchParams(scene)
+		}
+	}
+	return e
+}
