@@ -3,7 +3,8 @@ import config, {
 } from '../config'
 import store from '@/store'
 import {
-	hasOwnProperty
+	hasOwnProperty,
+	cloneDeepWithDescriptors
 } from './object'
 
 
@@ -86,6 +87,11 @@ export function uploadFile(url, filePath, formData) {
 				try {
 					const data = JSON.parse(res.data)
 					if (hasOwnProperty(data, 'status') && !data.status) {
+						if (data.responseCode === 'invalidAuthorization') {
+							return store.dispatch('user/login')
+								.then(() => uploadFile(...arguments))
+								.then(resolve)
+						}
 						if (hasOwnProperty(data, 'message')) uni.showToast({
 							title: data.message,
 							icon: 'none',
@@ -131,9 +137,7 @@ request.post = simplify('post')
 
 export default function http(opt, loading = true, qs = true) {
 	loading && startLoading()
-	const cacheOpt = {
-		...opt
-	}
+	const cacheArguments = cloneDeepWithDescriptors(arguments)
 	const {
 		header,
 		...res
@@ -155,7 +159,7 @@ export default function http(opt, loading = true, qs = true) {
 				if (hasOwnProperty(data, 'status') && !data.status) {
 					if (data.responseCode === 'invalidAuthorization') {
 						return store.dispatch('user/login')
-							.then(() => http(cacheOpt, loading, qs))
+							.then(() => http(...cacheArguments))
 							.then(resolve)
 					}
 					if (hasOwnProperty(data, 'message')) uni.showToast({
