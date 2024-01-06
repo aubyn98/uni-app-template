@@ -112,7 +112,7 @@
 
 	.custom-page-title {
 		position: fixed;
-		z-index: 9001;
+		z-index: 10;
 		top: 0;
 		left: 0;
 		right: 0;
