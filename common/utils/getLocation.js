@@ -36,3 +36,27 @@ export function getLocation(check = false) {
 		})
 	})
 }
+
+export function openLocation({
+	latitude,
+	longitude,
+	name = '',
+	address = ''
+}) {
+	return new Promise((resolve, reject) => {
+		uni.openLocation({ //?使用微信内置地图查看位置。
+			latitude: Number(latitude), //要去地点的纬度
+			longitude: Number(longitude), ///要去地点的经度-地址
+			name,
+			address,
+			success: resolve,
+			fail: function(err) {
+				uni.showToast({
+					icon: 'none',
+					title: err.errMsg
+				})
+				reject(err)
+			}
+		})
+	})
+}
