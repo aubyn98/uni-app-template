@@ -6,12 +6,11 @@
 	} from 'vuex';
 	export default {
 		methods: {
-			...mapMutations('statusBar', ['initBarInfo', 'setBottomBlackLineHeight']),
+			...mapMutations('statusBar', ['initBarInfo']),
 			...mapActions('location', ['onLocationChange'])
 		},
 		onLaunch: function() {
 			this.initBarInfo();
-			this.setBottomBlackLineHeight()
 			this.onLocationChange()
 
 			console.log(this.$utils);
