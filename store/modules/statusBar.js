@@ -1,10 +1,7 @@
 export default {
 	namespaced: true,
 	state() {
-		const SystemInfo = uni.getSystemInfoSync()
 		return {
-			safeBottom: SystemInfo.safeArea.bottom,
-			SystemInfo,
 			statusBarHeight: 0,
 			MenuButton: {},
 			titleHeight: 0,
@@ -12,7 +9,7 @@ export default {
 	},
 	mutations: {
 		initBarInfo(state) {
-			const statusBarHeight = state.statusBarHeight = state.SystemInfo.statusBarHeight;
+			const statusBarHeight = state.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
 			const MenuButton = uni.getMenuButtonBoundingClientRect()
 			while (!MenuButton || MenuButton.left == 0 || MenuButton.right == 0 || MenuButton.top == 0 || MenuButton
 				.bottom == 0 ||
