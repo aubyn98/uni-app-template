@@ -14,6 +14,7 @@
 			:mode="position"
 			:duration="duration"
 			@afterEnter="afterEnter"
+			@afterLeave="afterLeave"
 			@click="clickHandler"
 		>
 			<view
@@ -186,6 +187,9 @@
 			},
 			afterEnter() {
 				this.$emit('open')
+			},
+			afterLeave() {
+				this.$emit('closed')
 			},
 			clickHandler() {
 				// 由于中部弹出时，其u-transition占据了整个页面相当于遮罩，此时需要发出遮罩点击事件，是否无法通过点击遮罩关闭弹窗
