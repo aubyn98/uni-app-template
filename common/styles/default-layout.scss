@@ -46,44 +46,16 @@
   }
 }
 
-.inline-block {
-  display: inline-block;
+@each $vertical in top, middle, bottom {
+  .vertical-#{$vertical} {
+    vertical-align: $vertical;
+  }
 }
 
-.vertical-top {
-  vertical-align: top;
-}
-
-.vertical-middle {
-  vertical-align: middle;
-}
-
-.vertical-bottom {
-  vertical-align: bottom;
-}
-
-.display-none {
-  display: none;
-}
-
-.block {
-  display: block;
-}
-
-.inline {
-  display: inline;
-}
-
-.inline-flex {
-  display: inline-flex;
-}
-
-.grid {
-  display: grid;
-}
-
-.contents {
-  display: contents;
+@each $display in none, block, inline, inline-block, inline-flex, grid, contents {
+  .#{$display} {
+    display: $display;
+  }
 }
 
 .content-box {
@@ -93,13 +65,10 @@
 // --------------------------------------------------------------
 
 // -----------------------文本处理------------------------------
-
-.select-none {
-  user-select: none;
-}
-
-.select-text {
-  user-select: text;
+@each $select in none, text {
+  .select-#{$select} {
+    user-select: $select;
+  }
 }
 
 // 溢出处理
@@ -115,18 +84,12 @@
   }
 }
 
-.text-left {
-  text-align: left;
+@each $align in left, center, right, justify {
+  .text-#{$align} {
+    text-align: $align;
+  }
 }
-.text-center {
-  text-align: center;
-}
-.text-right {
-  text-align: right;
-}
-.text-justify {
-  text-align: justify;
-}
+
 .text-nowrap {
   white-space: nowrap;
 }
@@ -145,11 +108,11 @@
   width: 100%;
 }
 
-.h-auto{
+.h-auto {
   height: auto;
 }
 
-.h-100P{
+.h-100P {
   height: 100%;
 }
 
@@ -158,84 +121,52 @@
   height: 1em;
 }
 
-.static {
-  position: static;
+@each $position in static, relative, absolute, fixed, sticky {
+  .#{$position} {
+    position: $position;
+  }
 }
 
-.relative {
-  position: relative;
+@each $index in auto, 0, 1, -1 {
+  .zIndex-#{$index} {
+    z-index: $index;
+  }
 }
 
-.absolute {
-  position: absolute;
+@each $direction in left, right, top, bottom {
+  .#{$direction}-0 {
+    #{$direction}: 0;
+  }
 }
 
-.fixed {
-  position: fixed;
-}
+@each $size in auto, 0 {
+  .margin-#{$size} {
+    margin: $size;
+  }
 
-.sticky {
-  position: sticky;
-}
+  .margin-lr-#{$size} {
+    margin: 0 $size;
+  }
 
-.zIndex-auto {
-  z-index: auto;
-}
+  .margin-tb-#{$size} {
+    margin: $size 0;
+  }
 
-.zIndex-0 {
-  z-index: 0;
-}
+  .margin-l-#{$size} {
+    margin-left: $size;
+  }
 
-.zIndex-1 {
-  z-index: 1;
-}
+  .margin-r-#{$size} {
+    margin-right: $size;
+  }
 
-.zIndex--1 {
-  z-index: -1;
-}
+  .margin-t-#{$size} {
+    margin-top: $size;
+  }
 
-.left-0 {
-  left: 0;
-}
-
-.right-0 {
-  right: 0;
-}
-
-.top-0 {
-  top: 0;
-}
-
-.bottom-0 {
-  bottom: 0;
-}
-
-.margin-auto {
-  margin: auto;
-}
-
-.margin-lr-auto {
-  margin: 0 auto;
-}
-
-.margin-tb-auto {
-  margin: auto 0;
-}
-
-.margin-l-auto {
-  margin-left: auto;
-}
-
-.margin-r-auto {
-  margin-right: auto;
-}
-
-.margin-t-auto {
-  margin-top: auto;
-}
-
-.margin-b-auto {
-  margin-bottom: auto;
+  .margin-b-#{$size} {
+    margin-bottom: $size;
+  }
 }
 
 // -------------------------flex布局---------------------------------
