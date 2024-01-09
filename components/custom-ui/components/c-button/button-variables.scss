@@ -14,7 +14,15 @@
 	font-size: 0;
 	font-weight: 500;
 	@include getBorderRadius(16rpx);
-
+	height: 80rpx;
+	
+	&.small{
+		height: 72rpx;
+		text {
+			font-size: 28rpx;
+		}
+	}
+	
 	image {
 		width: 40rpx;
 		height: 40rpx;
@@ -23,7 +31,7 @@
 	}
 
 	text {
-		font-size: 32rpx;
+		font-size: 30rpx;
 		vertical-align: middle;
 	}
 
@@ -95,81 +103,4 @@
 		background-color: transparent;
 	}
 
-	&._large,
-	&._middle,
-	&._small,
-	&._smallest {
-		height: 92rpx;
-		line-height: 92rpx;
-	}
-
-	&._large {
-		width: 690rpx;
-	}
-
-	&._big {
-		image {
-			width: 44rpx;
-			height: 44rpx;
-		}
-
-		width: 656rpx;
-		height: 108rpx;
-		line-height: 108rpx;
-	}
-
-	&._default {
-		width: 616rpx;
-		height: 96rpx;
-		line-height: 96rpx;
-	}
-
-	&._middle {
-		width: 580rpx;
-	}
-
-	&._small {
-		width: 420rpx;
-	}
-
-	&._smallest {
-		width: 240rpx;
-	}
-
-	&._mini {
-		width: 240rpx;
-		height: 80rpx;
-		line-height: 80rpx;
-		
-		text {
-			font-size: 30rpx;
-		}
-		
-	}
-
-	&._search {
-		width: 152rpx;
-		height: 72rpx;
-		line-height: 72rpx;
-
-		text {
-			font-size: 30rpx;
-		}
-	}
-
-	&._add {
-		width: 132rpx;
-		height: 48rpx;
-		line-height: 48rpx;
-
-		text {
-			font-size: 28rpx;
-		}
-
-		image {
-			width: 28rpx;
-			height: 28rpx;
-			margin-right: 8rpx;
-		}
-	}
 }

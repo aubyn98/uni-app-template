@@ -1,12 +1,13 @@
 <template>
 	<button :style="[customStyle]" class="custom-button" :class="classList" :data-name="dataName" :disabled="disabled"
-	 :form-type="formType" :open-type="openType" :hover-class="hoverClass" :hover-start-time="Number(hoverStartTime)"
-	 :hover-stay-time="Number(hoverStayTime)" :app-parameter="appParameter" :hover-stop-propagation="hoverStopPropagation"
-	 :lang="lang" :session-from="sessionFrom" :send-message-title="sendMessageTitle" :send-message-path="sendMessagePath"
-	 :send-message-img="sendMessageImg" :show-message-card="showMessageCard" @tap.stop="click" @getphonenumber="getphonenumber"
-	 @getuserinfo="getuserinfo" @error="error" @opensetting="opensetting" @launchapp="launchapp">
-		<image :style="[imageStyle]" :class="imageClass" v-if="image" :src="`${imagePath}${image}.png`"></image> <text :style="[textStyle]"
-		 :class="[textClass]">
+		:form-type="formType" :open-type="openType" :hover-class="hoverClass" :hover-start-time="Number(hoverStartTime)"
+		:hover-stay-time="Number(hoverStayTime)" :app-parameter="appParameter"
+		:hover-stop-propagation="hoverStopPropagation" :lang="lang" :session-from="sessionFrom"
+		:send-message-title="sendMessageTitle" :send-message-path="sendMessagePath" :send-message-img="sendMessageImg"
+		:show-message-card="showMessageCard" @tap.stop="click" @getphonenumber="getphonenumber"
+		@getuserinfo="getuserinfo" @error="error" @opensetting="opensetting" @launchapp="launchapp">
+		<image :style="[imageStyle]" :class="imageClass" v-if="image" :src="`${imagePath}${image}.png`"></image> <text
+			:style="[textStyle]" :class="[textClass]">
 			<slot>{{text}}</slot>
 		</text>
 	</button>
@@ -67,7 +68,7 @@
 			},
 			type: { // 按钮颜色类型
 				type: String,
-				default: 'warning',
+				default: 'success',
 				validator: function(value) {
 					return ['success', 'warning', 'danger', 'info'].indexOf(value) !== -1;
 				}
@@ -76,7 +77,7 @@
 				type: String,
 				default: 'default',
 				validator: function(value) {
-					return ['large', 'big', 'default', 'middle', 'small', 'smallest', 'mini', 'search', 'add'].indexOf(value) !== -1;
+					return ['default', 'small'].indexOf(value) !== -1;
 				}
 			},
 			bold: { // 文字是否加粗
@@ -163,7 +164,8 @@
 				classList.push('_' + this.size);
 				const customClass = this.customClass;
 				if (typeof customClass === 'string') classList.push(customClass);
-				if (typeof customClass === 'object') Object.keys(customClass).forEach(key => customClass[key] && classList.push(key));
+				if (typeof customClass === 'object') Object.keys(customClass).forEach(key => customClass[key] && classList
+					.push(key));
 				return classList;
 			}
 		},
