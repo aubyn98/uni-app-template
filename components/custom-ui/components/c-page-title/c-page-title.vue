@@ -22,6 +22,9 @@
 		mapState
 	} from 'vuex';
 	export default {
+		options: {
+			virtualHost: true
+		},
 		props: {
 			title: String, // 标题
 			customClass: { // 自定义类名
