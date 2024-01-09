@@ -1,11 +1,12 @@
 <template>
-	<button :style="[customStyle]" class="custom-button" :class="classList" :data-name="dataName" :disabled="disabled"
-		:form-type="formType" :open-type="openType" :hover-class="hoverClass" :hover-start-time="Number(hoverStartTime)"
-		:hover-stay-time="Number(hoverStayTime)" :app-parameter="appParameter"
-		:hover-stop-propagation="hoverStopPropagation" :lang="lang" :session-from="sessionFrom"
-		:send-message-title="sendMessageTitle" :send-message-path="sendMessagePath" :send-message-img="sendMessageImg"
-		:show-message-card="showMessageCard" @tap.stop="click" @getphonenumber="getphonenumber"
-		@getuserinfo="getuserinfo" @error="error" @opensetting="opensetting" @launchapp="launchapp">
+	<button :style="[{width},customStyle]" class="custom-button" :class="classList" :data-name="dataName"
+		:disabled="disabled" :form-type="formType" :open-type="openType" :hover-class="hoverClass"
+		:hover-start-time="Number(hoverStartTime)" :hover-stay-time="Number(hoverStayTime)"
+		:app-parameter="appParameter" :hover-stop-propagation="hoverStopPropagation" :lang="lang"
+		:session-from="sessionFrom" :send-message-title="sendMessageTitle" :send-message-path="sendMessagePath"
+		:send-message-img="sendMessageImg" :show-message-card="showMessageCard" @tap.stop="click"
+		@getphonenumber="getphonenumber" @getuserinfo="getuserinfo" @error="error" @opensetting="opensetting"
+		@launchapp="launchapp">
 		<image :style="[imageStyle]" :class="imageClass" v-if="image" :src="`${imagePath}${image}.png`"></image> <text
 			:style="[textStyle]" :class="[textClass]">
 			<slot>{{text}}</slot>
@@ -24,11 +25,18 @@
 		};
 	}
 	export default {
+		options: {
+			virtualHost: true
+		},
 		props: {
 			// 节流，一定时间内只能触发一次
 			throttleTime: {
 				type: [String, Number],
 				default: 1000
+			},
+			width: { // 自定义样式
+				type: String,
+				default: 'auto'
 			},
 			customStyle: { // 自定义样式
 				type: Object,
