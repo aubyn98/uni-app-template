@@ -1,5 +1,5 @@
 <template>
-	<view class="custom-fix-bottom-box" :style="{'z-index':zIndex,'background-color':bgColor,position}">
+	<view class="custom-fix-bottom-box" :style="[{'z-index':zIndex,'background-color':bgColor,position},customStyle]">
 		<slot></slot>
 	</view>
 </template>
@@ -7,6 +7,10 @@
 <script>
 	export default {
 		props: {
+			customStyle: {
+				type: Object,
+				default: () => ({})
+			},
 			position: { // 定位
 				type: String,
 				default: 'fixed'
