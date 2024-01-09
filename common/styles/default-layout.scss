@@ -1,183 +1,224 @@
-// ------------------------去除边框-------------------------------
-
+/* 去除边框 */
 .no-border {
   border: none;
   outline: none;
 }
 
-// ------------------------浮动-------------------------------
-
+/* 浮动 */
 .float-left {
   float: left;
 }
-
 .float-right {
-  float: left;
+  float: right;
 }
-
-// 清除浮动
+/* 清除浮动 */
 .clearfix::after {
   content: '';
   display: block;
   clear: both;
 }
-
-// ----------------------------------------------------------------
-
-// ------------------------盒模型-----------------------------
-
+/* 盒模型 */
 .inline-layout {
   font-size: 0px;
-  &.v-center::before {
-    content: '';
-    display: inline-block;
-    vertical-align: middle;
-    width: 0px;
-    height: 100%;
-  }
-  &.justify {
-    text-align: justify;
-  }
-  &.justify::after {
-    content: '';
-    display: inline-block;
-    width: 100%;
-    height: 0px;
-  }
 }
-
-@each $vertical in top, middle, bottom {
-  .vertical-#{$vertical} {
-    vertical-align: $vertical;
-  }
+.inline-layout.v-center::before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  width: 0px;
+  height: 100%;
 }
-
-@each $display in none, block, inline, inline-block, inline-flex, grid, contents {
-  .#{$display} {
-    display: $display;
-  }
+.inline-layout.justify {
+  text-align: justify;
 }
-
+.inline-layout.justify::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+  height: 0px;
+}
+.vertical-top {
+  vertical-align: top;
+}
+.vertical-middle {
+  vertical-align: middle;
+}
+.vertical-bottom {
+  vertical-align: bottom;
+}
+.none {
+  display: none;
+}
+.block {
+  display: block;
+}
+.inline {
+  display: inline;
+}
+.inline-block {
+  display: inline-block;
+}
+.inline-flex {
+  display: inline-flex;
+}
+.flex {
+  display: flex;
+}
+.grid {
+  display: grid;
+}
+.contents {
+  display: contents;
+}
 .content-box {
   box-sizing: content-box;
 }
-
-// --------------------------------------------------------------
-
-// -----------------------文本处理------------------------------
-@each $select in none, text {
-  .select-#{$select} {
-    user-select: $select;
-  }
+.border-box {
+  box-sizing: border-box;
 }
-
-// 溢出处理
+/* 文本处理 */
+.select-none {
+  -webkit-user-select: none;
+          user-select: none;
+}
+.select-text {
+  -webkit-user-select: text;
+          user-select: text;
+}
+/* 溢出处理 */
 .ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
-  &.sl /*single-line*/ {
-    white-space: nowrap;
-  }
-  &.ml /*multi-line*/ {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-  }
 }
-
-@each $align in left, center, right, justify {
-  .text-#{$align} {
-    text-align: $align;
-  }
+.ellipsis.sl {
+  white-space: nowrap;
 }
-
+.ellipsis.ml {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.text-justify {
+  text-align: justify;
+}
 .text-nowrap {
   white-space: nowrap;
 }
 .text-last-justify {
   text-align-last: justify;
 }
-// --------------------------------------------------------------
-
-// -------------------------经典布局---------------------------------
-
+/* 经典布局 */
 .w-auto {
   width: auto;
 }
-
 .w-100P {
   width: 100%;
 }
-
 .h-auto {
   height: auto;
 }
-
 .h-100P {
   height: 100%;
 }
-
 .wh-fs {
   width: 1em;
   height: 1em;
 }
-
-@each $position in static, relative, absolute, fixed, sticky {
-  .#{$position} {
-    position: $position;
-  }
+.static {
+  position: static;
 }
-
-@each $index in auto, 0, 1, -1 {
-  .zIndex-#{$index} {
-    z-index: $index;
-  }
+.relative {
+  position: relative;
 }
-
-@each $direction in left, right, top, bottom {
-  .#{$direction}-0 {
-    #{$direction}: 0;
-  }
+.absolute {
+  position: absolute;
 }
-
-@each $size in auto, 0 {
-  .margin-#{$size} {
-    margin: $size;
-  }
-
-  .margin-lr-#{$size} {
-    margin: 0 $size;
-  }
-
-  .margin-tb-#{$size} {
-    margin: $size 0;
-  }
-
-  .margin-l-#{$size} {
-    margin-left: $size;
-  }
-
-  .margin-r-#{$size} {
-    margin-right: $size;
-  }
-
-  .margin-t-#{$size} {
-    margin-top: $size;
-  }
-
-  .margin-b-#{$size} {
-    margin-bottom: $size;
-  }
+.fixed {
+  position: fixed;
 }
-
-// -------------------------flex布局---------------------------------
-.flex {
-  display: flex;
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
 }
+.zIndex-auto {
+  z-index: auto;
+}
+.zIndex-0 {
+  z-index: 0;
+}
+.zIndex-1 {
+  z-index: 1;
+}
+.zIndex--1 {
+  z-index: -1;
+}
+.left-0 {
+  left: 0;
+}
+.right-0 {
+  right: 0;
+}
+.top-0 {
+  top: 0;
+}
+.bottom-0 {
+  bottom: 0;
+}
+.margin-auto {
+  margin: auto;
+}
+.margin-lr-auto {
+  margin: 0 auto;
+}
+.margin-tb-auto {
+  margin: auto 0;
+}
+.margin-l-auto {
+  margin-left: auto;
+}
+.margin-r-auto {
+  margin-right: auto;
+}
+.margin-t-auto {
+  margin-top: auto;
+}
+.margin-b-auto {
+  margin-bottom: auto;
+}
+.margin-0 {
+  margin: 0;
+}
+.margin-lr-0 {
+  margin: 0 0;
+}
+.margin-tb-0 {
+  margin: 0 0;
+}
+.margin-l-0 {
+  margin-left: 0;
+}
+.margin-r-0 {
+  margin-right: 0;
+}
+.margin-t-0 {
+  margin-top: 0;
+}
+.margin-b-0 {
+  margin-bottom: 0;
+}
+/* flex布局 */
 .flex-x-center {
   display: flex;
   justify-content: center;
 }
-
 .flex-y-center {
   display: flex;
   align-items: center;
@@ -193,14 +234,12 @@
 .flex-col {
   flex-direction: column;
 }
-
 .flex-wrap {
   flex-wrap: wrap;
 }
 .flex-nowrap {
   flex-wrap: nowrap;
 }
-
 .flex-1 {
   flex: 1;
 }
@@ -215,21 +254,18 @@
 .flex-auto {
   flex: auto;
 }
-
 .flex-grow-0 {
   flex-grow: 0;
 }
 .flex-grow {
   flex-grow: 1;
 }
-
 .flex-shrink-0 {
   flex-shrink: 0;
 }
 .flex-shrink {
   flex-shrink: 1;
 }
-
 .justify-start {
   justify-content: flex-start;
 }
@@ -245,16 +281,12 @@
 .justify-around {
   justify-content: space-around;
 }
-
 .items-start {
   align-items: flex-start;
 }
-
 .items-end {
   align-items: flex-end;
 }
-
 .items-center {
   align-items: center;
 }
-// --------------------------------------------------------------
