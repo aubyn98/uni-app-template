@@ -25,7 +25,7 @@
 		props: {
 			title: String, // 标题
 			customClass: { // 自定义类名
-				type: [String, Object],
+				type: String,
 				default: ''
 			},
 			customStyle: { // 自定义样式
@@ -37,7 +37,7 @@
 				default: ''
 			},
 			textClass: { // 自定义字体类目
-				type: [String, Object],
+				type: String,
 				default: ''
 			},
 			home: { // 是否显示图片
@@ -57,7 +57,7 @@
 				default: ''
 			},
 			imageClass: { // 自定义图片类名
-				type: [String, Object],
+				type: String,
 				default: ''
 			},
 			imagePath: { // 图片路径

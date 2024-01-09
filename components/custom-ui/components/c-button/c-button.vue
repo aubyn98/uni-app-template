@@ -43,7 +43,7 @@
 				default: () => ({})
 			},
 			customClass: { // 自定义类名
-				type: [String, Object],
+				type: String,
 				default: ''
 			},
 			text: { // 按钮文字
@@ -55,7 +55,7 @@
 				default: () => ({})
 			},
 			textClass: { // 文字类名
-				type: [String, Object],
+				type: String,
 				default: ''
 			},
 			imageStyle: { // 图片样式
@@ -63,7 +63,7 @@
 				default: () => ({})
 			},
 			imageClass: { // 图片类名
-				type: [String, Object],
+				type: String,
 				default: ''
 			},
 			imagePath: { // 图片路径前缀
