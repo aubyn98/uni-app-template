@@ -102,5 +102,10 @@
 		box-shadow: none;
 		background-color: transparent;
 	}
+	
+	&[disabled]{
+		background: #cccccc;
+		box-shadow: none;
+	}
 
 }
