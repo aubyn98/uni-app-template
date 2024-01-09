@@ -26,8 +26,9 @@ export function scanBarcode() {
 							icon: 'none',
 							duration: 1000
 						})
-						/* uni.navigateTo({
-							url: `/pages/subPackage/goodsdetail/goodsdetail?goodsId=${res.data.id}&formSearch=1`
+						/* uni.$u.route(`/pages/subPackage/goodsdetail/goodsdetail`, {
+							goodsId: res.data.id,
+							formSearch: 1
 						}) */
 					} else {
 						uni.showToast({

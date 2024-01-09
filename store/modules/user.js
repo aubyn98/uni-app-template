@@ -113,9 +113,7 @@ export default {
 				const userInfo = provider.info;
 				if (!userInfo.nickname || userInfo.nickname.indexOf(
 						'微信用户') > -1) {
-					uni.navigateTo({
-						url: '/packageA/pages/subPackage/editUserInfo/editUserInfo'
-					})
+					uni.$u.route('/packageA/pages/subPackage/editUserInfo/editUserInfo')
 				}
 				dispatch('getMemberCardInfo')
 			})

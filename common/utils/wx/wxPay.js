@@ -28,14 +28,11 @@ export function wexpayMiniAppPayment(data, orderSn) {
 			complete: function(res) {
 				if (res.errMsg == 'requestPayment:ok') {
 					resolve(res)
-					const pages = getCurrentPages()
-					const page = pages[pages.length - 1];
-					if (page.route != 'packageA/pages/orderDetail/orderDetail') {
-						uni.navigateTo({
-							url: '/packageA/pages/orderDetail/orderDetail?sn=' + orderSn,
-							fail: (err) => {
-								console.log(err)
-							},
+					const page = uni.$u.page();
+					const detailUrl = '/packageA/pages/orderDetail/orderDetail'
+					if (page != detailUrl) {
+						uni.$u.route(detailUrl, {
+							orderSn
 						})
 					}
 				} else {
