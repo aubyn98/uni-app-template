@@ -68,6 +68,9 @@ export function downloadFile(url, params) {
 
 export function uploadFile(url, filePath, formData) {
 	const token = uni.getStorageSync(STORAGE_KEY_ENUMS.token)
+	if (!filePath.startsWith('http://tmp') && !filePath.startsWith('wxfile://tmp')) return Promise.resolve({
+		data: filePath
+	})
 	uni.showLoading({
 		mask: true,
 		title: '上传中...'
