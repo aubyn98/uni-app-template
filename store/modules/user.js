@@ -35,11 +35,11 @@ export default {
 			uni.removeStorageSync('userInfo')
 			uni.removeStorageSync(STORAGE_KEY_ENUMS.token)
 		},
-		setOpenid(state, provider) {
-			state.openid = provider.openid
+		setOpenid(state, openid) {
+			state.openid = openid
 			uni.setStorageSync(
 				'openid',
-				provider.openid
+				openid
 			)
 		},
 		setLoginInfo(state, provider) {
@@ -78,6 +78,7 @@ export default {
 		},
 		login({
 			state,
+			getters,
 			rootState,
 			commit,
 			dispatch
@@ -115,7 +116,7 @@ export default {
 						'微信用户') > -1) {
 					uni.$u.route('/packageA/pages/subPackage/editUserInfo/editUserInfo')
 				}
-				dispatch('getMemberCardInfo')
+				// dispatch('getMemberCardInfo')
 			})
 		},
 	},

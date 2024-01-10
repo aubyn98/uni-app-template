@@ -45,7 +45,7 @@ export function downloadFile(url, params) {
 		title: '下载中...'
 	})
 	return new Promise((resolve, reject) => {
-		const token = uni.getStorageSync(STORAGE_KEY_ENUMS.token)
+		const token = store.state.user.token
 		uni.downloadFile({
 			url: default_baseURL + url + (hasParams ? '?' + params : ''),
 			header: {
@@ -67,7 +67,7 @@ export function downloadFile(url, params) {
 }
 
 export function uploadFile(url, filePath, formData) {
-	const token = uni.getStorageSync(STORAGE_KEY_ENUMS.token)
+	const token = store.state.user.token
 	if (!filePath.startsWith('http://tmp') && !filePath.startsWith('wxfile://tmp')) return Promise.resolve({
 		data: filePath
 	})
@@ -147,11 +147,13 @@ export default function http(opt, loading = true, qs = true) {
 	} = opt
 	opt = res
 	return new Promise((resolve, reject) => {
-		const token = uni.getStorageSync(STORAGE_KEY_ENUMS.token)
+		const token = store.state.user.token
 		uni.request({
 			header: {
 				'Content-Type': opt.method.toUpperCase() === 'GET' ? 'application/json' : qs ?
 					'application/x-www-form-urlencoded; charset=UTF-8' : 'application/json',
+				'source': 'miniProgram',
+				'deliveryType': store.state.deliveryType,
 				...(token && {
 					[STORAGE_KEY_ENUMS.token]: token
 				}),
