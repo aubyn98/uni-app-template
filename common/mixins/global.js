@@ -1,4 +1,12 @@
 export default {
+	data() {
+		return {
+			onShowEventKey: `[${uni.$u.page()}]onShow`
+		}
+	},
+	onShow() {
+		uni.$emit(this.onShowEventKey)
+	},
 	methods: {
 		goBack() {
 			const pages = getCurrentPages()

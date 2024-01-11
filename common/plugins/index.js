@@ -3,7 +3,7 @@ import utils from '../utils'
 import customUI from '@/components/custom-ui'
 import uview from '@/components/uview-ui';
 import {
-	navigate
+	global
 } from '../mixins'
 export default {
 	install(app) {
@@ -15,6 +15,6 @@ export default {
 			}
 		})
 		app.use(apis).use(utils).use(customUI).use(uview)
-		app.mixin(navigate)
+		app.mixin(global)
 	},
 }
