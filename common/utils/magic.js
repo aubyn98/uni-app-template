@@ -18,6 +18,22 @@ export function debounce(fn, delay) {
 		}, delay)
 	}
 }
+export function debouncePromise(fn, delay) {
+	let timer = null,
+		arr = []
+	return function(...argvs) {
+		return new Promise((r, j) => {
+			if (timer) {
+				arr.shift()?.('cancel')
+				clearTimeout(timer)
+			}
+			arr.push(j)
+			timer = setTimeout(() => {
+				r(fn.apply(this, argvs))
+			}, delay)
+		})
+	}
+}
 
 // 节流
 export function throttle(func, wait = 500, immediate = true) {
