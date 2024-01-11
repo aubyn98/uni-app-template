@@ -10,29 +10,38 @@ export function compose(...fns) {
 
 // 防抖
 export function debounce(fn, delay) {
-	let timer = null
-	return function(...argvs) {
-		if (timer) clearTimeout(timer)
+	let timer = null;
+	_.stop = () => timer && clearTimeout(timer);
+
+	function _(...argvs) {
+		_.stop();
 		timer = setTimeout(() => {
-			fn.apply(this, argvs)
-		}, delay)
+			fn.apply(this, argvs);
+		}, delay);
 	}
+	return _;
 }
+
 export function debouncePromise(fn, delay) {
 	let timer = null,
-		arr = []
-	return function(...argvs) {
-		return new Promise((r, j) => {
-			if (timer) {
-				arr.shift()?.('cancel')
-				clearTimeout(timer)
-			}
-			arr.push(j)
+		arr = [];
+	_.stop = () => {
+		if (timer) {
+			arr.shift()?.('cancel');
+			clearTimeout(timer);
+		}
+	};
+
+	function _(...argvs) {
+		return new Promise((resolve, reject) => {
+			_.stop();
+			arr.push(reject);
 			timer = setTimeout(() => {
-				r(fn.apply(this, argvs))
-			}, delay)
-		})
+				resolve(fn.apply(this, argvs));
+			}, delay);
+		});
 	}
+	return _;
 }
 
 // 节流
