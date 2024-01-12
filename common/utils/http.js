@@ -118,16 +118,16 @@ export function uploadFile(url, filePath, formData) {
 
 }
 
-export function request(url, method, params, config = {}, opts = {
-	loading: true,
-	qs: true
-}) {
+export function request(url, method, params, config = {}, {
+	loading = true,
+	qs = true
+} = {}) {
 	return http({
 		url,
 		method,
 		data: params,
 		...config
-	}, opts.loading, opts.qs)
+	}, loading, qs)
 }
 
 function simplify(type) {
