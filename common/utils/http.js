@@ -118,16 +118,13 @@ export function uploadFile(url, filePath, formData) {
 
 }
 
-export function request(url, method, params, config = {}, {
-	loading = true,
-	qs = true
-} = {}) {
+export function request(url, method, params, config = {}, options) {
 	return http({
 		url,
 		method,
 		data: params,
 		...config
-	}, loading, qs)
+	}, options)
 }
 
 function simplify(type) {
@@ -138,19 +135,25 @@ function simplify(type) {
 request.get = simplify('get')
 request.post = simplify('post')
 
-export default function http(opt, loading = true, qs = true) {
-	loading && startLoading()
+export default function http(config, options) {
+	options = Object.assign({
+		loading: true,
+		qs: true
+	}, options)
+
+	options.loading && startLoading()
 	const cacheArguments = cloneDeepWithDescriptors(arguments)
 	const {
 		header,
 		...res
-	} = opt
-	opt = res
+	} = config
+	config = res
 	return new Promise((resolve, reject) => {
 		const token = store.state.user.token
 		uni.request({
 			header: {
-				'Content-Type': opt.method.toUpperCase() === 'GET' ? 'application/json' : qs ?
+				'Content-Type': config.method.toUpperCase() === 'GET' ? 'application/json' : options
+					.qs ?
 					'application/x-www-form-urlencoded; charset=UTF-8' : 'application/json',
 				'source': 'miniProgram',
 				'deliveryType': store.state.deliveryType,
@@ -160,6 +163,7 @@ export default function http(opt, loading = true, qs = true) {
 				...header
 			},
 			success(res) {
+				if (res.statusCode == 404) return reject(res)
 				const data = res.data
 				if (hasOwnProperty(data, 'status') && !data.status) {
 					if (data.responseCode === 'invalidAuthorization') {
@@ -185,10 +189,10 @@ export default function http(opt, loading = true, qs = true) {
 				reject(err)
 			},
 			complete() {
-				loading && endLoading()
+				options.loading && endLoading()
 			},
-			...opt,
-			url: default_baseURL + opt.url,
+			...config,
+			url: default_baseURL + config.url,
 		})
 	})
 }
