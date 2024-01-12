@@ -118,7 +118,7 @@ export function uploadFile(url, filePath, formData) {
 
 }
 
-export function request(url, method, params, config = {}, options) {
+export function request(url, method, params, config, options) {
 	return http({
 		url,
 		method,
