@@ -2,14 +2,15 @@ import {
 	request
 } from '@/common/utils'
 
-export function createQRCode(params) {
+export function createQRCode(params, opts) {
 	return request.post('/fronted/createQRCode', params, {}, {
-		qs: false
+		qs: false,
+		...opts
 	})
 }
 
-export function editUserInfo(params) {
-	return request.post('/fronted/member/wechat/update', params)
+export function editUserInfo(params, opts) {
+	return request.post('/fronted/member/wechat/update', params, {}, opts)
 }
 
 export function createCardParams() {
@@ -132,40 +133,51 @@ export function createCardParams() {
 		}
 	}
 }
-export function create_member_card(params) {
+export function create_member_card(params, opts) {
 	return request.post('/fronted/wechat/create/member/card', createCardParams(), {}, {
-		qs: false
+		qs: false,
+		...opts
 	})
 }
 
-export function member_mobile_login(params) {
-	return request.post('/fronted/member/mobile/login', params)
+export function member_mobile_login(params, opts) {
+	return request.post('/fronted/member/mobile/login', params, {}, opts)
 }
 
-export function receive_member_card(params) {
-	return request.get('/fronted/wechat/receive/card/params', params)
+export function receive_member_card(params, opts) {
+	return request.get('/fronted/wechat/receive/card/params', params, {}, opts)
 }
 
-export function get_myself(params) {
-	return request.get('/fronted/member/myself', params)
+export function get_myself(params, opts) {
+	return request.get('/fronted/member/myself', params, {}, {
+		loading: false,
+		...opts
+	})
 }
 
-export function bind_member_card(params) {
-	return request.post('/fronted/member/bind/card', params)
+export function bind_member_card(params, opts) {
+	return request.post('/fronted/member/bind/card', params, {}, opts)
 }
 
-export function member_bind_card(params) {
-	return request.post('/fronted/member/bind_card', params)
+export function member_bind_card(params, opts) {
+	return request.post('/fronted/member/bind_card', params, {}, opts)
 }
 
-export function get_openid(params) {
-	return request.get('/fronted/wechat/mini/openid', params)
+export function get_openid(params, opts) {
+	return request.get('/fronted/wechat/mini/openid', params, {}, opts)
 }
 
-export function wechat_login(params) {
-	return request.post('/fronted/member/wechat/login', params)
+export function wechat_login(params, opts) {
+	return request.post('/fronted/member/wechat/login', params, {}, opts)
 }
 
-export function member_binding_mobile(params) {
-	return request.post('/fronted/member/binding_mobile', params)
+export function member_binding_mobile(params, opts) {
+	return request.post('/fronted/member/binding_mobile', params, {}, opts)
+}
+
+export function get_statistics(params, opts) {
+	return request.get('/fronted/member/statistics', params, {}, {
+		loading: false,
+		...opts
+	})
 }
