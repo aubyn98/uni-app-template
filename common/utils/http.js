@@ -136,10 +136,11 @@ request.get = simplify('get')
 request.post = simplify('post')
 
 export default function http(config, options) {
-	options = Object.assign({
+	options = {
 		loading: true,
-		qs: true
-	}, options)
+		qs: true,
+		...options
+	}
 
 	options.loading && startLoading()
 	const cacheArguments = cloneDeepWithDescriptors(arguments)
