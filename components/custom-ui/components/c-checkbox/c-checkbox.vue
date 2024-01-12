@@ -1,8 +1,7 @@
 <template>
 	<view class="custom-checkbox" @tap.stop="change(!value)">
-		<image :style="[cur.style,customStyle]"
-			:src="`/static/images/check-box/${cur.img[value ? 'selected' : 'noSelect'] || 'checked'}.png`"
-			class="custom-checkbox">
+		<image :style="[{ width:size, height:size }, customStyle]"
+			:src="`${imagePath}${value ? checkedIcon : checkIcon}.png`" class="custom-checkbox">
 		</image>
 		<view>
 			<slot>{{ label }}</slot>
@@ -11,34 +10,27 @@
 </template>
 
 <script>
-	const dict = {
-		round: { // 圆形
-			img: {
-				noSelect: 'check',
-				selected: 'checked'
-			},
-			style: {
-				width: '26rpx',
-				height: '26rpx',
-			}
-		},
-		square: { // 方形
-			img: {
-				noSelect: 'check',
-				selected: 'checked'
-			},
-			style: {
-				width: '26rpx',
-				height: '26rpx',
-				borderRadius: '4rpx'
-			}
-		}
-	}
 	export default {
 		options: {
 			virtualHost: true
 		},
 		props: {
+			size: {
+				type: String,
+				default: '26rpx'
+			},
+			imagePath: {
+				type: String,
+				default: '/static/images/check-box/'
+			},
+			checkIcon: {
+				type: String,
+				default: 'check'
+			},
+			checkedIcon: {
+				type: String,
+				default: 'checked'
+			},
 			disabled: {
 				type: Boolean,
 				default: false
@@ -50,13 +42,6 @@
 				type: Boolean,
 				default: false
 			}, // 双向绑定的值
-			type: { // checkbox类型
-				type: String,
-				validator(val) {
-					return ['round', 'square'].indexOf(val) !== -1;
-				},
-				default: 'square'
-			},
 			customStyle: { // 自定义样式
 				type: Object,
 				default: () => ({})
@@ -65,11 +50,6 @@
 		data() {
 			return {
 
-			}
-		},
-		computed: {
-			cur() {
-				return dict[this.type]
 			}
 		},
 		methods: {
