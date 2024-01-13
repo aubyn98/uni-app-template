@@ -1,5 +1,5 @@
 import config, {
-	STORAGE_KEY_ENUMS
+	ENUMS
 } from '../config'
 import store from '@/store'
 import {
@@ -50,7 +50,7 @@ export function downloadFile(url, params) {
 			url: default_baseURL + url + (hasParams ? '?' + params : ''),
 			header: {
 				...(token && {
-					[STORAGE_KEY_ENUMS.token]: token
+					[ENUMS.TOKEN_KEY]: token
 				})
 			},
 			success(res) {
@@ -83,7 +83,7 @@ export function uploadFile(url, filePath, formData) {
 			formData,
 			header: {
 				...(token && {
-					[STORAGE_KEY_ENUMS.token]: token
+					[ENUMS.TOKEN_KEY]: token
 				})
 			},
 			success(res) {
@@ -159,7 +159,7 @@ export default function http(config, options) {
 				'source': 'miniProgram',
 				'deliveryType': store.state.deliveryType,
 				...(token && {
-					[STORAGE_KEY_ENUMS.token]: token
+					[ENUMS.TOKEN_KEY]: token
 				}),
 				...header
 			},

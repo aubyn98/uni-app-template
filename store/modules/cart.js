@@ -1,6 +1,6 @@
 import apis from '@/common/apis'
 import {
-	STORAGE_KEY_ENUMS
+	ENUMS
 } from '@/common/config'
 
 let init = false

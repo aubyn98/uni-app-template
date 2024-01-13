@@ -1,13 +1,13 @@
 import apis from '@/common/apis'
 import {
-	STORAGE_KEY_ENUMS
+	ENUMS
 } from '@/common/config'
 export default {
 	namespaced: true,
 	state() {
 		return {
 			info: uni.getStorageSync('userInfo') || {},
-			token: uni.getStorageSync(STORAGE_KEY_ENUMS.token) || '',
+			token: uni.getStorageSync(ENUMS.TOKEN_KEY) || '',
 			openid: uni.getStorageSync('openid') || '',
 			memberCardInfo: uni.getStorageSync('memberCardInfo') || '',
 		}
@@ -33,7 +33,7 @@ export default {
 			state.token = ''
 			state.info = {}
 			uni.removeStorageSync('userInfo')
-			uni.removeStorageSync(STORAGE_KEY_ENUMS.token)
+			uni.removeStorageSync(ENUMS.TOKEN_KEY)
 		},
 		setOpenid(state, openid) {
 			state.openid = openid
@@ -48,7 +48,7 @@ export default {
 
 			state.token = provider.token
 			uni.setStorageSync(
-				STORAGE_KEY_ENUMS.token,
+				ENUMS.TOKEN_KEY,
 				provider.token
 			)
 		},
