@@ -7,6 +7,7 @@ export const Pro = {
 }
 
 export const ENUMS = Object.freeze({
+	/** token的键名 */
 	TOKEN_KEY: 'x-fronted-token',
 })
 
