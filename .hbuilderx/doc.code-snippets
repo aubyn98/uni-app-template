@@ -16,7 +16,7 @@
 		"scope": "source.js",
 		"prefix": "impUtils",
 		"body": [
-			"import {} from '@/common/utils'"
+			"import { $1 } from '@/common/utils'"
 		],
 		"triggerAssist": false,
 		"description": "impUtils"
@@ -34,7 +34,7 @@
 		"scope": "source.js",
 		"prefix": "impConfig",
 		"body": [
-			"import {} from '@/common/config'"
+			"import { $1 } from '@/common/config'"
 		],
 		"triggerAssist": false,
 		"description": "impConfig"
@@ -43,7 +43,7 @@
 		"scope": "source.js",
 		"prefix": "impMixins",
 		"body": [
-			"import {} from '@/common/mixins'"
+			"import { $1 } from '@/common/mixins'"
 		],
 		"triggerAssist": false,
 		"description": "impMixins"
