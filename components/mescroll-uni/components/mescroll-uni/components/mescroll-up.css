@@ -1,7 +1,7 @@
 /* 上拉加载区域 */
 .mescroll-upwarp {
 	box-sizing: border-box;
-	min-height: 110rpx;
+	height: 110rpx;
 	padding: 30rpx 0;
 	text-align: center;
 	clear: both;
@@ -11,7 +11,7 @@
 .mescroll-upwarp .upwarp-tip,
 .mescroll-upwarp .upwarp-nodata {
 	display: inline-block;
-	font-size: 28rpx;
+	font-size: 24rpx;
 	vertical-align: middle;
 	/* color: gray; 已在style设置color,此处删去*/
 }

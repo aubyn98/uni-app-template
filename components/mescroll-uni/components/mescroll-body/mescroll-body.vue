@@ -1,28 +1,27 @@
 <template>
-	<view 
-	class="mescroll-body mescroll-render-touch" 
-	:class="{'mescorll-sticky': sticky}"
-	:style="{'minHeight':minHeight, 'padding-top': padTop, 'padding-bottom': padBottom}" 
-	@touchstart="wxsBiz.touchstartEvent" 
-	@touchmove="wxsBiz.touchmoveEvent" 
-	@touchend="wxsBiz.touchendEvent" 
-	@touchcancel="wxsBiz.touchendEvent"
-	:change:prop="wxsBiz.propObserver"
-	:prop="wxsProp"
-	>
+	<view class="mescroll-body mescroll-render-touch" :class="{'mescorll-sticky': sticky}"
+		:style="{'minHeight':minHeight, 'padding-top': padTop, 'padding-bottom': padBottom}"
+		@touchstart="wxsBiz.touchstartEvent" @touchmove="wxsBiz.touchmoveEvent" @touchend="wxsBiz.touchendEvent"
+		@touchcancel="wxsBiz.touchendEvent" :change:prop="wxsBiz.propObserver" :prop="wxsProp">
 		<!-- 状态栏 -->
-		<view v-if="topbar&&statusBarHeight" class="mescroll-topbar" :style="{height: statusBarHeight+'px', background: topbar}"></view>
-		
-		<view class="mescroll-body-content mescroll-wxs-content" :style="{ transform: translateY, transition: transition }" :change:prop="wxsBiz.callObserver" :prop="callProp">
+		<view v-if="topbar&&statusBarHeight" class="mescroll-topbar"
+			:style="{height: statusBarHeight+'px', background: topbar}"></view>
+
+		<view class="mescroll-body-content mescroll-wxs-content"
+			:style="{ transform: translateY, transition: transition }" :change:prop="wxsBiz.callObserver"
+			:prop="callProp">
 			<!-- 下拉加载区域 (支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-down组件实现)-->
 			<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType" :rate="downRate"></mescroll-down> -->
-			<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'background':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
-				<view class="downwarp-content">
-					<view class="downwarp-progress mescroll-wxs-progress" :class="{'mescroll-rotate': isDownLoading}" :style="{'border-color':mescroll.optDown.textColor, 'transform': downRotate}"></view>
-					<view class="downwarp-tip">{{downText}}</view>
+			<view v-if="mescroll.optDown.use" class="mescroll-downwarp"
+				:style="{'background':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
+				<view class="downwarp-content" :style="{ paddingLeft: offsetLeft }">
+					<view class="downwarp-progress mescroll-wxs-progress" :class="{'mescroll-rotate': isDownLoading}"
+						:style="{'border-color':mescroll.optDown.textColor, 'transform': downRotate}"
+						v-if="!isDownLoading"></view>
+					<view class="downwarp-tip">{{ downText }}</view>
 				</view>
 			</view>
-	
+
 			<!-- 列表内容 -->
 			<slot></slot>
 
@@ -31,28 +30,30 @@
 
 			<!-- 上拉加载区域 (下拉刷新时不显示, 支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-up组件实现)-->
 			<!-- <mescroll-up v-if="mescroll.optUp.use && !isDownLoading && upLoadType!==3" :option="mescroll.optUp" :type="upLoadType"></mescroll-up> -->
-			<view v-if="mescroll.optUp.use && !isDownLoading && upLoadType!==3" class="mescroll-upwarp" :style="{'background':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor}">
+			<view v-if="mescroll.optUp.use && !isDownLoading && upLoadType!==3" class="mescroll-upwarp"
+				:style="{'background':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor, marginLeft: offsetLeft }">
 				<!-- 加载中 (此处不能用v-if,否则android小程序快速上拉可能会不断触发上拉回调) -->
 				<view v-show="upLoadType===1">
-					<view class="upwarp-progress mescroll-rotate" :style="{'border-color':mescroll.optUp.textColor}"></view>
+					<view class="upwarp-progress mescroll-rotate" :style="{'border-color':mescroll.optUp.textColor}">
+					</view>
 					<view class="upwarp-tip">{{ mescroll.optUp.textLoading }}</view>
 				</view>
 				<!-- 无数据 -->
 				<view v-if="upLoadType===2" class="upwarp-nodata">{{ mescroll.optUp.textNoMore }}</view>
 			</view>
 		</view>
-		
+
 		<!-- 底部是否偏移TabBar的高度(默认仅在H5端的tab页生效) -->
 		<!-- #ifdef H5 -->
 		<view v-if="bottombar && windowBottom>0" class="mescroll-bottombar" :style="{height: windowBottom+'px'}"></view>
 		<!-- #endif -->
-		
+
 		<!-- 适配iPhoneX -->
 		<view v-if="safearea" class="mescroll-safearea"></view>
-		
+
 		<!-- 回到顶部按钮 (fixed元素需写在transform外面,防止降级为absolute)-->
 		<mescroll-top v-model="isShowToTop" :option="mescroll.optUp.toTop" @click="toTopClick"></mescroll-top>
-		
+
 		<!-- #ifdef MP-WEIXIN || MP-QQ || APP-PLUS || H5 -->
 		<!-- renderjs的数据载体,不可写在mescroll-downwarp内部,避免use为false时,载体丢失,无法更新数据 -->
 		<view :change:prop="renderBiz.propObserver" :prop="wxsProp"></view>
@@ -86,7 +87,7 @@
 	import MescrollTop from "../mescroll-uni/components/mescroll-top.vue";
 	// 引入兼容wxs(含renderjs)写法的mixins
 	import WxsMixin from "../mescroll-uni/wxs/mixins.js";
-	
+
 	/**
 	 * mescroll-body 基于page滚动的下拉刷新和上拉加载组件, 支持嵌套原生组件, 性能好
 	 * @property {Object} down 下拉刷新的参数配置
@@ -123,15 +124,22 @@
 			bottom: [String, Number],
 			safearea: Boolean,
 			height: [String, Number],
-			bottombar:{
+			bottombar: {
 				type: Boolean,
 				default: true
 			},
-			sticky: Boolean
+			sticky: Boolean,
+			offsetLeft: {
+				type: String,
+				default: '0'
+			}
 		},
 		data() {
 			return {
-				mescroll: {optDown:{},optUp:{}}, // mescroll实例
+				mescroll: {
+					optDown: {},
+					optUp: {}
+				}, // mescroll实例
 				downHight: 0, //下拉刷新: 容器高度
 				downRate: 0, // 下拉比率(inOffset: rate<1; outOffset: rate>=1)
 				downLoadType: 0, // 下拉刷新状态: 0(loading前), 1(inOffset), 2(outOffset), 3(showLoading), 4(endDownScroll)
@@ -145,7 +153,7 @@
 		},
 		computed: {
 			// mescroll最小高度,默认windowHeight,使列表不满屏仍可下拉
-			minHeight(){
+			minHeight() {
 				return this.toPx(this.height || '100%') + 'px'
 			},
 			// 下拉布局往下偏移的距离 (px)
@@ -171,25 +179,33 @@
 				return this.isDownReset ? 'transform 300ms' : '';
 			},
 			translateY() {
-				return this.downHight > 0 ? 'translateY(' + this.downHight + 'px)' : ''; // transform会使fixed失效,需注意把fixed元素写在mescroll之外
+				return this.downHight > 0 ? 'translateY(' + this.downHight + 'px)' :
+					''; // transform会使fixed失效,需注意把fixed元素写在mescroll之外
 			},
 			// 是否在加载中
-			isDownLoading(){
+			isDownLoading() {
 				return this.downLoadType === 3
 			},
 			// 旋转的角度
-			downRotate(){
+			downRotate() {
 				return 'rotate(' + 360 * this.downRate + 'deg)'
 			},
 			// 文本提示
-			downText(){
-				if(!this.mescroll) return ""; // 避免头条小程序初始化时报错
-				switch (this.downLoadType){
-					case 1: return this.mescroll.optDown.textInOffset;
-					case 2: return this.mescroll.optDown.textOutOffset;
-					case 3: return this.mescroll.optDown.textLoading;
-					case 4: return this.mescroll.isDownEndSuccess ? this.mescroll.optDown.textSuccess : this.mescroll.isDownEndSuccess==false ? this.mescroll.optDown.textErr : this.mescroll.optDown.textInOffset;
-					default: return this.mescroll.optDown.textInOffset;
+			downText() {
+				if (!this.mescroll) return ""; // 避免头条小程序初始化时报错
+				switch (this.downLoadType) {
+					case 1:
+						return this.mescroll.optDown.textInOffset;
+					case 2:
+						return this.mescroll.optDown.textOutOffset;
+					case 3:
+						return this.mescroll.optDown.textLoading;
+					case 4:
+						return this.mescroll.isDownEndSuccess ? this.mescroll.optDown.textSuccess : this.mescroll
+							.isDownEndSuccess == false ? this.mescroll.optDown.textErr : this.mescroll.optDown
+							.textInOffset;
+					default:
+						return this.mescroll.optDown.textInOffset;
 				}
 			}
 		},
@@ -248,17 +264,20 @@
 						vm.downLoadType = 3; // 显示下拉刷新进度的回调 (自定义mescroll组件时,此行不可删)
 						vm.downHight = downHight; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
 					},
-					beforeEndDownScroll(mescroll){
-						vm.downLoadType = 4; 
+					beforeEndDownScroll(mescroll) {
+						vm.downLoadType = 4;
 						return mescroll.optDown.beforeEndDelay // 延时结束的时长
 					},
 					endDownScroll() {
 						vm.downLoadType = 4; // 结束下拉 (自定义mescroll组件时,此行不可删)
 						vm.downHight = 0; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
-						if(vm.downResetTimer) {clearTimeout(vm.downResetTimer); vm.downResetTimer = null} // 移除重置倒计时
-						vm.downResetTimer = setTimeout(()=>{ // 过渡动画执行完毕后,需重置为0的状态,避免下次inOffset不及时显示textInOffset
-							if(vm.downLoadType === 4) vm.downLoadType = 0
-						},300)
+						if (vm.downResetTimer) {
+							clearTimeout(vm.downResetTimer);
+							vm.downResetTimer = null
+						} // 移除重置倒计时
+						vm.downResetTimer = setTimeout(() => { // 过渡动画执行完毕后,需重置为0的状态,避免下次inOffset不及时显示textInOffset
+							if (vm.downLoadType === 4) vm.downLoadType = 0
+						}, 300)
 					},
 					// 派发下拉刷新的回调
 					callback: function(mescroll) {
@@ -299,14 +318,22 @@
 					}
 				}
 			};
-			
+
 			let i18nType = mescrollI18n.getType() // 当前语言类型
-			let i18nOption = {type: i18nType} // 国际化配置
+			let i18nOption = {
+				type: i18nType
+			} // 国际化配置
 			MeScroll.extend(i18nOption, vm.i18n) // 具体页面的国际化配置
 			MeScroll.extend(i18nOption, GlobalOption.i18n) // 全局的国际化配置
 			MeScroll.extend(diyOption, i18nOption[i18nType]); // 混入国际化配置
-			MeScroll.extend(diyOption, {down:GlobalOption.down, up:GlobalOption.up}); // 混入全局的配置
-			let myOption = JSON.parse(JSON.stringify({down: vm.down,up: vm.up})); // 深拷贝,避免对props的影响
+			MeScroll.extend(diyOption, {
+				down: GlobalOption.down,
+				up: GlobalOption.up
+			}); // 混入全局的配置
+			let myOption = JSON.parse(JSON.stringify({
+				down: vm.down,
+				up: vm.up
+			})); // 深拷贝,避免对props的影响
 			MeScroll.extend(myOption, diyOption); // 混入具体界面的配置
 
 			// 初始化MeScroll对象
@@ -326,21 +353,21 @@
 
 			// 因为使用的是page的scroll,这里需自定义scrollTo
 			vm.mescroll.resetScrollTo((y, t) => {
-				if(typeof y === 'string'){
+				if (typeof y === 'string') {
 					// 滚动到指定view (y为css选择器)
-					setTimeout(()=>{ // 延时确保view已渲染; 不使用$nextTick
+					setTimeout(() => { // 延时确保view已渲染; 不使用$nextTick
 						let selector;
-						if(y.indexOf('#')==-1 && y.indexOf('.')==-1){
-							selector = '#'+y // 不带#和. 则默认为id选择器
-						}else{
+						if (y.indexOf('#') == -1 && y.indexOf('.') == -1) {
+							selector = '#' + y // 不带#和. 则默认为id选择器
+						} else {
 							selector = y
 							// #ifdef APP-PLUS || H5 || MP-ALIPAY || MP-DINGTALK
-							if(y.indexOf('>>>')!=-1){ // 不支持跨自定义组件的后代选择器 (转为普通的选择器即可跨组件查询)
+							if (y.indexOf('>>>') != -1) { // 不支持跨自定义组件的后代选择器 (转为普通的选择器即可跨组件查询)
 								selector = y.split('>>>')[1].trim()
 							}
 							// #endif
 						}
-						uni.createSelectorQuery().select(selector).boundingClientRect(function(rect){
+						uni.createSelectorQuery().select(selector).boundingClientRect(function(rect) {
 							if (rect) {
 								let top = rect.top
 								top += vm.mescroll.getScrollTop()
@@ -348,12 +375,12 @@
 									scrollTop: top,
 									duration: t
 								})
-							} else{
+							} else {
 								console.error(selector + ' does not exist');
 							}
 						}).exec()
-					},30)
-				} else{
+					}, 30)
+				} else {
 					// 滚动到指定位置 (y必须为数字)
 					uni.pageScrollTo({
 						scrollTop: y,
@@ -366,21 +393,21 @@
 			if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {} else {
 				vm.mescroll.optUp.toTop.safearea = vm.safearea;
 			}
-			
+
 			// 全局配置监听
-			uni.$on("setMescrollGlobalOption", options=>{
-				if(!options) return;
+			uni.$on("setMescrollGlobalOption", options => {
+				if (!options) return;
 				let i18nType = options.i18n ? options.i18n.type : null
-				if(i18nType && vm.mescroll.i18n.type != i18nType){
+				if (i18nType && vm.mescroll.i18n.type != i18nType) {
 					vm.mescroll.i18n.type = i18nType
 					mescrollI18n.setType(i18nType)
 					MeScroll.extend(options, vm.mescroll.i18n[i18nType])
 				}
-				if(options.down){
+				if (options.down) {
 					let down = MeScroll.extend({}, options.down)
 					vm.mescroll.optDown = MeScroll.extend(down, vm.mescroll.optDown)
 				}
-				if(options.up){
+				if (options.up) {
 					let up = MeScroll.extend({}, options.up)
 					vm.mescroll.optUp = MeScroll.extend(up, vm.mescroll.optUp)
 				}
@@ -393,7 +420,7 @@
 	};
 </script>
 
-<style>
+<style lang="scss">
 	@import "../mescroll-body/mescroll-body.css";
 	@import "../mescroll-uni/components/mescroll-down.css";
 	@import "../mescroll-uni/components/mescroll-up.css";
