@@ -70,12 +70,22 @@ export function payment(data, orderSn) {
 		title: "请稍候...",
 		mask: true
 	})
-	return getOpenid().then(openid => apis.payment_h5({
+	return getOpenid()
+		.then(openid => apis.payment_h5({
 			openid,
 			...data
 		}))
 		.then(res => {
 			return wxPayInWxBrowser(res.data, orderSn)
+		}).then(() => {
+			setTimeout(function() {
+				uni.redirectTo({
+					url: '/pages/orderDetail?sn=' + orderSn,
+					fail: (err) => {
+						console.log(err)
+					}
+				})
+			}, 300)
 		})
 		.finally(() => {
 			uni.hideLoading()
@@ -97,14 +107,6 @@ export function wxPayInWxBrowser(data, orderSn) {
 			function(res) {
 				if (res.err_msg == "get_brand_wcpay_request:ok") {
 					resolve(res)
-					setTimeout(function() {
-						uni.redirectTo({
-							url: '/pages/orderDetail?sn=' + orderSn,
-							fail: (err) => {
-								console.log(err)
-							}
-						})
-					}, 300)
 				} else if (res.err_msg == "get_brand_wcpay_request:cancel") {
 					reject(res)
 				} else {

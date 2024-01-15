@@ -7,13 +7,22 @@ export function payment(openId, orderSn) {
 		mask: true
 	})
 	return apis.payment({
-		openId,
-		paymentMethod: 'wexpayMiniAppPaymentPlugin'
-	}).then(res => {
-		return wexpayMiniAppPayment(res.data, orderSn)
-	}).finally(() => {
-		uni.hideLoading()
-	})
+			openId,
+			paymentMethod: 'wexpayMiniAppPaymentPlugin'
+		}).then(res => {
+			return wexpayMiniAppPayment(res.data, orderSn)
+		}).then(() => {
+			const page = uni.$u.page();
+			const detailUrl = '/packageA/pages/orderDetail/orderDetail'
+			if (page != detailUrl) {
+				uni.$u.route(detailUrl, {
+					orderSn
+				})
+			}
+		})
+		.finally(() => {
+			uni.hideLoading()
+		})
 }
 
 export function wexpayMiniAppPayment(data, orderSn) {
@@ -28,13 +37,6 @@ export function wexpayMiniAppPayment(data, orderSn) {
 			complete: function(res) {
 				if (res.errMsg == 'requestPayment:ok') {
 					resolve(res)
-					const page = uni.$u.page();
-					const detailUrl = '/packageA/pages/orderDetail/orderDetail'
-					if (page != detailUrl) {
-						uni.$u.route(detailUrl, {
-							orderSn
-						})
-					}
 				} else {
 					reject(res)
 				}
