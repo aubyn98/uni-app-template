@@ -1,8 +1,8 @@
 <template>
-	<view class="custom-checkbox" :style="customStyle" @tap.stop="change(!value)">
+	<view class="custom-checkbox" :class="customClass" :style="customStyle" @tap.stop="change(!value)">
 		<image :style="[{ width:size, height:size }, iconStyle]"
-			:src="`${imagePath}${value ? checkedIcon : checkIcon}.png`" class="custom-checkbox">
-		</image>
+			:src="`${imagePath}${value ? checkedIcon : checkIcon}.png`" class="custom-checkbox"
+			:iconClass="iconClass" />
 		<slot>
 			<view v-if="label">
 				{{ label }}
@@ -48,7 +48,15 @@
 				type: Object,
 				default: () => ({})
 			},
+			iconClass: { // 自定义样式
+				type: Object,
+				default: () => ({})
+			},
 			customStyle: {
+				type: [String, Object],
+				default: ''
+			},
+			customClass: {
 				type: [String, Object],
 				default: ''
 			}
