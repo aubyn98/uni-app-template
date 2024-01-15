@@ -129,17 +129,17 @@
 		"triggerAssist": false,
 		"description": "props default Number or String"
 	},
-	"pdStrOrObj": {
+	"pdObjOrStr": {
 		"scope": "source.js",
-		"prefix": "pdsoo",
+		"prefix": "pdoos",
 		"body": [
 			"$1: {",
-			"	type: [String, Object],",
+			"	type: [Object, String],",
 			"	default: ''",
 			"}"
 		],
 		"triggerAssist": false,
-		"description": "props default String or Object"
+		"description": "props default Object or String"
 	},
 	"watch handler": {
 		"scope": "source.js",
