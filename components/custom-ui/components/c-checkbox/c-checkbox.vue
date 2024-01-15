@@ -1,13 +1,10 @@
 <template>
 	<view class="custom-checkbox" :class="customClass" :style="customStyle" @tap.stop="change(!value)">
 		<image :style="[{ width:size, height:size }, iconStyle]"
-			:src="`${imagePath}${value ? checkedIcon : checkIcon}.png`" class="custom-checkbox"
-			:iconClass="iconClass" />
-		<slot>
-			<view v-if="label">
-				{{ label }}
-			</view>
-		</slot>
+			:src="`${imagePath}${value ? checkedIcon : checkIcon}.png`" :iconClass="iconClass" />
+		<text class="custom-checkbox-label" v-if="label">
+			{{ label }}
+		</text>
 	</view>
 </template>
 
@@ -81,8 +78,8 @@
 		display: flex;
 		align-items: center;
 
-		image {
-			margin-right: 10rpx;
+		.custom-checkbox-label {
+			margin-left: 10rpx;
 		}
 	}
 </style>
