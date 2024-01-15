@@ -1,5 +1,5 @@
 <template>
-	<view class="custom-checkbox" :style="[customStyle]" @tap.stop="change(!value)">
+	<view class="custom-checkbox" :style="customStyle" @tap.stop="change(!value)">
 		<image :style="[{ width:size, height:size }, iconStyle]"
 			:src="`${imagePath}${value ? checkedIcon : checkIcon}.png`" class="custom-checkbox">
 		</image>
@@ -48,9 +48,9 @@
 				type: Object,
 				default: () => ({})
 			},
-			customStyle: { // 自定义样式
-				type: Object,
-				default: () => ({})
+			customStyle: {
+				type: [String, Object],
+				default: ''
 			}
 		},
 		data() {
