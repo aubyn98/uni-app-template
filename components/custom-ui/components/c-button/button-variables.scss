@@ -96,6 +96,19 @@
 		}
 	}
 	
+	&._disabled {
+		@include getColor(white, $disabled-color, 20rpx, none);
+	
+		&._plain {
+			color: $disabled-color;
+	
+			&::after {
+				border-color: $disabled-color;
+			}
+		}
+	}
+	
+	
 	&._blod {
 		@include getColor(#bcbcbc, #f8f8f8, 20rpx, rgba(192, 192, 192, 0.5));
 		
@@ -115,8 +128,10 @@
 		background-color: transparent;
 	}
 	
-	&[disabled],&._disabled{
-		background: #cccccc;
+	
+	
+	&[disabled]{
+		background: $disabled-color;
 		box-shadow: none;
 	}
 

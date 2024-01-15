@@ -78,7 +78,7 @@
 				type: String,
 				default: 'success',
 				validator: function(value) {
-					return ['success', 'warning', 'danger', 'info'].indexOf(value) !== -1;
+					return ['success', 'warning', 'danger', 'info', 'disabled'].indexOf(value) !== -1;
 				}
 			},
 			size: { // 按钮大小
