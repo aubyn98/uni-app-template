@@ -88,10 +88,22 @@
 		@include getColor(white, $info-color, 20rpx, rgba(192, 192, 192, 0.5));
 
 		&._plain {
-			color: #b2b2b2;
+			color: $info-color;
 
 			&::after {
-				border-color: #e6e6e6;
+				border-color: $info-color;
+			}
+		}
+	}
+	
+	&._blod {
+		@include getColor(#bcbcbc, #f8f8f8, 20rpx, rgba(192, 192, 192, 0.5));
+		
+		&._plain {
+			color: #bcbcbc;
+	
+			&::after {
+				border-color: #f8f8f8;
 			}
 		}
 	}
@@ -103,7 +115,7 @@
 		background-color: transparent;
 	}
 	
-	&[disabled]{
+	&[disabled],&._disabled{
 		background: #cccccc;
 		box-shadow: none;
 	}
