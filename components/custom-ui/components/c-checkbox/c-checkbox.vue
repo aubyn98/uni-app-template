@@ -1,11 +1,13 @@
 <template>
-	<view class="custom-checkbox" @tap.stop="change(!value)">
-		<image :style="[{ width:size, height:size }, customStyle]"
+	<view class="custom-checkbox" :style="[customStyle]" @tap.stop="change(!value)">
+		<image :style="[{ width:size, height:size }, iconStyle]"
 			:src="`${imagePath}${value ? checkedIcon : checkIcon}.png`" class="custom-checkbox">
 		</image>
-		<view>
-			<slot>{{ label }}</slot>
-		</view>
+		<slot>
+			<view v-if="label">
+				{{ label }}
+			</view>
+		</slot>
 	</view>
 </template>
 
@@ -42,6 +44,10 @@
 				type: Boolean,
 				default: false
 			}, // 双向绑定的值
+			iconStyle: { // 自定义样式
+				type: Object,
+				default: () => ({})
+			},
 			customStyle: { // 自定义样式
 				type: Object,
 				default: () => ({})
