@@ -30,7 +30,7 @@
         }
     }    
 </script>
-<style>
+<style lang="scss" scoped>
     .weui-switch {
         display: block;
         position: relative;
@@ -68,8 +68,8 @@
         transition: transform 0.35s cubic-bezier(0.4, 0.4, 0.25, 1.35);
     }
    .weui-switch-on:before {
-        background-color: #FFCB45;
-        background-color: #FFCB45;
+        background-color: $color-primary;
+        background-color: $color-primary;
     }
     .weui-switch-on:after {
         transform: translate(33rpx,-50%);

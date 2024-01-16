@@ -1,5 +1,5 @@
 <template>
-	<view class="custom-checkbox" :class="customClass" :style="customStyle" @tap.stop="change(!value)">
+	<view class="custom-checkbox" :class="customClass" :style="customStyle" @click.stop="change(!value)">
 		<image :style="[{ width:size, height:size }, iconStyle]"
 			:src="`${imagePath}${value ? checkedIcon : checkIcon}.png`" :iconClass="iconClass" />
 		<text class="custom-checkbox-label" v-if="label">
@@ -65,6 +65,7 @@
 		},
 		methods: {
 			change(val) {
+				this.$emit('click')
 				if (this.disabled) return
 				this.$emit('input', val)
 				this.$emit('change', val)

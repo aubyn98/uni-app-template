@@ -6,9 +6,6 @@
 
 <script>
 	export default {
-		options: {
-			virtualHost: true
-		},
 		props: {
 			customStyle: {
 				type: Object,

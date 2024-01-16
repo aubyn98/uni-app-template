@@ -1,7 +1,8 @@
-$success-color: #80d47f;
+$success-color: #2dbf77;
 $warning-color: #ffcb45;
-$danger-color: #ff6363;
-$info-color: #c0c0c0;
+$danger-color: #fc5936;
+$info-color: #666666;
+$disabled-color:#ccc;
 
 @mixin getBorderRadius($size) {
 	border-radius: $size;

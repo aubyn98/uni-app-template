@@ -20,7 +20,7 @@ export default {
 				marginTop: MenuButton.top - statusBarHeight,
 				...MenuButton
 			};
-			state.titleHeight = MenuButton.height + MenuButton.top + 6
+			state.titleHeight = MenuButton.height + MenuButton.top + state.MenuButton.marginTop
 		}
 	}
 }
