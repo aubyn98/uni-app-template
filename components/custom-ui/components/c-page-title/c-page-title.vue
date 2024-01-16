@@ -105,7 +105,6 @@
 				if (typeof customClass === 'string') classList.push(customClass);
 				if (typeof customClass === 'object') Object.keys(customClass).forEach(key => customClass[key] && classList
 					.push(key));
-				console.log(classList)
 				return classList;
 			}
 		},
