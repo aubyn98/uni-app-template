@@ -1,5 +1,5 @@
 <template>
-	<view class="custom-page-title-placeholder" :style="{height:titleHeight+'px'}">
+	<view class="custom-page-title-placeholder" :style="{ height: occupySpaceHeight }">
 		<view id="_custom-page-title" class="custom-page-title" :class="classList" :style="[getStyle]">
 			<view class="title-container" :style="{'min-height':getStyle['min-height']}">
 				<view class="_left-container" @tap.stop="goBack" v-if="back">
@@ -26,6 +26,11 @@
 			virtualHost: true
 		},
 		props: {
+			// 是否开启占位
+			occupySpace: {
+				type: Boolean,
+				default: true
+			},
 			title: String, // 标题
 			customClass: { // 自定义类名
 				type: String,
@@ -74,10 +79,19 @@
 			background: {
 				type: String,
 				default: '#fff'
+			},
+			otherHeight: {
+				type: [String, Number]
 			}
 		},
 		computed: {
 			...mapState('statusBar', ['statusBarHeight', 'MenuButton', 'titleHeight']),
+			occupySpaceHeight() {
+				if (this.occupySpace) {
+					return this.otherHeight ? `calc(${this.titleHeight}px + ${this.otherHeight})` : `${this.titleHeight}px`
+				}
+				return 0
+			},
 			getStyle() {
 				const statusBarHeight = this.statusBarHeight;
 				const MenuButton = this.MenuButton;
