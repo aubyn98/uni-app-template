@@ -1,5 +1,5 @@
 <template>
-	<u-popup :show="show" :closeOnClickOverlay="closeOnClickOverlay" :safeAreaInsetBottom="false" @close="close"
+	<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" :safeAreaInsetBottom="false" @close="close"
 		@closed="closed" mode="center" round="16rpx">
 		<view class="c-modal-tip">
 			<view v-if="options.showTitle" class="modal-tip-header">
@@ -8,63 +8,94 @@
 			<view class="modal-tip-content">
 				{{ options.content }}
 			</view>
-			<c-button v-if="options.showConfirm" width="448rpx" size="small"
-				@click="confirm">{{ options.confirmText }}</c-button>
+			<c-button v-if="options.showConfirm" width="448rpx" size="small" @click="confirm"
+				:text="options.confirmText" />
 		</view>
 	</u-popup>
 </template>
 
 <script>
 	export default {
+		props: {
+			closeOnClickOverlay: {
+				type: Boolean,
+				default: true
+			},
+			title: {
+				type: String,
+				default: '提示'
+			},
+			showTitle: {
+				type: Boolean,
+				default: true
+			},
+			confirmText: {
+				type: String,
+				default: '确定'
+			},
+			showConfirm: {
+				type: Boolean,
+				default: true
+			},
+			content: {
+				type: String,
+				default: ''
+			},
+			asyncClose: {
+				type: Boolean,
+				default: false
+			},
+		},
 		data() {
 			return {
 				show: false,
 				options: this.getOptions(),
 				resolve: () => void 0,
 				reject: () => void 0,
-				closeOnClickOverlay: true
 			}
 		},
-		created() {
-
-		},
-		onLoad() {
-
-		},
 		methods: {
-			open(opts) {
-				this.closeOnClickOverlay = true
+			open(opts, config) {
 				return new Promise((resolve, reject) => {
-					this.options = this.getOptions(opts)
+					this.options = this.getOptions(opts, config)
+					console.log(this.options)
 					this.show = true
 					this.resolve = resolve
 					this.reject = reject
 				})
 			},
+			confirmRes(res) {
+				this.resolve(res)
+				this.options.onConfirm(res)
+			},
 			confirm() {
-				this.closeOnClickOverlay = false
 				const close = () => this.show = false
 				if (this.options.asyncClose) {
-					this.resolve(close)
-					this.options.onConfirm(close)
+					this.confirmRes(close)
 				} else {
 					close()
-					this.resolve()
-					this.options.onConfirm()
+					this.confirmRes()
 				}
 			},
-			getOptions(opts) {
+			getOptions(opts, config) {
+				if (typeof config !== 'object') config = {}
+				if (typeof opts !== 'object') {
+					opts = {
+						content: opts
+					}
+				}
 				return {
-					title: '提示',
-					showTitle: true,
-					content: '',
-					showConfirm: true,
-					confirmText: '确定',
-					asyncClose: false,
-					closeOnClickOverlay: true,
-					onConfirm: () => void 0,
-					onCancel: () => void 0,
-					...opts
+					title: this.title,
+					showTitle: this.showTitle,
+					showConfirm: this.showConfirm,
+					confirmText: this.confirmText,
+					content: this.content,
+					asyncClose: this.asyncClose,
+					closeOnClickOverlay: this.closeOnClickOverlay,
+					onConfirm: (e) => this.$emit('confirm', e),
+					onCancel: (e) => this.$emit('cancel', e),
+					...opts,
+					...config
 				}
 			},
 			close() {

@@ -1,6 +1,7 @@
 <template>
-	<u-popup :show="show" :closeOnClickOverlay="closeOnClickOverlay" @close="close" @closed="closed" mode="center"
-		round="16rpx" :safeAreaInsetBottom="false" :z-index="options.zIndex" :overlayStyle="options.overlayStyle">
+	<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" @close="close" @closed="closed"
+		mode="center" round="16rpx" :safeAreaInsetBottom="false" :z-index="options.zIndex"
+		:overlayStyle="options.overlayStyle">
 		<view class="c-modal-input-wrapper">
 			<view class="c-model-title" v-if="options.showTitle">{{ options.title }}</view>
 			<view class="c-model-input">
@@ -9,15 +10,59 @@
 						:placeholder="options.placeholder" @confirm="confirm" />
 				</slot>
 			</view>
-			<view v-if="options.showConfirm" class="c-modal-input-confirm" @click="confirm">
-				{{ options.confirmText }}
-			</view>
+			<c-button v-if="options.showConfirm" width="448rpx" size="small" @click="confirm"
+				:text="options.confirmText" />
 		</view>
 	</u-popup>
 </template>
 
 <script>
 	export default {
+		props: {
+			closeOnClickOverlay: {
+				type: Boolean,
+				default: true
+			},
+			type: {
+				type: String,
+				default: 'text',
+				validator(v) {
+					return ['text', 'number', 'idcard', 'digit', 'safe-password', 'nickname'].includes(v)
+				}
+			},
+			zIndex: {
+				type: [Number, String],
+				default: 10075
+			},
+			title: {
+				type: String,
+				default: ''
+			},
+			showTitle: {
+				type: Boolean,
+				default: true
+			},
+			confirmText: {
+				type: String,
+				default: '确定'
+			},
+			showConfirm: {
+				type: Boolean,
+				default: true
+			},
+			placeholder: {
+				type: String,
+				default: ''
+			},
+			asyncClose: {
+				type: Boolean,
+				default: false
+			},
+			overlayStyle: {
+				type: Object,
+				default: () => ({})
+			},
+		},
 		data() {
 			return {
 				focus: false,
@@ -25,7 +70,6 @@
 				options: this.getOptions(),
 				resolve: () => void 0,
 				reject: () => void 0,
-				closeOnClickOverlay: true
 			}
 		},
 		watch: {
@@ -38,54 +82,57 @@
 				}
 			}
 		},
-		computed: {
-
-		},
 		methods: {
 			onInput(e) {
 				this.options.value = e.detail.value
 			},
-			open(opts) {
-				this.closeOnClickOverlay = true
+			open(opts, config) {
 				return new Promise((resolve, reject) => {
-					this.options = this.getOptions(opts)
+					this.options = this.getOptions(opts, config)
 					this.show = true
 					this.resolve = resolve
 					this.reject = reject
 				})
 			},
+			confirmRes(res) {
+				this.resolve(res)
+				this.options.onConfirm(res)
+			},
 			confirm() {
-				this.closeOnClickOverlay = false
 				const close = () => this.show = false
 				const res = {
 					value: this.options.value
 				}
 				if (this.options.asyncClose) {
 					res.close = close
-					this.resolve(res)
-					this.options.onConfirm(res)
+					this.confirmRes(res)
 				} else {
 					close()
-					this.resolve(res)
-					this.options.onConfirm(res)
+					this.confirmRes(res)
 				}
 			},
-			getOptions(opts) {
+			getOptions(opts, config) {
+				if (typeof config !== 'object') config = {}
+				if (typeof opts !== 'object') {
+					opts = {
+						value: opts || (opts === 0 ? 0 : '')
+					}
+				}
 				return {
-					title: '',
-					showTitle: true,
-					confirmText: '确定',
-					showConfirm: true,
-					zIndex: 10075,
-					overlayStyle: {},
-					value: '',
-					placeholder: '',
-					type: 'text', // 'text', 'number', 'idcard', 'digit', 'safe-password', 'nickname'
-					asyncClose: false,
-					closeOnClickOverlay: true,
-					onConfirm: () => void 0,
-					onCancel: () => void 0,
-					...opts
+					title: this.title,
+					showTitle: this.showTitle,
+					confirmText: this.confirmText,
+					showConfirm: this.showConfirm,
+					zIndex: this.zIndex,
+					overlayStyle: this.overlayStyle,
+					placeholder: this.placeholder,
+					type: this.type,
+					asyncClose: this.asyncClose,
+					closeOnClickOverlay: this.closeOnClickOverlay,
+					onConfirm: (e) => this.$emit('confirm', e),
+					onCancel: (e) => this.$emit('cancel', e),
+					...opts,
+					...config
 				}
 			},
 			close() {
@@ -139,17 +186,5 @@
 			height: 72rpx;
 		}
 
-		.c-modal-input-confirm {
-			width: 448rpx;
-			height: 72rpx;
-			line-height: 72rpx;
-			background: $color-primary;
-			border-radius: 44rpx;
-
-
-			font-size: 28rpx;
-			text-align: center;
-			color: #ffffff;
-		}
 	}
 </style>
