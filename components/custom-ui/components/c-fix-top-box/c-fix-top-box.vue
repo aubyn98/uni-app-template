@@ -3,7 +3,6 @@
 		<view id="c-fix-top-box" class="c-fix-top-box" :class="classList" :style="[ getStyle ]">
 			<slot :paddingX="paddingX" :paddingY="paddingY" :statusBarHeight="statusBarHeight + 'px'"
 				:minHeight="minHeight" :titleHeight="titleHeight" />
-			<slot name="other"></slot>
 		</view>
 	</view>
 </template>

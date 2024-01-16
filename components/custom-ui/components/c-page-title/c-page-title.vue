@@ -19,8 +19,6 @@
 					</slot>
 				</view>
 			</view>
-		</template>
-		<template #other>
 			<slot name="other"></slot>
 		</template>
 	</c-fix-top-box>
