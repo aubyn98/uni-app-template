@@ -1,6 +1,6 @@
 <template>
-	<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" :safeAreaInsetBottom="false" @close="close"
-		@closed="closed" mode="center" round="16rpx">
+	<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" :overlayStyle="options.overlayStyle"
+		:safeAreaInsetBottom="false" @close="close" @closed="closed" mode="center" round="16rpx">
 		<view class="c-modal-tip">
 			<view v-if="options.showTitle" class="modal-tip-header">
 				{{ options.title }}
@@ -45,6 +45,10 @@
 				type: Boolean,
 				default: false
 			},
+			overlayStyle: {
+				type: Object,
+				default: () => ({})
+			},
 		},
 		data() {
 			return {
@@ -58,7 +62,6 @@
 			open(opts, config) {
 				return new Promise((resolve, reject) => {
 					this.options = this.getOptions(opts, config)
-					console.log(this.options)
 					this.show = true
 					this.resolve = resolve
 					this.reject = reject
@@ -91,6 +94,7 @@
 					confirmText: this.confirmText,
 					content: this.content,
 					asyncClose: this.asyncClose,
+					overlayStyle: this.overlayStyle,
 					closeOnClickOverlay: this.closeOnClickOverlay,
 					onConfirm: (e) => this.$emit('confirm', e),
 					onCancel: (e) => this.$emit('cancel', e),
