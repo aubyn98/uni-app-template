@@ -12,6 +12,9 @@
 		mapState
 	} from 'vuex';
 	export default {
+		options: {
+			virtualHost: true
+		},
 		props: {
 			position: {
 				type: String,
