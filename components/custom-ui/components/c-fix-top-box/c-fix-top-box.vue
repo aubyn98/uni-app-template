@@ -103,7 +103,6 @@
 	}
 
 	.c-fix-top-box {
-		height: 0;
 		left: 0;
 		right: 0;
 		transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
