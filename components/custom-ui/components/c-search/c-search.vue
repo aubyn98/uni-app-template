@@ -19,7 +19,6 @@
 		},
 		watch:{
 			newValue(val){
-				console.log('--------x')
 				this.$emit('input',val)
 			},
 			value(val){

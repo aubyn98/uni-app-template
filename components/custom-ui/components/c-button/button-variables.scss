@@ -110,13 +110,13 @@
 	
 	
 	&._blod {
-		@include getColor(#bcbcbc, #f8f8f8, 20rpx, rgba(192, 192, 192, 0.5));
+		@include getColor(#bcbcbc, #f8f8f8, 20rpx, #ffffff);
 		
 		&._plain {
 			color: #bcbcbc;
 	
 			&::after {
-				border-color: #f8f8f8;
+				border-color: #bcbcbc;
 			}
 		}
 	}
