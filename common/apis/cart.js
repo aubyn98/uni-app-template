@@ -3,7 +3,7 @@ import {
 } from '@/common/utils'
 
 export function get_cart(params, opts) {
-	return request.get('/fronted/cart/get', params, {}, loading)
+	return request.get('/fronted/cart/get', params, {}, opts)
 }
 
 export function get_cart_info(params, opts) {
