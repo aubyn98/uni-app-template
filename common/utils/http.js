@@ -6,6 +6,9 @@ import {
 	hasOwnProperty,
 	cloneDeepWithDescriptors
 } from './object'
+import {
+	showToast
+} from './project'
 
 
 const default_baseURL = config.baseURL
@@ -31,7 +34,7 @@ function endLoading() {
 }
 
 // 106
-export function downloadFile(url, params) {
+export function downloadFile(url, params, loading = true) {
 	const hasParams = typeof params === 'object' && params !== null
 	if (hasParams) {
 		params = Object.keys(params).reduce((prev, k) => {
@@ -40,10 +43,7 @@ export function downloadFile(url, params) {
 			return prev
 		}, []).join('&')
 	}
-	uni.showLoading({
-		mask: true,
-		title: '下载中...'
-	})
+	loading && startLoading('下载中...')
 	return new Promise((resolve, reject) => {
 		const token = store.state.user.token
 		uni.downloadFile({
@@ -60,21 +60,18 @@ export function downloadFile(url, params) {
 				reject(e)
 			},
 			complete() {
-				uni.hideLoading()
+				loading && uni.hideLoading()
 			}
 		})
 	})
 }
 
-export function uploadFile(url, filePath, formData) {
+export function uploadFile(url, filePath, formData, loading = true) {
 	const token = store.state.user.token
 	if (!filePath.startsWith('http://tmp') && !filePath.startsWith('wxfile://tmp')) return Promise.resolve({
 		data: filePath
 	})
-	uni.showLoading({
-		mask: true,
-		title: '上传中...'
-	})
+	loading && startLoading('上传中...')
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({
 			url: default_baseURL + url, //仅为示例，非真实的接口地址
@@ -95,11 +92,7 @@ export function uploadFile(url, filePath, formData) {
 								.then(() => uploadFile(...arguments))
 								.then(resolve)
 						}
-						if (hasOwnProperty(data, 'message')) uni.showToast({
-							title: data.message,
-							icon: 'none',
-							duration: 1500
-						})
+						if (hasOwnProperty(data, 'message')) showToast(data.message)
 						return reject(data)
 					}
 					resolve(data)
@@ -111,20 +104,11 @@ export function uploadFile(url, filePath, formData) {
 				reject(e)
 			},
 			complete() {
-				uni.hideLoading()
+				loading && uni.hideLoading()
 			}
 		})
 	})
 
-}
-
-export function request(url, method, params, config, options) {
-	return http({
-		url,
-		method,
-		data: params,
-		...config
-	}, options)
 }
 
 function simplify(type) {
@@ -135,7 +119,7 @@ function simplify(type) {
 request.get = simplify('get')
 request.post = simplify('post')
 
-export default function http(config, options) {
+export function request(url, method, params, config, options) {
 	options = {
 		loading: true,
 		qs: true,
@@ -152,8 +136,11 @@ export default function http(config, options) {
 	return new Promise((resolve, reject) => {
 		const token = store.state.user.token
 		uni.request({
+			method,
+			url: default_baseURL + url,
+			data: params,
 			header: {
-				'Content-Type': config.method.toUpperCase() === 'GET' ? 'application/json' : options
+				'Content-Type': method.toUpperCase() === 'GET' ? 'application/json' : options
 					.qs ?
 					'application/x-www-form-urlencoded; charset=UTF-8' : 'application/json',
 				'source': 'miniProgram',
@@ -193,7 +180,7 @@ export default function http(config, options) {
 				options.loading && endLoading()
 			},
 			...config,
-			url: default_baseURL + config.url,
 		})
 	})
 }
+export default request
