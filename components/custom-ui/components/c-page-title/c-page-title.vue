@@ -3,19 +3,22 @@
 		:statusBar="false" background="transparent">
 		<template #default="{ paddingX, paddingY, statusBarHeight, minHeight }">
 			<view class="c-page-title" :class="classList" :style="[{ paddingTop: statusBarHeight, background }]">
-				<view class="title-container" :style="[{ padding:`${paddingY} ${paddingX}`, minHeight },customStyle]">
-					<view class="_left-container" @tap.stop="goBack" v-if="back">
-						<image class="_left-icon" :style="imageStyle" :class="imageClass"
-							:src="`${imagePath}icon_fh@2x.png`" mode="aspectFit"></image>
-					</view>
-					<view class="_left-container _left-home" @tap.stop="goHome" v-if="home">
-						<image class="_left-icon" :style="imageStyle" :class="imageClass"
-							:src="`${imagePath}icon_sy@2x.png`" mode="aspectFit"></image>
+				<view class="title-container"
+					:style="[{ padding:`${paddingY} ${paddingX} ${paddingY} 24rpx`, minHeight },customStyle]">
+					<view class="_left-container">
+						<view class="_left-icon-wrapper" @tap.stop="goBack" v-if="back">
+							<image class="_left-icon" :style="imageStyle" :class="imageClass"
+								:src="`${imagePath}icon_fh@2x.png`" mode="aspectFit"></image>
+						</view>
+						<view class="_left-icon-wrapper _left-home" @tap.stop="goHome" v-if="home">
+							<image class="_left-icon" :style="imageStyle" :class="imageClass"
+								:src="`${imagePath}icon_sy@2x.png`" mode="aspectFit"></image>
+						</view>
 					</view>
 					<slot name="title">
-						<text :style="textStyle" :class="textClass">
+						<view class="title-text" :style="{ minWidth: `calc(100% - ${paddingX})` }" :class="textClass">
 							<slot>{{title}}</slot>
-						</text>
+						</view>
 					</slot>
 				</view>
 			</view>
@@ -51,7 +54,9 @@
 			},
 			textStyle: { // 自定义字体样式
 				type: [String, Object],
-				default: ''
+				default: () => ({
+
+				})
 			},
 			textClass: { // 自定义字体类目
 				type: String,
@@ -145,35 +150,34 @@
 		display: flex;
 		align-items: center;
 
-
-
 		._left-container {
-			position: absolute;
-			display: block;
-			top: 50%;
-			transform: translateY(-50%);
-			left: 24rpx;
+			display: flex;
+			flex-shrink: 0;
+		}
+
+		._left-icon-wrapper {
+			flex-shrink: 0;
 			width: 56rpx;
 			height: 56rpx;
 			font-size: 0;
 			line-height: 56rpx;
-		}
+			margin-right: 12rpx;
 
-		._left-home {
-			left: 104rpx;
+			&:last-child {
+				margin-right: 24rpx;
+			}
 		}
 
 		._left-icon {
 			width: 48rpx;
 			height: 48rpx;
-			margin-right: 12rpx;
 			vertical-align: middle;
 		}
 
-		text {
-			width: 100%;
+		.title-text {
 			display: inline-block;
 			line-height: 1;
+			margin-left: auto;
 			@include textLineClamp(1);
 		}
 	}
