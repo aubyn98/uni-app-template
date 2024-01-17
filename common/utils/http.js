@@ -4,7 +4,7 @@ import config, {
 import store from '@/store'
 import {
 	hasOwnProperty,
-	cloneDeepWithDescriptors
+	cloneDeepWithDescriptors,
 } from './object'
 import {
 	showToast
@@ -12,6 +12,17 @@ import {
 
 
 const default_baseURL = config.baseURL
+
+export const ContentTypeEnum = {
+	// json
+	JSON: 'application/json;charset=UTF-8',
+	// json
+	TEXT: 'text/plain;charset=UTF-8',
+	// form-data 一般配合qs
+	FORM_URLENCODED: 'application/x-www-form-urlencoded;charset=UTF-8',
+	// form-data  上传
+	FORM_DATA: 'multipart/form-data;charset=UTF-8'
+}
 
 
 let loadingCount = 0
@@ -34,7 +45,17 @@ function endLoading() {
 }
 
 // 106
-export function downloadFile(url, params, loading = true) {
+export function downloadFile(url, params, config, options) {
+	options = {
+		loading: true,
+		...options
+	}
+
+	const {
+		headers,
+		...configRes
+	} = config
+
 	const hasParams = typeof params === 'object' && params !== null
 	if (hasParams) {
 		params = Object.keys(params).reduce((prev, k) => {
@@ -43,7 +64,7 @@ export function downloadFile(url, params, loading = true) {
 			return prev
 		}, []).join('&')
 	}
-	loading && startLoading('下载中...')
+	options.loading && startLoading('下载中...')
 	return new Promise((resolve, reject) => {
 		const token = store.state.user.token
 		uni.downloadFile({
@@ -51,7 +72,8 @@ export function downloadFile(url, params, loading = true) {
 			header: {
 				...(token && {
 					[ENUMS.TOKEN_KEY]: token
-				})
+				}),
+				...headers
 			},
 			success(res) {
 				resolve(res)
@@ -60,28 +82,55 @@ export function downloadFile(url, params, loading = true) {
 				reject(e)
 			},
 			complete() {
-				loading && uni.hideLoading()
-			}
+				options.loading && uni.hideLoading()
+			},
+			...configRes
 		})
 	})
 }
 
-export function uploadFile(url, filePath, formData, loading = true) {
+export function uploadFile(url, params, config, options) {
+	const cacheArguments = cloneDeepWithDescriptors(arguments)
+	params = {
+		fileName: 'file',
+		filePath: '',
+		...params
+	}
+	
+	options = {
+		loading: true,
+		...options
+	}
+	
+	const {
+		headers,
+		...configRes
+	} = config
+
+	const {
+		fileName,
+		filePath,
+		...formData
+	} = params
+
 	const token = store.state.user.token
 	if (!filePath.startsWith('http://tmp') && !filePath.startsWith('wxfile://tmp')) return Promise.resolve({
 		data: filePath
 	})
-	loading && startLoading('上传中...')
+
+
+	options.loading && startLoading('上传中...')
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({
 			url: default_baseURL + url, //仅为示例，非真实的接口地址
 			filePath,
-			name: 'file',
+			name: fileName,
 			formData,
 			header: {
 				...(token && {
 					[ENUMS.TOKEN_KEY]: token
-				})
+				}),
+				...headers
 			},
 			success(res) {
 				try {
@@ -89,7 +138,7 @@ export function uploadFile(url, filePath, formData, loading = true) {
 					if (hasOwnProperty(data, 'status') && !data.status) {
 						if (data.responseCode === 'invalidAuthorization') {
 							return store.dispatch('user/login')
-								.then(() => uploadFile(...arguments))
+								.then(() => uploadFile(...cacheArguments))
 								.then(resolve)
 						}
 						if (hasOwnProperty(data, 'message')) showToast(data.message)
@@ -104,8 +153,9 @@ export function uploadFile(url, filePath, formData, loading = true) {
 				reject(e)
 			},
 			complete() {
-				loading && uni.hideLoading()
-			}
+				options.loading && uni.hideLoading()
+			},
+			...configRes
 		})
 	})
 
@@ -119,6 +169,7 @@ function simplify(type) {
 request.get = simplify('get')
 request.post = simplify('post')
 
+
 export function request(url, method, params, config, options) {
 	options = {
 		loading: true,
@@ -129,10 +180,10 @@ export function request(url, method, params, config, options) {
 	options.loading && startLoading()
 	const cacheArguments = cloneDeepWithDescriptors(arguments)
 	const {
-		header,
-		...res
+		headers,
+		...configRes
 	} = config
-	config = res
+
 	return new Promise((resolve, reject) => {
 		const token = store.state.user.token
 		uni.request({
@@ -140,15 +191,14 @@ export function request(url, method, params, config, options) {
 			url: default_baseURL + url,
 			data: params,
 			header: {
-				'Content-Type': method.toUpperCase() === 'GET' ? 'application/json' : options
-					.qs ?
-					'application/x-www-form-urlencoded; charset=UTF-8' : 'application/json',
+				'Content-Type': method.toUpperCase() === 'GET' ? ContentTypeEnum.JSON : options.qs ?
+					ContentTypeEnum.FORM_URLENCODED : ContentTypeEnum.JSON,
 				'source': 'miniProgram',
 				'deliveryType': store.state.deliveryType,
 				...(token && {
 					[ENUMS.TOKEN_KEY]: token
 				}),
-				...header
+				...headers
 			},
 			success(res) {
 				if (res.statusCode == 404) return reject(res)
@@ -179,7 +229,7 @@ export function request(url, method, params, config, options) {
 			complete() {
 				options.loading && endLoading()
 			},
-			...config,
+			...configRes,
 		})
 	})
 }
