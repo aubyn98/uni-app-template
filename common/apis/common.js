@@ -10,3 +10,10 @@ export function file_common_upload(params, opts) {
 		...opts
 	})
 }
+
+export function uploadFiles(filePaths) {
+	const allUpload = filePaths.map(filePath => file_common_upload({
+		filePath
+	}).then(res => res.data))
+	return Promise.all(allUpload)
+}
