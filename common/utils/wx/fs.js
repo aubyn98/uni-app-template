@@ -152,12 +152,14 @@ export function getArraybufferTempPath({
 
 const canChooseMedia = wx.canIUse('chooseMedia')
 
-export function chooseImg({
-	count = 1
-} = {}) {
+export function chooseImg(opts) {
+	opts = {
+		count: 1,
+		...opts
+	}
 	return new Promise((resolve, reject) => {
 		canChooseMedia ? wx.chooseMedia({
-			count,
+			...opts,
 			mediaType: 'image',
 			success(res) {
 				if (res.errMsg == "chooseMedia:ok" && res.tempFiles[0]) {
