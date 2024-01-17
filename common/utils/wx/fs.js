@@ -161,6 +161,7 @@ export function chooseImg(opts) {
 		canChooseMedia ? wx.chooseMedia({
 			...opts,
 			mediaType: 'image',
+			sizeType: ['original', 'compressed'],
 			success(res) {
 				if (res.errMsg == "chooseMedia:ok" && res.tempFiles[0]) {
 					const tempFilePaths = res.tempFiles.map(it => it.tempFilePath)
