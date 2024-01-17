@@ -1,4 +1,4 @@
-import apis from '@/common/apis'
+import * as apis from '@/common/apis'
 import {
 	getSearchParams
 } from './magic'
@@ -66,7 +66,7 @@ export function toPage(row) {
 		id: targetData.id
 	}, 'switchTab')
 	if (targetType == 'GoodsDetail') event('/packageGoods/pages/detail/detail', {
-		id: targetData.id
+		goodsId: targetData.id
 	})
 	if (targetType == 'DefinePage') event('/packageOther/pages/definePage/definePage', targetData)
 	if (targetType == 'Integrate') event('/packageOther/pages/integral/integral', targetData)

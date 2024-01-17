@@ -1,4 +1,4 @@
-import apis from '@/common/apis'
+import * as apis from '@/common/apis'
 import {
 	ENUMS
 } from '@/common/config'
@@ -114,8 +114,50 @@ export default {
 				const userInfo = provider.info;
 				if (!userInfo.nickname || userInfo.nickname.indexOf(
 						'微信用户') > -1) {
-					uni.$u.route('/packageA/pages/subPackage/editUserInfo/editUserInfo')
+					uni.$u.route('/packageMine/pages/editUserInfo/editUserInfo')
 				}
+				// dispatch('getMemberCardInfo')
+			})
+		},
+		mobileLogin({
+			state,
+			getters,
+			rootState,
+			commit,
+			dispatch
+		}, mobileData) {
+			return wx.login({
+				provider: 'weixin',
+			}).then(result => apis.get_openid({
+				code: result.code
+			})).then(res => {
+				const openid = res.data.openid
+				if (!openid) {
+					uni.showToast({
+						icon: 'none',
+						title: 'openid为空'
+					})
+					return
+				}
+				commit('setOpenid', openid)
+				return apis.member_binding_mobile({
+					encryptedData: mobileData.encryptedData,
+					iv: mobileData.iv,
+					sessionKey: res.data.session_key
+				})
+
+			}).then(result => {
+				return apis.wechat_login({
+					openId: state.openid,
+					nickname: '',
+					avatarUrl: '',
+					storeId: rootState.storeId
+				})
+			}).then(result => {
+				// 获取用户基本信息
+				const provider = result.data
+				commit('setLoginInfo', provider)
+				const userInfo = provider.info;
 				// dispatch('getMemberCardInfo')
 			})
 		},

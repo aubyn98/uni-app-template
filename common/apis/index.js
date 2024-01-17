@@ -1,20 +1,14 @@
-import {
-	request
-} from '@/common/utils'
-let apis = require.context('./', true, /\.js$/)
-apis = apis.keys().reduce((total, apiPath) => {
-	// const apiName = apiPath.match(/.*\/(.*)\.js$/)[1]
-	if (apiPath !== './index.js') {
-		return { ...total,
-			...apis(apiPath)
-		}
-	}
-	return total
-}, {})
-module.exports = {
-	install(app) {
-		app.prototype.$api = apis
-		app.prototype.$request = request
-	},
-	...apis,
-}
+export * from './address'
+export * from './cart'
+export * from './common'
+export * from './coupon'
+export * from './feedback'
+export * from './getCode'
+export * from './gift'
+export * from './goods'
+export * from './mine'
+export * from './order'
+export * from './payment'
+export * from './search'
+export * from './store'
+export * from './user'

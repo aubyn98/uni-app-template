@@ -1,5 +1,4 @@
-import apis from '@/common/apis';
-
+import * as apis from '@/common/apis';
 
 export function payment(openId, orderSn) {
 	uni.showLoading({

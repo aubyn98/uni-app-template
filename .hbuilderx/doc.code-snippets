@@ -25,7 +25,7 @@
 		"scope": "source.js",
 		"prefix": "impApis",
 		"body": [
-			"import apis from '@/common/apis'"
+			"import * as apis from '@/common/apis'"
 		],
 		"triggerAssist": false,
 		"description": "impApis"

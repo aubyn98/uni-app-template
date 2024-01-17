@@ -1,4 +1,4 @@
-import apis from '@/common/apis';
+import * as apis from '@/common/apis';
 
 function createNode(key, data, form) {
 	const node = document.createElement('input')

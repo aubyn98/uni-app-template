@@ -10,8 +10,8 @@ import {
 export function get_fixture_current(params, opts) {
 	return request.get('/fronted/fixture/current', params, {}, opts)
 }
-export function get_definePage_detail(params) {
-	return request.get('/fronted/definePage/detail', params)
+export function get_definePage_detail(params, opts) {
+	return request.get('/fronted/definePage/detail', params, {}, opts)
 }
 
 export function get_store_nearby(params, opts) {

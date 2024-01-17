@@ -5,11 +5,15 @@ import {
 	getLocation,
 	pick
 } from '@/common/utils'
-import apis from '@/common/apis'
+import * as apis from '@/common/apis'
+import {
+	ENUMS
+} from '@/common/config'
 Vue.use(Vuex)
+
 const deliveryTypeDict = {
-	store_send: '配送',
-	member_take: '自提'
+	[ENUMS.STORE_SEND]: '配送',
+	[ENUMS.MEMBER_TAKE]: '自提'
 }
 export default new Vuex.Store({
 	modules,
@@ -18,11 +22,14 @@ export default new Vuex.Store({
 		currentStore: {},
 		location: uni.getStorageSync('location') || {},
 		storeId: uni.getStorageSync('storeId') || '',
-		deliveryType: uni.getStorageSync('deliveryType') || 'store_send'
+		deliveryType: uni.getStorageSync('deliveryType') || ENUMS.STORE_SEND,
 	},
 	getters: {
 		hasLogin(state, getters) {
 			return getters['user/hasLogin']
+		},
+		deliveryTypeName(state) {
+			return deliveryTypeDict[state.deliveryType]
 		}
 	},
 	mutations: {
@@ -44,13 +51,12 @@ export default new Vuex.Store({
 			pageParams,
 			storeId
 		} = {}) {
-			state.deliveryType = state.deliveryType === 'store_send' ? 'member_take' : 'store_send'
+			const {
+				store_send,
+				member_take
+			} = ENUMS
+			state.deliveryType = state.deliveryType === ENUMS.STORE_SEND ? ENUMS.MEMBER_TAKE : ENUMS.STORE_SEND
 			uni.setStorageSync('deliveryType', state.deliveryType)
-			uni.showToast({
-				title: `切换${deliveryTypeDict[state.deliveryType]}后,优惠活动可能发生变化,请核查`,
-				icon: 'none',
-				duration: 1200,
-			});
 			/* setTimeout(() => {
 				const pages = getCurrentPages();
 				const perpage = pages[pages.length - 1];

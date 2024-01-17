@@ -1,4 +1,4 @@
-import apis from '@/common/apis';
+import * as apis from '@/common/apis';
 
 export function formatQueryString(url = '') {
 	url = decodeURIComponent(url)

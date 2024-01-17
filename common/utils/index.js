@@ -1,9 +1,11 @@
-export * from './export'
-import * as utils from './export'
-
-export default {
-	install(app) {
-		console.log(utils, 'utils')
-		app.prototype.$utils = utils
-	}
-}
+export * as wx from './wx'
+export * from './aliPay'
+export * from './date'
+export * from './http'
+export * from './magic'
+export * from './object'
+export * from './getLocation'
+export * from './lodash.extract'
+export * from './array'
+export * from './validate'
+export * from './project'

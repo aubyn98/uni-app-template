@@ -1,8 +1,7 @@
-import apis from '@/common/apis'
+import * as apis from '@/common/apis'
 import {
-	ENUMS
-} from '@/common/config'
-
+	debouncePromise
+} from '@/common/utils'
 let init = false
 export default {
 	namespaced: true,
@@ -54,9 +53,14 @@ export default {
 		clearCart({
 			dispatch,
 			rootState
-		}, storeId = rootState.storeId) {
+		}, {
+			storeId = rootState.storeId,
+			loading = false,
+		} = {}) {
 			return apis.clean_cart({
 				storeId
+			}, {
+				loading
 			}).then(() => {
 				return dispatch('getCartlist')
 			})
@@ -64,18 +68,33 @@ export default {
 		updateCart({
 			dispatch,
 			rootState
-		}, params) {
-			return apis.update_cart(params).then(() => {
-				return dispatch('getCartlist')
+		}, {
+			loading = false,
+			...params
+		} = {}) {
+			return apis.update_cart(params, {
+				loading
+			}).then(() => {
+				return dispatch('getCartlistDebounce')
 			})
 		},
+		getCartlistDebounce: debouncePromise(function({
+			dispatch
+		}) {
+			return dispatch('getCartlist')
+		}, 300),
 		getCartlist({
 			state,
 			commit,
 			rootState
-		}, storeId = rootState.storeId) {
-			apis.get_cart({
+		}, {
+			storeId = rootState.storeId,
+			loading = false
+		} = {}) {
+			return apis.get_cart({
 				storeId,
+			}, {
+				loading
 			}).then(res => {
 				commit('setCartInfo', res.data)
 				const count = res.data ? res.data.count : 0
@@ -95,6 +114,7 @@ export default {
 					})
 				}
 				init = true
+				return res.data
 			})
 		}
 	},

@@ -12,10 +12,8 @@
 		onLaunch: function() {
 			this.initBarInfo();
 			this.onLocationChange()
-
-			console.log(this.$utils);
-			console.log(this.$api);
-			console.log(this.$request);
+			console.log('this.$utils', this.$utils)
+			console.log('this.$apis', this.$apis)
 		}
 	};
 </script>
@@ -27,7 +25,6 @@
 	@import '@/common/styles/index.scss';
 
 	page {
-		background-color: #f8f8f8;
-		@include safe-padding-bottom(1px);
+		background: #f8f8fb;
 	}
 </style>
