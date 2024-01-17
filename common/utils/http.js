@@ -92,23 +92,23 @@ export function downloadFile(url, params, config, options) {
 export function uploadFile(url, params, config, options) {
 	const cacheArguments = cloneDeepWithDescriptors(arguments)
 	params = {
-		fileName: 'file',
+		keyName: 'file',
 		filePath: '',
 		...params
 	}
-	
+
 	options = {
 		loading: true,
 		...options
 	}
-	
+
 	const {
 		headers,
 		...configRes
 	} = config
 
 	const {
-		fileName,
+		keyName,
 		filePath,
 		...formData
 	} = params
@@ -124,7 +124,7 @@ export function uploadFile(url, params, config, options) {
 		uni.uploadFile({
 			url: default_baseURL + url, //仅为示例，非真实的接口地址
 			filePath,
-			name: fileName,
+			name: keyName,
 			formData,
 			header: {
 				...(token && {
