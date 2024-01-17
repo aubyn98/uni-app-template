@@ -16,7 +16,8 @@
 						</view>
 					</view>
 					<slot name="title">
-						<view class="title-text" :style="{ minWidth: `calc(100% - ${paddingX})` }" :class="textClass">
+						<view class="title-text" :style="[{ minWidth: `calc(100% - ${paddingX})`}, textStyle]"
+							:class="textClass">
 							<slot>{{title}}</slot>
 						</view>
 					</slot>
@@ -53,7 +54,7 @@
 				default: () => ({})
 			},
 			textStyle: { // 自定义字体样式
-				type: [String, Object],
+				type: Object,
 				default: () => ({
 
 				})
