@@ -137,11 +137,12 @@ export function uploadFile(url, params, config, options) {
 					const data = JSON.parse(res.data)
 					if (hasOwnProperty(data, 'status') && !data.status) {
 						if (data.responseCode === 'invalidAuthorization') {
-							uploadFileCaches.push(() => uploadFile(...argumentsCache).then(resolve))
+							uploadFileCaches.push(() => uploadFile(...argumentsCache).then(resolve)
+								.catch(reject))
 							return store.dispatch('user/login')
 								.then(() => {
 									uploadFileCaches.forEach(fn => fn())
-									uploadFileCaches = []
+									uploadFileCaches.length = 0
 								})
 						}
 						if (hasOwnProperty(data, 'message')) showToast(data.message)
@@ -208,11 +209,11 @@ export function request(url, method, params, config, options) {
 				const data = res.data
 				if (hasOwnProperty(data, 'status') && !data.status) {
 					if (data.responseCode === 'invalidAuthorization') {
-						requestCaches.push(() => request(...argumentsCache).then(resolve))
+						requestCaches.push(() => request(...argumentsCache).then(resolve).catch(reject))
 						return store.dispatch('user/login')
 							.then(() => {
 								requestCaches.forEach(fn => fn())
-								requestCaches = []
+								requestCaches.length = 0
 							})
 					}
 					if (hasOwnProperty(data, 'message')) uni.showToast({
