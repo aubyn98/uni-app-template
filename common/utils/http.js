@@ -88,9 +88,9 @@ export function downloadFile(url, params, config, options) {
 		})
 	})
 }
-
+const uploadFileCaches = []
 export function uploadFile(url, params, config, options) {
-	const cacheArguments = cloneDeepWithDescriptors(arguments)
+	const argumentsCache = cloneDeepWithDescriptors(arguments)
 	params = {
 		keyName: 'file',
 		filePath: '',
@@ -137,9 +137,12 @@ export function uploadFile(url, params, config, options) {
 					const data = JSON.parse(res.data)
 					if (hasOwnProperty(data, 'status') && !data.status) {
 						if (data.responseCode === 'invalidAuthorization') {
+							uploadFileCaches.push(() => uploadFile(...argumentsCache).then(resolve))
 							return store.dispatch('user/login')
-								.then(() => uploadFile(...cacheArguments))
-								.then(resolve)
+								.then(() => {
+									uploadFileCaches.forEach(fn => fn())
+									uploadFileCaches = []
+								})
 						}
 						if (hasOwnProperty(data, 'message')) showToast(data.message)
 						return reject(data)
@@ -169,8 +172,9 @@ function simplify(type) {
 request.get = simplify('get')
 request.post = simplify('post')
 
-
+const requestCaches = []
 export function request(url, method, params, config, options) {
+	const argumentsCache = cloneDeepWithDescriptors(arguments)
 	options = {
 		loading: true,
 		qs: true,
@@ -178,7 +182,6 @@ export function request(url, method, params, config, options) {
 	}
 
 	options.loading && startLoading()
-	const cacheArguments = cloneDeepWithDescriptors(arguments)
 	const {
 		headers,
 		...configRes
@@ -205,9 +208,12 @@ export function request(url, method, params, config, options) {
 				const data = res.data
 				if (hasOwnProperty(data, 'status') && !data.status) {
 					if (data.responseCode === 'invalidAuthorization') {
+						requestCaches.push(() => request(...argumentsCache).then(resolve))
 						return store.dispatch('user/login')
-							.then(() => http(...cacheArguments))
-							.then(resolve)
+							.then(() => {
+								requestCaches.forEach(fn => fn())
+								requestCaches = []
+							})
 					}
 					if (hasOwnProperty(data, 'message')) uni.showToast({
 						title: data.message,

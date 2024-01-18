@@ -119,9 +119,7 @@ export default new Vuex.Store({
 					}
 					return data
 				}).then(store => {
-					return dispatch('changeCurrentStore', {
-						id: 1
-					} || store)
+					return dispatch('changeCurrentStore', store)
 				})
 		}
 	},

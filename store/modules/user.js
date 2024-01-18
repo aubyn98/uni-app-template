@@ -2,6 +2,9 @@ import * as apis from '@/common/apis'
 import {
 	ENUMS
 } from '@/common/config'
+import {
+	debouncePromise
+} from '@/common/utils'
 export default {
 	namespaced: true,
 	state() {
@@ -76,7 +79,7 @@ export default {
 				root: true
 			})
 		},
-		login({
+		login: debouncePromise(function({
 			state,
 			getters,
 			rootState,
@@ -118,7 +121,7 @@ export default {
 				}
 				// dispatch('getMemberCardInfo')
 			})
-		},
+		}, 200),
 		mobileLogin({
 			state,
 			getters,
