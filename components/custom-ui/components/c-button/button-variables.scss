@@ -16,7 +16,7 @@
 	@include getBorderRadius(16rpx);
 	height: 80rpx;
 	
-	&.small{
+	&._small{
 		height: 72rpx;
 		text {
 			font-size: 28rpx;

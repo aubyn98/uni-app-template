@@ -2,38 +2,35 @@
 	<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" @close="close" @closed="closed"
 		mode="center" round="16rpx" :safeAreaInsetBottom="false" :z-index="options.zIndex"
 		:overlayStyle="options.overlayStyle">
-		<view class="c-modal-input-wrapper">
-			<view class="c-model-title" v-if="options.showTitle">{{ options.title }}</view>
-			<view class="c-model-input">
-				<slot :options="options" :focus="focus" :confirm="confirm">
-					<input ref="input" :type="options.type" :focus="focus" :value="options.value" @input="onInput"
-						:placeholder="options.placeholder" @confirm="confirm" />
+		<slot name="container" :options="options" :focus="focus">
+			<view class="c-modal-input">
+				<slot name="title" :options="options">
+					<view class="c-model-input-title" v-if="options.showTitle">{{ options.title }}</view>
+				</slot>
+				<slot name="content" :options="options" :focus="focus">
+					<view class="c-model-input-content">
+						<slot :options="options" :focus="focus">
+							<input ref="input" :type="options.type" :focus="focus" :value="options.value"
+								@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
+						</slot>
+					</view>
+				</slot>
+				<slot name="footer" :options="options">
+					<view class="c-model-input-footer">
+						<c-button v-if="options.showCancel" :custom-style="{ flex: 1, marginRight: '48rpx' }"
+							:text="options.cancelText" size="small" type="info" plain @click="cancel" />
+						<c-button v-if="options.showConfirm" :custom-style="{ flex: 1 }" :text="options.confirmText"
+							size="small" @click="confirm" />
+					</view>
 				</slot>
 			</view>
-			<c-button v-if="options.showConfirm" width="448rpx" size="small" @click="confirm"
-				:text="options.confirmText" />
-		</view>
+		</slot>
 	</u-popup>
 </template>
 
 <script>
 	export default {
 		props: {
-			closeOnClickOverlay: {
-				type: Boolean,
-				default: true
-			},
-			type: {
-				type: String,
-				default: 'text',
-				validator(v) {
-					return ['text', 'number', 'idcard', 'digit', 'safe-password', 'nickname'].includes(v)
-				}
-			},
-			zIndex: {
-				type: [Number, String],
-				default: 10075
-			},
 			title: {
 				type: String,
 				default: ''
@@ -50,6 +47,33 @@
 				type: Boolean,
 				default: true
 			},
+			cancelText: {
+				type: String,
+				default: '取消'
+			},
+			showCancel: {
+				type: Boolean,
+				default: false
+			},
+			zIndex: {
+				type: [Number, String],
+				default: 10075
+			},
+			overlayStyle: {
+				type: Object,
+				default: () => ({})
+			},
+			closeOnClickOverlay: {
+				type: Boolean,
+				default: true
+			},
+			type: {
+				type: String,
+				default: 'text',
+				validator(v) {
+					return ['text', 'number', 'idcard', 'digit', 'safe-password', 'nickname'].includes(v)
+				}
+			},
 			placeholder: {
 				type: String,
 				default: ''
@@ -57,10 +81,6 @@
 			asyncClose: {
 				type: Boolean,
 				default: false
-			},
-			overlayStyle: {
-				type: Object,
-				default: () => ({})
 			},
 		},
 		data() {
@@ -106,12 +126,14 @@
 					showTitle: this.showTitle,
 					confirmText: this.confirmText,
 					showConfirm: this.showConfirm,
+					cancelText: this.cancelText,
+					showCancel: this.showCancel,
 					zIndex: this.zIndex,
 					overlayStyle: this.overlayStyle,
-					placeholder: this.placeholder,
-					type: this.type,
-					asyncClose: this.asyncClose,
 					closeOnClickOverlay: this.closeOnClickOverlay,
+					type: this.type,
+					placeholder: this.placeholder,
+					asyncClose: this.asyncClose,
 					onConfirm: (e) => this.$emit('confirm', e),
 					onCancel: (e) => this.$emit('cancel', e),
 					...opts,
@@ -151,7 +173,7 @@
 	}
 </script>
 <style lang="scss">
-	.c-model-input {
+	.c-model-input-content {
 
 		input {
 			min-height: 68rpx;
@@ -169,12 +191,12 @@
 	}
 </style>
 <style lang="scss" scoped>
-	.c-modal-input-wrapper {
+	.c-modal-input {
 		width: 542rpx;
 		height: 332rpx;
 		padding: 40rpx 48rpx 56rpx;
 
-		.c-model-title {
+		.c-model-input-title {
 			height: 44rpx;
 			line-height: 44rpx;
 			font-size: 32rpx;
@@ -183,7 +205,7 @@
 			margin-bottom: 24rpx;
 		}
 
-		.c-model-input {
+		.c-model-input-content {
 			width: 448rpx;
 			border: 2rpx solid #f0f0f0;
 			border-radius: 4rpx;
@@ -192,5 +214,8 @@
 			height: 72rpx;
 		}
 
+		.c-model-input-footer {
+			display: flex;
+		}
 	}
 </style>

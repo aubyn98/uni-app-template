@@ -1,19 +1,22 @@
 <template>
 	<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" :overlayStyle="options.overlayStyle"
-		:safeAreaInsetBottom="false" @close="close" @closed="closed" mode="center" round="16rpx">
-		<slot name="container">
+		:z-index="options.zIndex" :safeAreaInsetBottom="false" @close="close" @closed="closed" mode="center"
+		round="16rpx">
+		<slot name="container" :options="options">
 			<view class="c-modal">
-				<slot name="title">
+				<slot name="title" :options="options">
 					<view v-if="options.showTitle" class="c-modal-header">
 						{{ options.title }}
 					</view>
 				</slot>
-				<view class="c-modal-content">
-					<slot>
-						{{ options.content }}
-					</slot>
-				</view>
-				<slot name="footer">
+				<slot name="content" :options="options">
+					<view class="c-modal-content">
+						<slot :options="options">
+							{{ options.content }}
+						</slot>
+					</view>
+				</slot>
+				<slot name="footer" :options="options">
 					<view class="c-modal-footer">
 						<c-button v-if="options.showCancel" :custom-style="{ flex: 1, marginRight: '48rpx' }"
 							:text="options.cancelText" size="small" type="info" plain @click="cancel" />
@@ -29,10 +32,6 @@
 <script>
 	export default {
 		props: {
-			closeOnClickOverlay: {
-				type: Boolean,
-				default: true
-			},
 			title: {
 				type: String,
 				default: '提示'
@@ -57,6 +56,18 @@
 				type: Boolean,
 				default: true
 			},
+			zIndex: {
+				type: [Number, String],
+				default: 10075
+			},
+			overlayStyle: {
+				type: Object,
+				default: () => ({})
+			},
+			closeOnClickOverlay: {
+				type: Boolean,
+				default: true
+			},
 			content: {
 				type: String,
 				default: ''
@@ -64,10 +75,6 @@
 			asyncClose: {
 				type: Boolean,
 				default: false
-			},
-			overlayStyle: {
-				type: Object,
-				default: () => ({})
 			},
 		},
 		data() {
@@ -97,14 +104,15 @@
 				return {
 					title: this.title,
 					showTitle: this.showTitle,
-					showConfirm: this.showConfirm,
 					confirmText: this.confirmText,
-					showCancel: this.showCancel,
+					showConfirm: this.showConfirm,
 					cancelText: this.cancelText,
-					content: this.content,
-					asyncClose: this.asyncClose,
+					showCancel: this.showCancel,
+					zIndex: this.zIndex,
 					overlayStyle: this.overlayStyle,
 					closeOnClickOverlay: this.closeOnClickOverlay,
+					content: this.content,
+					asyncClose: this.asyncClose,
 					onConfirm: (e) => this.$emit('confirm', e),
 					onCancel: (e) => this.$emit('cancel', e),
 					...opts,
