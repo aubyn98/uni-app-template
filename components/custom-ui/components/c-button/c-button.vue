@@ -7,8 +7,8 @@
 		:send-message-img="sendMessageImg" :show-message-card="showMessageCard" @tap.stop="click"
 		@getphonenumber="getphonenumber" @getuserinfo="getuserinfo" @error="error" @opensetting="opensetting"
 		@launchapp="launchapp">
-		<image :style="[imageStyle]" :class="imageClass" v-if="image" :src="`${imagePath}${image}.png`"></image> <text
-			:style="[textStyle]" :class="[textClass]">
+		<image :style="[imageStyle]" :class="imageClass" v-if="image" :src="`${imagePath}${image}.png`"></image>
+		<text :style="[textStyle]" :class="[textClass]">
 			<slot>{{text}}</slot>
 		</text>
 	</button>

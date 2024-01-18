@@ -15,8 +15,10 @@
 				</view>
 				<slot name="footer">
 					<view class="c-modal-footer">
-						<c-button v-if="options.showConfirm" size="small" @click="confirm"
-							:text="options.confirmText" />
+						<c-button v-if="options.showCancel" :custom-style="{ flex: 1, marginRight: '48rpx' }"
+							:text="options.cancelText" size="small" type="info" plain @click="cancel" />
+						<c-button v-if="options.showConfirm" :custom-style="{ flex: 1 }" :text="options.confirmText"
+							size="small" @click="confirm" />
 					</view>
 				</slot>
 			</view>
@@ -44,6 +46,14 @@
 				default: '确定'
 			},
 			showConfirm: {
+				type: Boolean,
+				default: true
+			},
+			cancelText: {
+				type: String,
+				default: '取消'
+			},
+			showCancel: {
 				type: Boolean,
 				default: true
 			},
@@ -89,6 +99,8 @@
 					showTitle: this.showTitle,
 					showConfirm: this.showConfirm,
 					confirmText: this.confirmText,
+					showCancel: this.showCancel,
+					cancelText: this.cancelText,
 					content: this.content,
 					asyncClose: this.asyncClose,
 					overlayStyle: this.overlayStyle,
@@ -127,7 +139,11 @@
 		}
 	}
 </script>
-
+<style>
+	.c-modal-button {
+		flex: 1;
+	}
+</style>
 <style lang="scss" scoped>
 	.c-modal {
 		width: 542rpx;
@@ -150,6 +166,8 @@
 			margin-bottom: 32rpx;
 		}
 
-		.c-modal-footer {}
+		.c-modal-footer {
+			display: flex;
+		}
 	}
 </style>
