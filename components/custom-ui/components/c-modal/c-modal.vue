@@ -1,16 +1,26 @@
 <template>
 	<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" :overlayStyle="options.overlayStyle"
 		:safeAreaInsetBottom="false" @close="close" @closed="closed" mode="center" round="16rpx">
-		<view class="c-modal-tip">
-			<view v-if="options.showTitle" class="modal-tip-header">
-				{{ options.title }}
+		<slot name="container">
+			<view class="c-modal">
+				<slot name="title">
+					<view v-if="options.showTitle" class="c-modal-header">
+						{{ options.title }}
+					</view>
+				</slot>
+				<view class="c-modal-content">
+					<slot>
+						{{ options.content }}
+					</slot>
+				</view>
+				<slot name="footer">
+					<view class="c-modal-footer">
+						<c-button v-if="options.showConfirm" size="small" @click="confirm"
+							:text="options.confirmText" />
+					</view>
+				</slot>
 			</view>
-			<view class="modal-tip-content">
-				{{ options.content }}
-			</view>
-			<c-button v-if="options.showConfirm" width="448rpx" size="small" @click="confirm"
-				:text="options.confirmText" />
-		</view>
+		</slot>
 	</u-popup>
 </template>
 
@@ -67,19 +77,6 @@
 					this.reject = reject
 				})
 			},
-			confirmRes(res) {
-				this.resolve(res)
-				this.options.onConfirm(res)
-			},
-			confirm() {
-				const close = () => this.show = false
-				if (this.options.asyncClose) {
-					this.confirmRes(close)
-				} else {
-					close()
-					this.confirmRes()
-				}
-			},
 			getOptions(opts, config) {
 				if (typeof config !== 'object') config = {}
 				if (typeof opts !== 'object') {
@@ -102,10 +99,29 @@
 					...config
 				}
 			},
+			confirmRes(res) {
+				this.resolve(res)
+				this.options.onConfirm(res)
+			},
+			confirm() {
+				const close = () => this.show = false
+				if (this.options.asyncClose) {
+					this.confirmRes(close)
+				} else {
+					close()
+					this.confirmRes()
+				}
+			},
+			cancel() {
+				this._closeHandle('cancel')
+			},
 			close() {
+				this._closeHandle('close')
+			},
+			_closeHandle(code) {
 				this.show = false
-				this.reject('close')
-				this.options.onCancel()
+				this.reject(code)
+				this.options.onCancel(code)
 			},
 			closed() {}
 		}
@@ -113,27 +129,27 @@
 </script>
 
 <style lang="scss" scoped>
-	.c-modal-tip {
+	.c-modal {
 		width: 542rpx;
-		padding: 40rpx 48rpx 56rpx;
+		padding: 48rpx;
 		text-align: center;
 
-		.modal-tip-header {
+		.c-modal-header {
 			height: 48rpx;
 			line-height: 48rpx;
 			font-size: 34rpx;
 			color: #333333;
-			margin-bottom: 24rpx;
+			margin-bottom: 32rpx;
 
 		}
 
-		.modal-tip-content {
+		.c-modal-content {
 			line-height: 44rpx;
 			font-size: 26rpx;
 			color: #666666;
-			margin-bottom: 24rpx;
+			margin-bottom: 32rpx;
 		}
 
-		.modal-tip-button {}
+		.c-modal-footer {}
 	}
 </style>

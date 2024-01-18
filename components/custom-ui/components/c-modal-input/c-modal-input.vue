@@ -94,23 +94,6 @@
 					this.reject = reject
 				})
 			},
-			confirmRes(res) {
-				this.resolve(res)
-				this.options.onConfirm(res)
-			},
-			confirm() {
-				const close = () => this.show = false
-				const res = {
-					value: this.options.value
-				}
-				if (this.options.asyncClose) {
-					res.close = close
-					this.confirmRes(res)
-				} else {
-					close()
-					this.confirmRes(res)
-				}
-			},
 			getOptions(opts, config) {
 				if (typeof config !== 'object') config = {}
 				if (typeof opts !== 'object') {
@@ -135,10 +118,33 @@
 					...config
 				}
 			},
+			confirmRes(res) {
+				this.resolve(res)
+				this.options.onConfirm(res)
+			},
+			confirm() {
+				const close = () => this.show = false
+				const res = {
+					value: this.options.value
+				}
+				if (this.options.asyncClose) {
+					res.close = close
+					this.confirmRes(res)
+				} else {
+					close()
+					this.confirmRes(res)
+				}
+			},
+			cancel() {
+				this._closeHandle('cancel')
+			},
 			close() {
+				this._closeHandle('close')
+			},
+			_closeHandle(code) {
 				this.show = false
-				this.reject('close')
-				this.options.onCancel()
+				this.reject(code)
+				this.options.onCancel(code)
 			},
 			closed() {}
 		}
