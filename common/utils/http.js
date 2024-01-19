@@ -11,16 +11,16 @@ import {
 	showToast
 } from './project'
 
-export const ContentTypeEnum = {
-	// json
-	JSON: 'application/json;charset=UTF-8',
-	// json
-	TEXT: 'text/plain;charset=UTF-8',
-	// form-data 一般配合qs
-	FORM_URLENCODED: 'application/x-www-form-urlencoded;charset=UTF-8',
-	// form-data  上传
-	FORM_DATA: 'multipart/form-data;charset=UTF-8'
-}
+export const COMTENT_TYPES = Object.freeze({
+  /** json */
+  JSON: 'application/json;charset=UTF-8',
+  /** text/plain */
+  TEXT: 'text/plain;charset=UTF-8',
+  /** form-data 一般配合qs */
+  FORM_URLENCODED: 'application/x-www-form-urlencoded;charset=UTF-8',
+  /** form-data  上传 */
+  FORM_DATA: 'multipart/form-data;charset=UTF-8'
+})
 
 
 let loadingCount = 0
@@ -36,9 +36,7 @@ function startLoading(title = '加载中...') {
 function endLoading() {
 	if (loadingCount > 0) loadingCount--
 	if (loadingCount === 0) {
-		setTimeout(() => {
-			uni.hideLoading()
-		}, 17)
+		uni.hideLoading()
 	}
 }
 
@@ -63,6 +61,10 @@ export function downloadFile(url, params, config, options) {
 		}, []).join('&')
 	}
 	options.loading && startLoading('下载中...')
+	let closeLoading = () => {
+		options.loading && endLoading()
+		closeLoading = null
+	}
 	return new Promise((resolve, reject) => {
 		const token = store.state.user.token
 		uni.downloadFile({
@@ -80,7 +82,7 @@ export function downloadFile(url, params, config, options) {
 				reject(e)
 			},
 			complete() {
-				options.loading && uni.hideLoading()
+				closeLoading && closeLoading()
 			},
 			...configRes
 		})
@@ -119,6 +121,10 @@ export function uploadFile(url, params, config, options) {
 
 
 	options.loading && startLoading('上传中...')
+	let closeLoading = () => {
+		options.loading && endLoading()
+		closeLoading = null
+	}
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({
 			url: BASE_URL + url, //仅为示例，非真实的接口地址
@@ -144,8 +150,10 @@ export function uploadFile(url, params, config, options) {
 									uploadFileCaches.length = 0
 								})
 						}
-						if (hasOwnProperty(data, 'message') && options.showError) showToast(data
-							.message)
+						if (hasOwnProperty(data, 'message') && options.showError) {
+							closeLoading()
+							showToast(data.message)
+						}
 						return reject(data)
 					}
 					resolve(data)
@@ -157,7 +165,7 @@ export function uploadFile(url, params, config, options) {
 				reject(e)
 			},
 			complete() {
-				options.loading && uni.hideLoading()
+				closeLoading && closeLoading()
 			},
 			...configRes
 		})
@@ -183,21 +191,26 @@ export function request(url, method, params, config, options) {
 		...options
 	}
 
-	options.loading && startLoading()
 	const {
 		headers,
 		...configRes
 	} = config
 
+	const token = store.state.user.token
+
+	options.loading && startLoading()
+	let closeLoading = () => {
+		options.loading && endLoading()
+		closeLoading = null
+	}
 	return new Promise((resolve, reject) => {
-		const token = store.state.user.token
 		uni.request({
 			method,
 			url: BASE_URL + url,
 			data: params,
 			header: {
-				'Content-Type': method.toUpperCase() === 'GET' ? ContentTypeEnum.JSON : options.qs ?
-					ContentTypeEnum.FORM_URLENCODED : ContentTypeEnum.JSON,
+				'Content-Type': method.toUpperCase() === 'GET' ? COMTENT_TYPES.JSON : options.qs ?
+					COMTENT_TYPES.FORM_URLENCODED : COMTENT_TYPES.JSON,
 				'source': 'miniProgram',
 				'deliveryType': store.state.deliveryType,
 				...(token && {
@@ -206,7 +219,7 @@ export function request(url, method, params, config, options) {
 				...headers
 			},
 			success(res) {
-				if (res.statusCode == 404) return reject(res)
+				if (res.statusCode !== 200) return reject(res)
 				const data = res.data
 				if (hasOwnProperty(data, 'status') && !data.status) {
 					if (data.responseCode === 'invalidAuthorization') {
@@ -217,7 +230,10 @@ export function request(url, method, params, config, options) {
 								requestCaches.length = 0
 							})
 					}
-					if (hasOwnProperty(data, 'message') && options.showError) showToast(data.message)
+					if (hasOwnProperty(data, 'message') && options.showError) {
+						closeLoading()
+						showToast(data.message)
+					}
 					return reject(data)
 				}
 				resolve(data)
@@ -227,8 +243,8 @@ export function request(url, method, params, config, options) {
 				showToast("请求失败")
 				reject(err)
 			},
-			complete() {
-				options.loading && endLoading()
+			complete(res) {
+				closeLoading && closeLoading()
 			},
 			...configRes,
 		})
