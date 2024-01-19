@@ -33,7 +33,7 @@ export default {
 		},
 		setCartInfo(state, payload) {
 			state.cartInfo = payload
-		},
+		}
 	},
 	actions: {
 		goSettle({
@@ -86,6 +86,7 @@ export default {
 		getCartlist({
 			state,
 			commit,
+			dispatch,
 			rootState
 		}, {
 			storeId = rootState.storeId,
@@ -97,25 +98,24 @@ export default {
 				loading
 			}).then(res => {
 				commit('setCartInfo', res.data)
-				const count = res.data ? res.data.count : 0
+				dispatch('updateTabarCount')
+				return res.data
+			})
+		},
+		updateTabarCount({
+			getters
+		}) {
+			const count = getters.goodsCount
+			if (count) {
 				uni.setTabBarBadge({
 					index: 2,
 					text: String(count)
 				})
-				if (count) {
-					uni.setTabBarBadge({
-						index: 2,
-						text: String(count)
-					})
-					// uni.showTabBarRedDot()
-				} else {
-					init && uni.hideTabBarRedDot({
-						index: 2
-					})
-				}
-				init = true
-				return res.data
-			})
+			} else {
+				uni.hideTabBarRedDot({
+					index: 2
+				})
+			}
 		}
 	},
 }
