@@ -1,5 +1,6 @@
-import config, {
-	ENUMS
+import {
+	BASE_URL,
+	TOKEN_KEY
 } from '../config'
 import store from '@/store'
 import {
@@ -9,9 +10,6 @@ import {
 import {
 	showToast
 } from './project'
-
-
-const default_baseURL = config.baseURL
 
 export const ContentTypeEnum = {
 	// json
@@ -68,10 +66,10 @@ export function downloadFile(url, params, config, options) {
 	return new Promise((resolve, reject) => {
 		const token = store.state.user.token
 		uni.downloadFile({
-			url: default_baseURL + url + (hasParams ? '?' + params : ''),
+			url: BASE_URL + url + (hasParams ? '?' + params : ''),
 			header: {
 				...(token && {
-					[ENUMS.TOKEN_KEY]: token
+					[TOKEN_KEY]: token
 				}),
 				...headers
 			},
@@ -123,13 +121,13 @@ export function uploadFile(url, params, config, options) {
 	options.loading && startLoading('上传中...')
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({
-			url: default_baseURL + url, //仅为示例，非真实的接口地址
+			url: BASE_URL + url, //仅为示例，非真实的接口地址
 			filePath,
 			name: keyName,
 			formData,
 			header: {
 				...(token && {
-					[ENUMS.TOKEN_KEY]: token
+					[TOKEN_KEY]: token
 				}),
 				...headers
 			},
@@ -195,7 +193,7 @@ export function request(url, method, params, config, options) {
 		const token = store.state.user.token
 		uni.request({
 			method,
-			url: default_baseURL + url,
+			url: BASE_URL + url,
 			data: params,
 			header: {
 				'Content-Type': method.toUpperCase() === 'GET' ? ContentTypeEnum.JSON : options.qs ?
@@ -203,7 +201,7 @@ export function request(url, method, params, config, options) {
 				'source': 'miniProgram',
 				'deliveryType': store.state.deliveryType,
 				...(token && {
-					[ENUMS.TOKEN_KEY]: token
+					[TOKEN_KEY]: token
 				}),
 				...headers
 			},

@@ -4,7 +4,7 @@ import {
 	getSearchParams
 } from './magic'
 import {
-	ENUMS
+	PAGE_JUMP_KEYS
 } from '@/common/config'
 
 
@@ -69,8 +69,8 @@ export function toPage(row) {
 	if (targetType == 'None') return
 	if (targetType == 'AllCategory') event('/pages/findMedicine/findMedicine', {}, 'switchTab')
 	if (targetType == 'Category') {
-		uni.setStorageSync(ENUMS.JUMP_FIND_MEDICINE_KEY, targetData.id)
-		uni.$emit(ENUMS.JUMP_FIND_MEDICINE_KEY)
+		uni.setStorageSync(PAGE_JUMP_KEYS.FIND_MEDICINE, targetData.id)
+		uni.$emit(PAGE_JUMP_KEYS.FIND_MEDICINE)
 		event('/pages/findMedicine/findMedicine', {}, 'switchTab')
 	}
 	if (targetType == 'GoodsDetail') event('/packageGoods/pages/detail/detail', {

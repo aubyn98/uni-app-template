@@ -4,7 +4,7 @@ import {
 	getSearchParams
 } from '@/common/utils'
 import {
-	ENUMS
+	PAY_METHODS
 } from '@/common/config'
 
 export function payment(params, opts) {
@@ -14,7 +14,7 @@ export function payment(params, opts) {
 	})
 	return request.get('/fronted/payment/miniapp_params', {
 			...params,
-			paymentMethod: ENUMS.PAY_WX_MINI
+			paymentMethod: PAY_METHODS.WX_MINI
 		}, {}, {
 			loading: false,
 			...opts

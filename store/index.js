@@ -7,13 +7,13 @@ import {
 } from '@/common/utils'
 import * as apis from '@/common/apis'
 import {
-	ENUMS
+	DELIVERY_TYPES
 } from '@/common/config'
 Vue.use(Vuex)
 
 const deliveryTypeDict = {
-	[ENUMS.STORE_SEND]: '配送',
-	[ENUMS.MEMBER_TAKE]: '自提'
+	[DELIVERY_TYPES.SEND]: '配送',
+	[DELIVERY_TYPES.TAKE]: '自提'
 }
 export default new Vuex.Store({
 	modules,
@@ -22,7 +22,7 @@ export default new Vuex.Store({
 		currentStore: {},
 		location: uni.getStorageSync('location') || {},
 		storeId: uni.getStorageSync('storeId') || '',
-		deliveryType: uni.getStorageSync('deliveryType') || ENUMS.STORE_SEND,
+		deliveryType: uni.getStorageSync('deliveryType') || DELIVERY_TYPES.SEND,
 	},
 	getters: {
 		hasLogin(state, getters) {
@@ -51,11 +51,7 @@ export default new Vuex.Store({
 			pageParams,
 			storeId
 		} = {}) {
-			const {
-				store_send,
-				member_take
-			} = ENUMS
-			state.deliveryType = state.deliveryType === ENUMS.STORE_SEND ? ENUMS.MEMBER_TAKE : ENUMS.STORE_SEND
+			state.deliveryType = state.deliveryType === DELIVERY_TYPES.SEND ? DELIVERY_TYPES.TAKE : DELIVERY_TYPES.SEND
 			uni.setStorageSync('deliveryType', state.deliveryType)
 			/* setTimeout(() => {
 				const pages = getCurrentPages();

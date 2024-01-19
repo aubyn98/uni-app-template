@@ -1,6 +1,6 @@
 import * as apis from '@/common/apis'
 import {
-	ENUMS
+	TOKEN_KEY
 } from '@/common/config'
 import {
 	debouncePromise
@@ -10,7 +10,7 @@ export default {
 	state() {
 		return {
 			info: uni.getStorageSync('userInfo') || {},
-			token: uni.getStorageSync(ENUMS.TOKEN_KEY) || '',
+			token: uni.getStorageSync(TOKEN_KEY) || '',
 			openid: uni.getStorageSync('openid') || '',
 			memberCardInfo: uni.getStorageSync('memberCardInfo') || '',
 		}
@@ -36,7 +36,7 @@ export default {
 			state.token = ''
 			state.info = {}
 			uni.removeStorageSync('userInfo')
-			uni.removeStorageSync(ENUMS.TOKEN_KEY)
+			uni.removeStorageSync(TOKEN_KEY)
 		},
 		setOpenid(state, openid) {
 			state.openid = openid
@@ -51,7 +51,7 @@ export default {
 
 			state.token = provider.token
 			uni.setStorageSync(
-				ENUMS.TOKEN_KEY,
+				TOKEN_KEY,
 				provider.token
 			)
 		},
@@ -62,7 +62,7 @@ export default {
 			commit,
 			rootState
 		}) {
-			return apis.get_myself().then(res => {
+			return apis.get_myself({}, {showError: false}).then(res => {
 				if (res.status && res.responseCode === 'success') {
 					commit('setMemberCardInfo', res.data)
 				} else {
