@@ -78,12 +78,13 @@
 }
 /* 文本处理 */
 .select-none {
-  -webkit-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 .select-text {
-  -webkit-user-select: text;
-          user-select: text;
+  user-select: text;
+}
+.bold {
+	font-weight:bold;
 }
 /* 溢出处理 */
 .ellipsis {
@@ -145,7 +146,6 @@
   position: fixed;
 }
 .sticky {
-  position: -webkit-sticky;
   position: sticky;
 }
 .zIndex-auto {
