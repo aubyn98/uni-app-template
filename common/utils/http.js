@@ -99,6 +99,7 @@ export function uploadFile(url, params, config, options) {
 
 	options = {
 		loading: true,
+		showError: true,
 		...options
 	}
 
@@ -145,7 +146,8 @@ export function uploadFile(url, params, config, options) {
 									uploadFileCaches.length = 0
 								})
 						}
-						if (hasOwnProperty(data, 'message')) showToast(data.message)
+						if (hasOwnProperty(data, 'message') && options.showError) showToast(data
+							.message)
 						return reject(data)
 					}
 					resolve(data)
@@ -179,6 +181,7 @@ export function request(url, method, params, config, options) {
 	options = {
 		loading: true,
 		qs: true,
+		showError: true,
 		...options
 	}
 
@@ -216,21 +219,14 @@ export function request(url, method, params, config, options) {
 								requestCaches.length = 0
 							})
 					}
-					if (hasOwnProperty(data, 'message')) uni.showToast({
-						title: data.message,
-						icon: 'none',
-						duration: 1500
-					})
+					if (hasOwnProperty(data, 'message') && options.showError) showToast(data.message)
 					return reject(data)
 				}
 				resolve(data)
 			},
 			fail(err) {
 				console.log("http fail")
-				uni.showToast({
-					title: "请求失败",
-					icon: 'none'
-				})
+				showToast("请求失败")
 				reject(err)
 			},
 			complete() {
