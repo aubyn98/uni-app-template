@@ -1,7 +1,7 @@
 <template>
 	<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" @close="close" @closed="closed"
 		mode="center" round="16rpx" :safeAreaInsetBottom="false" :z-index="options.zIndex"
-		:overlayStyle="options.overlayStyle">
+		:overlayStyle="options.overlayStyle" :customStyle="{ transform: 'translateY(-50%)' }">
 		<slot name="container" :options="options" :focus="focus">
 			<view class="c-modal-input">
 				<slot name="title" :options="options">
@@ -9,9 +9,26 @@
 				</slot>
 				<slot name="content" :options="options" :focus="focus">
 					<view class="c-model-input-content">
+						<!-- 微信小程序不支持动态的type -->
 						<slot :options="options" :focus="focus">
-							<input ref="input" :type="options.type" :focus="focus" :value="options.value"
+							<input v-if="options.type == 'text'" ref="input" type="text" :focus="focus"
+								:value="options.value" @keyboardheightchange="keyboardheightchange" @input="onInput"
+								:placeholder="options.placeholder" @confirm="confirm" />
+							<input v-if="options.type == 'number'" ref="input" type="number" :focus="focus"
+								:value="options.value" @keyboardheightchange="keyboardheightchange" @input="onInput"
+								:placeholder="options.placeholder" @confirm="confirm" />
+							<input v-if="options.type == 'idcard'" ref="input" type="idcard" :focus="focus"
+								:value="options.value" @keyboardheightchange="keyboardheightchange" @input="onInput"
+								:placeholder="options.placeholder" @confirm="confirm" />
+							<input v-if="options.type == 'digit'" ref="input" type="digit" :focus="focus"
+								:value="options.value" @keyboardheightchange="keyboardheightchange" @input="onInput"
+								:placeholder="options.placeholder" @confirm="confirm" />
+							<input v-if="options.type == 'safe-password'" ref="input" type="safe-password"
+								:focus="focus" :value="options.value" @keyboardheightchange="keyboardheightchange"
 								@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
+							<input v-if="options.type == 'nickname'" ref="input" type="nickname" :focus="focus"
+								:value="options.value" @keyboardheightchange="keyboardheightchange" @input="onInput"
+								:placeholder="options.placeholder" @confirm="confirm" />
 						</slot>
 					</view>
 				</slot>
@@ -90,6 +107,7 @@
 				options: this.getOptions(),
 				resolve: () => void 0,
 				reject: () => void 0,
+				keyboardHeight: 0
 			}
 		},
 		watch: {
@@ -103,6 +121,9 @@
 			}
 		},
 		methods: {
+			keyboardheightchange(e) {
+				this.keyboardHeight = e.detail.height
+			},
 			onInput(e) {
 				this.options.value = e.detail.value
 			},
