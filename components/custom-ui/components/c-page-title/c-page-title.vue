@@ -1,8 +1,8 @@
 <template>
 	<c-fix-top-box :occupySpace="occupySpace" :otherHeight="otherHeight" :position="position" :zIndex="zIndex"
-		:statusBar="false" background="transparent">
+		:statusBar="false" :background="background">
 		<template #default="{ paddingX, paddingY, statusBarHeight, minHeight }">
-			<view class="c-page-title" :class="classList" :style="[{ paddingTop: statusBarHeight, background }]">
+			<view class="c-page-title" :class="classList" :style="[{ paddingTop: statusBarHeight }]">
 				<view class="title-container"
 					:style="[{ padding:`${paddingY} ${paddingX} ${paddingY} 24rpx`, minHeight },customStyle]">
 					<view class="_left-container">
@@ -139,7 +139,7 @@
 		width: 100%;
 
 		&._bold {
-			font-weight: 500;
+			font-weight: bold;
 		}
 	}
 
