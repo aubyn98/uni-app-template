@@ -1,4 +1,4 @@
-export const COMTENT_TYPES = Object.freeze({
+export const CONTENT_TYPES = Object.freeze({
 	/** json */
 	JSON: 'application/json;charset=UTF-8',
 	/** text/plain */

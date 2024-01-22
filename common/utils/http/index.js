@@ -11,7 +11,7 @@ import {
 	showToast
 } from '../project'
 import {
-	COMTENT_TYPES,
+	CONTENT_TYPES,
 	CancelToken,
 	promisifyRequest,
 	startLoading,
@@ -204,8 +204,8 @@ export function request(url, method, params, config, options) {
 		url: BASE_URL + url,
 		data: params,
 		header: {
-			'Content-Type': method.toUpperCase() === 'GET' ? COMTENT_TYPES.JSON : options.qs ?
-				COMTENT_TYPES.FORM_URLENCODED : COMTENT_TYPES.JSON,
+			'Content-Type': method.toUpperCase() === 'GET' ? CONTENT_TYPES.JSON : options.qs ?
+				CONTENT_TYPES.FORM_URLENCODED : CONTENT_TYPES.JSON,
 			'source': 'miniProgram',
 			'deliveryType': store.state.deliveryType,
 			...(token && {
