@@ -3,19 +3,19 @@ export default {
 		async loginAdjunct(e) {
 			const fromCode = !!e.scene
 			if (e.scene) {
-
 				e = {
 					...e,
 					fromCode,
 					...this.$utils.getSearchParams(e.scene)
 				}
 			}
-			if (fromCode && !e.id && this.storeId) {
-				e.id = this.storeId
+			if (fromCode && !e.storeId && this.storeId) {
+				e.storeId = this.storeId
 			}
-			if (e.storeId) e.id = e.storeId // 兼容
-			if (e.id) {
-				await this.$store.dispatch('changeCurrentStore', e.id)
+			if (e.storeId) {
+				await this.$store.dispatch('changeCurrentStore', {
+					id: e.storeId
+				})
 			} else if (this.$utils.isEmpty(this.currentStore)) {
 				await this.$store.dispatch('getNearbyStore')
 					.catch(() => {
