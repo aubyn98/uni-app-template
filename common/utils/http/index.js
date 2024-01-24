@@ -24,7 +24,7 @@ import {
 function checkStatus(res, options, reloadFn) {
 	const data = res.data
 	if (hasOwnProperty(data, 'status') && !data.status) {
-		if (['invalidAuthorization', 'parameterMustBeNotnull'].includes(data.responseCode)) {
+		if (['invalidAuthorization'/* , 'parameterMustBeNotnull' */].includes(data.responseCode)) {
 			return store.dispatch('user/login').then(reloadFn)
 		}
 		if (hasOwnProperty(data, 'message') && options.showError) showToast(data.message)
