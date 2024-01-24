@@ -1,5 +1,3 @@
-import * as apis from '@/common/apis';
-
 /** 微信小程序支付 */
 export function wxPayInMiniPrograms(data) {
 	return new Promise((resolve, reject) => {
@@ -10,11 +8,15 @@ export function wxPayInMiniPrograms(data) {
 			package: data.package,
 			signType: data.signType,
 			paySign: data.sign,
-			complete: function(res) {
-				if (res.errMsg === 'requestPayment:ok') {
-					resolve(res)
-				} else {
-					reject(res)
+			success: resolve,
+			fail(e) {
+				reject(e)
+				if (e.errMsg !== 'requestPayment:fail cancel') {
+					uni.showToast({
+						title: '支付失败',
+						icon: 'none',
+						duration: 2000
+					});
 				}
 			}
 		});
@@ -28,27 +30,21 @@ export function subscribeMessage(opts) {
 		wx.requestSubscribeMessage({
 			...opts,
 			success(res) {
-				if (res.errMsg === 'requestSubscribeMessage:ok') {
-					const allowTemplateIds = []
-					const rejectTemplateIds = []
-					for (let key in res) {
-						if (res[key] === 'accept') {
-							allowTemplateIds.push(key)
-						} else if (res[key] === 'reject') {
-							rejectTemplateIds.push(key)
-						}
+				const allowTemplateIds = []
+				const rejectTemplateIds = []
+				for (let key in res) {
+					if (res[key] === 'accept') {
+						allowTemplateIds.push(key)
+					} else if (res[key] === 'reject') {
+						rejectTemplateIds.push(key)
 					}
-					resolve({
-						allowTemplateIds,
-						rejectTemplateIds,
-					})
-				} else {
-					reject(res)
 				}
+				resolve({
+					allowTemplateIds,
+					rejectTemplateIds,
+				})
 			},
-			fail(e) {
-				reject(e)
-			}
+			fail: reject
 		})
 	})
 }
