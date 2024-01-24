@@ -2,9 +2,7 @@ import * as apis from '@/common/apis'
 import {
 	TOKEN_KEY
 } from '@/common/config'
-import {
-	debouncePromise
-} from '@/common/utils'
+let loginPromise = null
 export default {
 	namespaced: true,
 	state() {
@@ -62,13 +60,14 @@ export default {
 			commit,
 			rootState
 		}) {
-			return apis.get_myself({}, {showError: false}).then(res => {
-				if (res.status && res.responseCode === 'success') {
-					commit('setMemberCardInfo', res.data)
-				} else {
-					commit('clearMemberCardInfo')
-				}
+			return apis.get_myself({}, {
+				showError: false
+			}).then(res => {
+				commit('setMemberCardInfo', res.data)
 				return res
+			}).catch((rej) => {
+				commit('clearMemberCardInfo')
+				return rej
 			})
 		},
 		logout({
@@ -79,14 +78,15 @@ export default {
 				root: true
 			})
 		},
-		login: debouncePromise(function({
+		login({
 			state,
 			getters,
 			rootState,
 			commit,
 			dispatch
 		}, storeId) {
-			return wx.login({
+			if (loginPromise) return loginPromise
+			loginPromise = wx.login({
 				provider: 'weixin',
 			}).then(result => apis.get_openid({
 				code: result.code
@@ -120,8 +120,11 @@ export default {
 					uni.$u.route('/packageMine/pages/editUserInfo/editUserInfo')
 				}
 				// dispatch('getMemberCardInfo')
+			}).finally(() => {
+				loginPromise = null
 			})
-		}, 200),
+			return loginPromise
+		},
 		mobileLogin({
 			state,
 			getters,

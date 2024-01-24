@@ -21,20 +21,12 @@ import {
 	getSearchParams
 } from '../magic'
 
-export function reLogin() {
-	CancelToken.cancelAll()
-	return store.dispatch('user/login')
-		.then(() => {
-			const page = getCurrentPages().pop()
-			page.onLoad(getSearchParams(page.$page.fullPath))
-		})
-}
-
-function checkStatus(res, options) {
+function checkStatus(res, options, reloadFn) {
 	const data = res.data
 	if (hasOwnProperty(data, 'status') && !data.status) {
-		data.responseCode = 'invalidAuthorization'
-		if (data.responseCode === 'invalidAuthorization') return reLogin()
+		if (['invalidAuthorization', 'parameterMustBeNotnull'].includes(data.responseCode)) {
+			return store.dispatch('user/login').then(reloadFn)
+		}
 		if (hasOwnProperty(data, 'message') && options.showError) showToast(data.message)
 		return Promise.reject({
 			type: 'status',
@@ -149,7 +141,7 @@ export function uploadFile(url, params, config, options) {
 			closeLoading()
 			try {
 				res.data = JSON.parse(res.data)
-				return checkStatus(res, options)
+				return checkStatus(res, options, () => uploadFile(...argumentsCache))
 			} catch (e) {
 				return Promise.reject({
 					type: 'code error',
@@ -216,7 +208,7 @@ export function request(url, method, params, config, options) {
 		...configRes
 	}).then(res => {
 		closeLoading()
-		return checkStatus(res, options)
+		return checkStatus(res, options, () => request(...argumentsCache))
 	}).catch(e => {
 		closeLoading && closeLoading()
 		return Promise.reject(e)
