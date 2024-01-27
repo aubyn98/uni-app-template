@@ -67,15 +67,8 @@ export function payment_h5(params, opts) {
 }
 
 export function getOpenid() {
-	return new Promise((resolve, reject) => {
-		const openid = uni.getStorageSync('openid');
-		if (openid) {
-			resolve(openid);
-		} else {
-			authorizeInWxBrowser()
-			reject()
-		};
-	})
+	const openid = uni.getStorageSync('openid');
+	return openid ? Promise.resolve(openid) : authorizeInWxBrowser()
 }
 
 export function authorizeInWxBrowser(type = 'snsapi_userinfo') {
@@ -87,7 +80,7 @@ export function authorizeInWxBrowser(type = 'snsapi_userinfo') {
 
 	if (!queryStringParams.code) {
 		// 获取微信授权url
-		return apis.get_authorizeUrl({
+		apis.get_authorizeUrl({
 			redirectUrl: currentUrl
 		}).then(res => {
 			const snsapi_userinfo = res.data;
@@ -95,23 +88,25 @@ export function authorizeInWxBrowser(type = 'snsapi_userinfo') {
 			//跳转微信授权
 			window.location.href = type === 'base' ? snsapi_base : snsapi_userinfo;
 		})
+		return Promise.reject()
+	}
+	const data = {
+		code: queryStringParams.code,
+		inviteCode: uni.getStorageSync('passive_inviteCode') // 邀请码
+	};
+	if (store.state.hasLogin) {
+		return apis.get_openid(data).then((res) => {
+			uni.setStorageSync('openid', res.data)
+			return res.data
+		})
 	} else {
-		const data = {
-			code: queryStringParams.code,
-			inviteCode: uni.getStorageSync('passive_inviteCode') // 邀请码
-		};
-		if (store.state.hasLogin) {
-			return apis.get_openid(data).then((res) => {
-				uni.setStorageSync('openid', res.data)
-			})
-		} else {
-			// 登录
-			return apis.login(data).then(res => {
-				const info = res.data
-				uni.setStorageSync('openid', info.openid)
-				// store.commit('login', info);
-			})
+		// 登录
+		return apis.login(data).then(res => {
+			const info = res.data
+			uni.setStorageSync('openid', info.openid)
+			// store.commit('login', info);
+			return info.openid
+		})
 
-		}
 	}
 }
