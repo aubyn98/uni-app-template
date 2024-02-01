@@ -57,6 +57,7 @@
             "postcss" : false,
             "minified" : true
         },
+		"libVersion": "latest",
         "usingComponents" : true,
         "requiredPrivateInfos" : [ "getLocation", "chooseLocation", "onLocationChange" ],
         "permission" : {
