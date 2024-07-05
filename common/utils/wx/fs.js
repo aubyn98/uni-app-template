@@ -189,12 +189,20 @@ export function chooseImg(opts) {
 }
 
 export function saveImageToPhotosAlbum(url) {
-	return new Promise((success, fail) => {
+	return new Promise((r, j) => {
 		downloadFile(url).then(res => {
 			wx.saveImageToPhotosAlbum({
 				filePath: res.tempFilePath,
-				success,
-				fail,
+				success: (e) => {
+					uni.showToast({
+						icon: 'none',
+						title: '保存成功'
+					})
+					r(e)
+				},
+				fail: (e) => {
+					j(e)
+				},
 			})
 		})
 	})
