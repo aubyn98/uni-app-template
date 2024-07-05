@@ -1,3 +1,6 @@
+import {
+	downloadFile
+} from '../http/index.js'
 export const $fs = wx.getFileSystemManager();
 
 const encodingList = ['ascii', 'base64', 'binary', 'hex', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'utf-8', 'utf8',
@@ -181,6 +184,18 @@ export function chooseImg(opts) {
 			fail(err) {
 				reject(err)
 			}
+		})
+	})
+}
+
+export function saveImageToPhotosAlbum(url) {
+	return new Promise((success, fail) => {
+		downloadFile(url).then(res => {
+			wx.saveImageToPhotosAlbum({
+				filePath: res.tempFilePath,
+				success,
+				fail,
+			})
 		})
 	})
 }

@@ -24,7 +24,7 @@ import {
 function checkStatus(res, options, reloadFn) {
 	const data = res.data
 	if (hasOwnProperty(data, 'status') && !data.status) {
-		if (['invalidAuthorization'/* , 'parameterMustBeNotnull' */].includes(data.responseCode)) {
+		if (['invalidAuthorization' /* , 'parameterMustBeNotnull' */ ].includes(data.responseCode)) {
 			return store.dispatch('user/login').then(reloadFn)
 		}
 		if (hasOwnProperty(data, 'message') && options.showError) showToast(data.message)
@@ -37,7 +37,7 @@ function checkStatus(res, options, reloadFn) {
 }
 
 // 106
-export function downloadFile(url, params, config, options) {
+export function downloadFile(url, params, config = {}, options = {}) {
 	const source = CancelToken.source()
 
 	options = {
@@ -67,7 +67,7 @@ export function downloadFile(url, params, config, options) {
 	}
 	return promisifyRequest('downloadFile', {
 		cancelToken: source.token,
-		url: BASE_URL + url + (hasParams ? '?' + params : ''),
+		url: url.startsWith('http') ? url : BASE_URL + url + (hasParams ? '?' + params : ''),
 		header: {
 			...(token && {
 				[TOKEN_KEY]: token
@@ -84,7 +84,7 @@ export function downloadFile(url, params, config, options) {
 	})
 }
 
-export function uploadFile(url, params, config, options) {
+export function uploadFile(url, params, config = {}, options = {}) {
 	const source = CancelToken.source()
 
 	const argumentsCache = cloneDeepWithDescriptors(arguments)
@@ -125,7 +125,7 @@ export function uploadFile(url, params, config, options) {
 
 	return promisifyRequest('uploadFile', {
 			cancelToken: source.token,
-			url: BASE_URL + url, //仅为示例，非真实的接口地址
+			url: url.startsWith('http') ? url : BASE_URL + url, //仅为示例，非真实的接口地址
 			filePath,
 			name: keyName,
 			formData,
@@ -166,7 +166,7 @@ request.post = simplify('post')
 
 
 
-export function request(url, method, params, config, options) {
+export function request(url, method, params, config = {}, options = {}) {
 	const source = CancelToken.source()
 
 	const argumentsCache = cloneDeepWithDescriptors(arguments)
@@ -193,7 +193,7 @@ export function request(url, method, params, config, options) {
 	return promisifyRequest('request', {
 		cancelToken: source.token,
 		method,
-		url: BASE_URL + url,
+		url: url.startsWith('http') ? url : BASE_URL + url,
 		data: params,
 		header: {
 			'Content-Type': method.toUpperCase() === 'GET' ? CONTENT_TYPES.JSON : options.qs ?
