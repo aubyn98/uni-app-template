@@ -1,7 +1,7 @@
 import {
 	downloadFile
-} from '../http/index.js'
-export const $fs = wx.getFileSystemManager();
+} from './http/index.js'
+export const $fs = uni.getFileSystemManager();
 
 const encodingList = ['ascii', 'base64', 'binary', 'hex', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'utf-8', 'utf8',
 	'latin1'
@@ -120,7 +120,7 @@ export function getArraybufferTempPath({
 			if (!['canvas', 'fs'].includes(method)) return reject(new Error('method must be canvas | fs'))
 			const base64Url = `data:image/${fileType};base64,${uni.arrayBufferToBase64(arraybuffer)}`
 			if (typeof canvasId !== 'string') return reject(new Error('canvasId must be a string [#id]'))
-			const query = wx.createSelectorQuery()
+			const query = uni.createSelectorQuery()
 			if (ctx) query.in(ctx)
 			query.select(canvasId).fields({
 				node: true,
@@ -140,7 +140,7 @@ export function getArraybufferTempPath({
 				}).catch(reject)
 				context.clearRect(0, 0, width, height)
 				context.drawImage(image, 0, 0, width, height)
-				wx.canvasToTempFilePath({
+				uni.canvasToTempFilePath({
 					canvas,
 					width,
 					height,
@@ -153,7 +153,7 @@ export function getArraybufferTempPath({
 	}
 }
 
-const canChooseMedia = wx.canIUse('chooseMedia')
+const canChooseMedia = uni.canIUse('chooseMedia')
 
 export function chooseImg(opts) {
 	opts = {
@@ -161,7 +161,7 @@ export function chooseImg(opts) {
 		...opts
 	}
 	return new Promise((resolve, reject) => {
-		canChooseMedia ? wx.chooseMedia({
+		canChooseMedia ? uni.chooseMedia({
 			...opts,
 			mediaType: 'image',
 			sizeType: ['original', 'compressed'],
@@ -176,7 +176,7 @@ export function chooseImg(opts) {
 			fail(err) {
 				reject(err)
 			}
-		}) : wx.chooseImage({
+		}) : uni.chooseImage({
 			count,
 			success(res) {
 				resolve(res.tempFilePaths);
@@ -191,7 +191,7 @@ export function chooseImg(opts) {
 export function saveImageToPhotosAlbum(url) {
 	return new Promise((r, j) => {
 		downloadFile(url).then(res => {
-			wx.saveImageToPhotosAlbum({
+			uni.saveImageToPhotosAlbum({
 				filePath: res.tempFilePath,
 				success: (e) => {
 					uni.showToast({

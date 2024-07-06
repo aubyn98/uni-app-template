@@ -86,7 +86,7 @@ export default {
 			dispatch
 		}, storeId) {
 			if (loginPromise) return loginPromise
-			loginPromise = wx.login({
+			loginPromise = uni.login({
 				provider: 'weixin',
 			}).then(result => apis.get_openid({
 				code: result.code

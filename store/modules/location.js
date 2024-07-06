@@ -18,7 +18,7 @@ export default {
 		startLocationUpdate({
 			commit
 		}) {
-			wx.startLocationUpdate({
+			uni.startLocationUpdate({
 				success() {
 					commit('changeAuthorize', true)
 				},
@@ -30,7 +30,7 @@ export default {
 		stopLocationUpdate({
 			commit
 		}) {
-			wx.stopLocationUpdate({
+			uni.stopLocationUpdate({
 				success() {
 
 				},
@@ -42,13 +42,13 @@ export default {
 		onLocationChange({
 			commit
 		}, fn) {
-			wx.onLocationChange(function(res) {
+			uni.onLocationChange(function(res) {
 				commit('changeLocation', res)
 				typeof fn === 'function' && fn(res)
 			})
 		},
 		offLocationChange() {
-			wx.offLocationChange()
+			uni.offLocationChange()
 		}
 	},
 }
