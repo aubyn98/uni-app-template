@@ -17,7 +17,7 @@
 					</view>
 				</slot>
 				<slot name="footer" :options="options">
-					<view class="c-modal-footer">
+					<view class="c-modal-footer" :style="{ gridTemplateColumns: options.footerColumns }">
 						<slot name="cancel" :options="options">
 							<c-button v-if="options.showCancel" width="100%" :text="options.cancelText" size="small"
 								type="info" plain @click="cancel" />
@@ -43,6 +43,10 @@
 			showTitle: {
 				type: Boolean,
 				default: true
+			},
+			footerColumns: {
+				type: String,
+				default: 'repeat(2, 1fr)'
 			},
 			confirmText: {
 				type: String,
@@ -108,6 +112,7 @@
 				return {
 					title: this.title,
 					showTitle: this.showTitle,
+					footerColumns: this.footerColumns,
 					confirmText: this.confirmText,
 					showConfirm: this.showConfirm,
 					cancelText: this.cancelText,
@@ -180,7 +185,6 @@
 
 		.c-modal-footer {
 			display: grid;
-			grid-template-columns: repeat(2, 1fr);
 			grid-gap: 48rpx;
 		}
 	}
