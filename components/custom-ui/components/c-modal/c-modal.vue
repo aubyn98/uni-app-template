@@ -18,10 +18,14 @@
 				</slot>
 				<slot name="footer" :options="options">
 					<view class="c-modal-footer">
-						<c-button v-if="options.showCancel" :custom-style="{ flex: 1, marginRight: '48rpx' }"
-							:text="options.cancelText" size="small" type="info" plain @click="cancel" />
-						<c-button v-if="options.showConfirm" :custom-style="{ flex: 1 }" :text="options.confirmText"
-							size="small" @click="confirm" />
+						<slot name="cancel" :options="options">
+							<c-button v-if="options.showCancel" width="100%" :text="options.cancelText" size="small"
+								type="info" plain @click="cancel" />
+						</slot>
+						<slot name="confirm" :options="options">
+							<c-button v-if="options.showConfirm" :text="options.confirmText" size="small"
+								@click="confirm" />
+						</slot>
 					</view>
 				</slot>
 			</view>
@@ -175,7 +179,9 @@
 		}
 
 		.c-modal-footer {
-			display: flex;
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-gap: 48rpx;
 		}
 	}
 </style>
