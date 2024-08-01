@@ -100,7 +100,7 @@
 			},
 			getOptions(opts, config) {
 				if (typeof config !== 'object') config = {}
-				if (typeof opts !== 'object') {
+				if (opts && typeof opts !== 'object') {
 					opts = {
 						content: opts
 					}
