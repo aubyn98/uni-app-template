@@ -1,7 +1,9 @@
 import {
 	downloadFile
 } from './http/index.js'
+// #ifndef H5
 export const $fs = uni.getFileSystemManager();
+// #endif
 
 const encodingList = ['ascii', 'base64', 'binary', 'hex', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'utf-8', 'utf8',
 	'latin1'
@@ -10,7 +12,7 @@ const encodingList = ['ascii', 'base64', 'binary', 'hex', 'ucs2', 'ucs-2', 'utf1
 export function getImgBase64Prefix(imgType = 'png') {
 	return `data:image/${imgType};base64,`
 }
-
+// #ifndef H5
 export function readFile({
 	filePath,
 	encoding,
@@ -207,3 +209,4 @@ export function saveImageToPhotosAlbum(url) {
 		})
 	})
 }
+// #endif

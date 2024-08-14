@@ -10,7 +10,9 @@
 			...mapActions('location', ['onLocationChange'])
 		},
 		onLaunch: function() {
-			this.initBarInfo();
+			// #ifndef H5
+				this.initBarInfo();
+			// #endif
 			this.onLocationChange()
 			console.log('this.$utils', this.$utils)
 			console.log('this.$apis', this.$apis)
