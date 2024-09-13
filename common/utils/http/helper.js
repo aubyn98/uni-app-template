@@ -137,9 +137,10 @@ export function createRequest(defaultConfig, defaultOpts) {
 			...configRes
 		}).then(res => {
 			closeLoading()
-			return options.resInterceptor(res, options, () => _request(...argumentsCache))
+			return options.resInterceptor ? options.resInterceptor(res, options, () => _request(...
+				argumentsCache)) : res
 		}).catch(e => {
-			options.errInterceptor(e)
+			options.errInterceptor && options.errInterceptor(e)
 			closeLoading && closeLoading()
 			return Promise.reject(e)
 		})
@@ -212,7 +213,8 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 				closeLoading()
 				try {
 					res.data = JSON.parse(res.data)
-					return options.resInterceptor(res, options, () => _uploadFile(...argumentsCache))
+					return options.resInterceptor ? options.resInterceptor(res, options, () => _uploadFile(...
+						argumentsCache)) : res
 				} catch (e) {
 					return Promise.reject({
 						type: 'code error',
@@ -221,7 +223,7 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 				}
 			})
 			.catch(e => {
-				options.errInterceptor(e)
+				options.errInterceptor && options.errInterceptor(e)
 				closeLoading && closeLoading()
 				return Promise.reject(e)
 			})
@@ -277,7 +279,7 @@ export function createDownloadFile(defaultConfig, defaultOpts) {
 			closeLoading()
 			return res
 		}).catch((e) => {
-			options.errInterceptor(e)
+			options.errInterceptor && options.errInterceptor(e)
 			closeLoading && closeLoading()
 			return Promise.reject(e)
 		})
