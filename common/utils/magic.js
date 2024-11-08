@@ -84,6 +84,17 @@ export function getSearchParams(str) {
 	return collect
 }
 
+export function getRandomStr(len = 8, $chars) {
+  len = len || 32;
+  $chars ||= 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+  const maxPos = $chars.length;
+  let pwd = '';
+  for (let i = 0; i < len; i++) {
+    pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+  }
+  return pwd;
+}
+
 // 获取路径参数
 export function getSearchStr(params) {
 	return Object.keys(params).map((key) => `${key}=${params[key]}`).join('&')
