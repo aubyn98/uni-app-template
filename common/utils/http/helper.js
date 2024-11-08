@@ -116,7 +116,10 @@ export function createRequest(defaultConfig, defaultOpts) {
 			...configRes
 		} = config
 
-		if (typeof headers !== 'function') headers = () => headers
+		if (typeof headers !== 'function') {
+			const _temp = headers
+			headers = () => _temp
+		}
 
 		options.loading && startLoading()
 		let closeLoading = () => {
@@ -180,7 +183,10 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 			...configRes
 		} = config
 
-		if (typeof headers !== 'function') headers = () => headers
+		if (typeof headers !== 'function') {
+			const _temp = headers
+			headers = () => _temp
+		}
 
 		const {
 			keyName,
@@ -252,7 +258,10 @@ export function createDownloadFile(defaultConfig, defaultOpts) {
 			...configRes
 		} = config
 
-		if (typeof headers !== 'function') headers = () => headers
+		if (typeof headers !== 'function') {
+			const _temp = headers
+			headers = () => _temp
+		}
 
 		const hasParams = typeof params === 'object' && params !== null
 		if (hasParams) {
