@@ -86,7 +86,7 @@ export function getSearchParams(str) {
 
 // 获取路径参数
 export function getSearchStr(params) {
-	return '?' + Object.keys(params).map((key) => `${key}=${params[key]}`).join('&')
+	return Object.keys(params).map((key) => `${key}=${params[key]}`).join('&')
 }
 
 // 获取页面参数
