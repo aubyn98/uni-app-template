@@ -19,12 +19,12 @@
 				<slot name="footer" :options="options">
 					<view class="c-modal-footer" :style="{ gridTemplateColumns: options.footerColumns }">
 						<slot name="cancel" :options="options">
-							<c-button v-if="options.showCancel" width="100%" :text="options.cancelText" size="small"
-								type="info" plain @click="cancel" />
+							<c-button v-if="options.showCancel" :width="options.cancelWidth" :text="options.cancelText"
+								size="small" type="info" plain @click="cancel" />
 						</slot>
 						<slot name="confirm" :options="options">
-							<c-button v-if="options.showConfirm" :text="options.confirmText" size="small"
-								@click="confirm" />
+							<c-button v-if="options.showConfirm" :width="options.confirmWidth"
+								:text="options.confirmText" size="small" @click="confirm" />
 						</slot>
 					</view>
 				</slot>
@@ -52,6 +52,10 @@
 				type: String,
 				default: '确定'
 			},
+			confirmWidth: {
+				type: String,
+				default: '100%'
+			},
 			showConfirm: {
 				type: Boolean,
 				default: true
@@ -59,6 +63,10 @@
 			cancelText: {
 				type: String,
 				default: '取消'
+			},
+			cancelWidth: {
+				type: String,
+				default: '100%'
 			},
 			showCancel: {
 				type: Boolean,
@@ -114,8 +122,10 @@
 					showTitle: this.showTitle,
 					footerColumns: this.footerColumns,
 					confirmText: this.confirmText,
+					confirmWidth: this.confirmWidth,
 					showConfirm: this.showConfirm,
 					cancelText: this.cancelText,
+					cancelWidth: this.cancelWidth,
 					showCancel: this.showCancel,
 					zIndex: this.zIndex,
 					overlayStyle: this.overlayStyle,
