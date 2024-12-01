@@ -117,10 +117,11 @@
 						content: opts
 					}
 				}
-				return {
+				const res = {
 					title: this.title,
 					showTitle: this.showTitle,
 					footerColumns: this.footerColumns,
+					footerDisplay: this.footerDisplay,
 					confirmText: this.confirmText,
 					confirmWidth: this.confirmWidth,
 					showConfirm: this.showConfirm,
@@ -137,6 +138,10 @@
 					...opts,
 					...config
 				}
+				if ([res.showCancel, res.showConfirm].filter(i => i).length < 2) {
+					res.footerColumns = 'repeat(1, 1fr)'
+				}
+				return res
 			},
 			confirmRes(res) {
 				this.resolve(res)
