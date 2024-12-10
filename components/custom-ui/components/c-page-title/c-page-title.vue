@@ -16,7 +16,7 @@
 						</view>
 					</view>
 					<slot name="title">
-						<view class="title-text" :style="[{ minWidth: `calc(100% - ${paddingX})`}, textStyle]"
+						<view class="title-text" :style="[{ minWidth: `calc(100% - calc(${paddingX} - 24rpx))`}, textStyle]"
 							:class="textClass">
 							<slot>{{title}}</slot>
 						</view>
