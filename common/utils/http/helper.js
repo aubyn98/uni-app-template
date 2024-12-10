@@ -98,6 +98,7 @@ export function createRequest(defaultConfig, defaultOpts) {
 		const argumentsCache = cloneDeepWithDescriptors(arguments)
 		options = {
 			loading: true,
+			loadingText: '加载中...',
 			qs: true,
 			showError: true,
 			resInterceptor: (res) => res.data,
@@ -121,7 +122,7 @@ export function createRequest(defaultConfig, defaultOpts) {
 			headers = () => _temp
 		}
 
-		options.loading && startLoading()
+		options.loading && startLoading(options.loadingText)
 		let closeLoading = () => {
 			options.loading && endLoading()
 			closeLoading = null
@@ -166,6 +167,7 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 
 		options = {
 			loading: true,
+			loadingText: '上传中...',
 			showError: true,
 			resInterceptor: (res) => res.data,
 			errInterceptor: () => void 0,
@@ -198,7 +200,7 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 			data: filePath
 		})
 
-		options.loading && startLoading('上传中...')
+		options.loading && startLoading(options.loadingText)
 		let closeLoading = () => {
 			options.loading && endLoading()
 			closeLoading = null
@@ -243,6 +245,7 @@ export function createDownloadFile(defaultConfig, defaultOpts) {
 
 		options = {
 			loading: true,
+			loadingText: '下载中...',
 			errInterceptor: () => void 0,
 			...defaultOpts,
 			...options
@@ -271,7 +274,7 @@ export function createDownloadFile(defaultConfig, defaultOpts) {
 				return prev
 			}, []).join('&')
 		}
-		options.loading && startLoading('下载中...')
+		options.loading && startLoading(options.loadingText)
 		let closeLoading = () => {
 			options.loading && endLoading()
 			closeLoading = null
