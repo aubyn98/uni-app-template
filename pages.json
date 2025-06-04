@@ -79,7 +79,7 @@
 		"fontSize": "10px",
 		"iconWidth": "22px",
 		"spacing": "3px",
-		// "custom": true,
+		"custom": true,
 		"list": [{
 			"pagePath": "pages/home/home",
 			"iconPath": "/static/images/tabs/icon_sy@2x.png",
