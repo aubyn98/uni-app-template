@@ -12,7 +12,7 @@
 		mixins: [tabBar],
 		data() {
 			return {
-
+				tabBarIndex: 1,
 			}
 		},
 		methods: {
