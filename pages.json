@@ -8,6 +8,7 @@
 		{
 			"path": "pages/home/home",
 			"style": {
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
@@ -29,6 +30,7 @@
 		}, {
 			"path": "pages/mine/mine",
 			"style": {
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
