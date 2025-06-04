@@ -13,7 +13,7 @@
 			}
 
 		}, {
-			"path": "pages/findMedicine/findMedicine",
+			"path": "pages/category/category",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
@@ -86,7 +86,7 @@
 			"selectedIconPath": "/static/images/tabs/icon_sy2@2x.png",
 			"text": "首页"
 		}, {
-			"pagePath": "pages/findMedicine/findMedicine",
+			"pagePath": "pages/category/category",
 			"iconPath": "/static/images/tabs/icon_fl@2x.png",
 			"selectedIconPath": "/static/images/tabs/icon_fl2@2x.png",
 			"text": "找药"

@@ -11,7 +11,7 @@ Component({
 			text: '找药',
 			icon: 'icon_fl',
 			activeIcon: 'icon_fl2',
-			path: '/pages/findMedicine/findMedicine'
+			path: '/pages/category/category'
 		}, {
 			text: '购物车',
 			icon: 'icon_gwc',
