@@ -1,5 +1,5 @@
 <view class="p-tabBar">
-	<view wx:for="{{ list }}" class="p-tabBar-item {{ selected == index ? 'active' : '' }}" data-index="{{ index }}" data-path="{{ item.path }}"
+	<view wx:for="{{ list }}" wx:key="text" class="p-tabBar-item {{ selected == index ? 'active' : '' }}" data-index="{{ index }}" data-path="{{ item.path }}"
 		bindtap="switchTab">
 		<view wx:if="{{ item.badge }}" class="p-tabBar-badge-box">
 			<image class="p-tabBar-icon"
