@@ -2,7 +2,12 @@
 	"easycom": {
 		"^u-(.*)": "@/components/uview-ui/components/u-$1/u-$1.vue",
 		"^c-(.*)": "@/components/custom-ui/components/c-$1/c-$1.vue",
-		"^p-(.*)": "@/components/project-ui/p-$1.vue"
+		// "^p-(.*)": "@/components/project-ui/p-$1.vue",
+		"^p-cart-(.*)": "@/components/project-ui/cart/p-cart-$1.vue",
+		"^p-goods-(.*)": "@/components/project-ui/goods/p-goods-$1.vue",
+		"^p-popup-(.*)": "@/components/project-ui/popup/p-popup-$1.vue",
+		"^p-address-(.*)": "@/components/project-ui/address/p-address-$1.vue",
+		"^p-(?!cart|goods|popup|tabBar|address)(.*)": "@/components/project-ui/others/p-$1.vue"
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
