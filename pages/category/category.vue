@@ -109,8 +109,7 @@
 			}
 		},
 		computed: {
-			...mapState('statusBar', ['titleHeight']),
-			...mapGetters(['hasLogin', 'deliveryTypeName']),
+			...mapGetters(['hasLogin']),
 			/** 是否可以下拉刷新 */
 			isDisabledDown() {
 				let disabled = true
@@ -166,7 +165,7 @@
 			/** 筛选条件的高度 */
 			conditionOccupySpace() {
 				return {
-					height: this.subCategorys.length > 1 ? '154rpx' : '70rpx'
+					height: this.subCategorys.length > 1 ? '162rpx' : '78rpx'
 				}
 			},
 			/** 请求参数 */
@@ -191,17 +190,6 @@
 		watch: {
 			isDisabledDown(v) {
 				this.mescroll && this.mescroll.lockDownScroll(v)
-			},
-			deliveryType: {
-				handler(v, oldV) {
-					if (oldV && v) this.getGoodsList(true).then(res => {
-						uni.showToast({
-							title: `切换${this.deliveryTypeName}后,优惠活动可能发生变化,请核查`,
-							icon: 'none',
-							duration: 1200,
-						})
-					})
-				}
 			},
 			canSlideUp(v) {
 				if (v) this.mescroll.optUp.textNoMore = '上滑加载下一分类'
@@ -359,10 +347,10 @@
 					loading: false
 				}).then(res => {
 					if (reload) {
-						this.goodsList = res.data
-						this.pager = res.pager
+						this.goodsList = res.data.data
+						this.pager = res.data.pager
 					} else {
-						this.goodsList.push(...res.data)
+						this.goodsList.push(...res.data.data)
 					}
 					this.$nextTick(() => {
 						this.queryContentHeight({
@@ -473,7 +461,7 @@
 		z-index: 2;
 		right: 0;
 		left: 152rpx;
-		padding: 20rpx 16rpx;
+		padding: 24rpx;
 
 		.subCategory-menus {
 			margin-bottom: 32rpx;
@@ -534,7 +522,7 @@
 
 	.main-container {
 		margin-left: 152rpx;
-		padding: 0 16rpx;
+		padding: 0 24rpx;
 		padding-bottom: 1px;
 		overflow: hidden;
 
