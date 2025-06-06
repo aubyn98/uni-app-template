@@ -2,7 +2,6 @@ import * as apis from '@/common/apis'
 import {
 	debouncePromise
 } from '@/common/utils'
-let init = false
 export default {
 	namespaced: true,
 	state() {
