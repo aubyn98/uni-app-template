@@ -103,9 +103,11 @@ export function getSearchStr(params) {
 // 获取页面参数
 export function getOnLoadParams(e) {
 	const scene = e.scene
+	const fromCode = !!e.scene
 	if (scene) {
 		e = {
 			...e,
+			fromCode,
 			...getSearchParams(scene)
 		}
 	}
