@@ -168,7 +168,7 @@ export function createRequest(defaultConfig, defaultOpts) {
 			closeLoading()
 			return options.resInterceptor(res, options, reloadFn)
 		}).catch(e => {
-			closeLoading()
+			closeLoading && closeLoading()
 			options.errInterceptor(e)
 			return Promise.reject(e)
 		})
@@ -239,7 +239,7 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 				}
 			})
 			.catch(e => {
-				closeLoading()
+				closeLoading && closeLoading()
 				options.errInterceptor(e)
 				return Promise.reject(e)
 			})
@@ -288,7 +288,7 @@ export function createDownloadFile(defaultConfig, defaultOpts) {
 			closeLoading()
 			return options.resInterceptor(res, options)
 		}).catch((e) => {
-			closeLoading()
+			closeLoading && closeLoading()
 			options.errInterceptor(e)
 			return Promise.reject(e)
 		})
