@@ -90,37 +90,60 @@ function simplify(_request, type) {
 	}
 }
 
+function normalizeConfig(url, defaultConfig, config) {
+	const tempConfig = {
+		...defaultConfig,
+		...config
+	}
+	let {
+		headers,
+		...configRes
+	} = tempConfig
+
+	if (typeof headers !== 'function') {
+		const _temp = headers
+		headers = () => _temp
+	}
+
+	const urlRes = url.startsWith('http') ? url : tempConfig.baseURL ? tempConfig.baseURL + url : url
+	return {
+		urlRes,
+		headers,
+		configRes
+	}
+}
+
+function normalizeOpts(loadingText, defaultOpts, options) {
+	return {
+		qs: true,
+		showError: true,
+		loadingText,
+		loading: true,
+		reqInterceptor: (e) => e,
+		resInterceptor: (res) => res,
+		errInterceptor: () => void 0,
+		...defaultOpts,
+		...options
+	}
+}
+
+function getReload(fn, argvs) {
+	return () => fn(...cloneDeepWithDescriptors(argvs))
+}
+
 export function createRequest(defaultConfig, defaultOpts) {
 
 	function _request(url, method, params, config, options) {
 		const source = CancelToken.source()
+		const reloadFn = getReload(_request, arguments)
 
-		const argumentsCache = cloneDeepWithDescriptors(arguments)
-		options = {
-			loading: true,
-			loadingText: '加载中...',
-			qs: true,
-			showError: true,
-			resInterceptor: (res) => res.data,
-			errInterceptor: () => void 0,
-			...defaultOpts,
-			...options
-		}
+		options = normalizeOpts('加载中...', defaultOpts, options)
 
-		config = {
-			...defaultConfig,
-			...config
-		}
-
-		let {
+		const {
+			urlRes,
 			headers,
-			...configRes
-		} = config
-
-		if (typeof headers !== 'function') {
-			const _temp = headers
-			headers = () => _temp
-		}
+			configRes
+		} = normalizeConfig(url, defaultConfig, config)
 
 		options.loading && startLoading(options.loadingText)
 		let closeLoading = () => {
@@ -128,10 +151,10 @@ export function createRequest(defaultConfig, defaultOpts) {
 			closeLoading = null
 		}
 
-		return promisifyRequest('request', {
+		const finalArgvs = options.reqInterceptor({
 			cancelToken: source.token,
 			method,
-			url: url.startsWith('http') ? url : config.baseURL ? config.baseURL + url : url,
+			url: urlRes,
 			data: params,
 			header: {
 				'Content-Type': method.toUpperCase() === 'GET' ? CONTENT_TYPES.JSON : options.qs ?
@@ -139,13 +162,14 @@ export function createRequest(defaultConfig, defaultOpts) {
 				...headers()
 			},
 			...configRes
-		}).then(res => {
+		})
+
+		return promisifyRequest('request', finalArgvs).then(res => {
 			closeLoading()
-			return options.resInterceptor ? options.resInterceptor(res, options, () => _request(...
-				argumentsCache)) : res
+			return options.resInterceptor(res, options, reloadFn)
 		}).catch(e => {
-			options.errInterceptor && options.errInterceptor(e)
-			closeLoading && closeLoading()
+			closeLoading()
+			options.errInterceptor(e)
 			return Promise.reject(e)
 		})
 	}
@@ -158,37 +182,20 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 	return function _uploadFile(url, params, config, options) {
 		const source = CancelToken.source()
 
-		const argumentsCache = cloneDeepWithDescriptors(arguments)
+		const reloadFn = getReload(_uploadFile, arguments)
 		params = {
 			keyName: 'file',
 			filePath: '',
 			...params
 		}
 
-		options = {
-			loading: true,
-			loadingText: '上传中...',
-			showError: true,
-			resInterceptor: (res) => res.data,
-			errInterceptor: () => void 0,
-			...defaultOpts,
-			...options
-		}
+		options = normalizeOpts('上传中...', defaultOpts, options)
 
-		config = {
-			...defaultConfig,
-			...config
-		}
-
-		let {
+		const {
+			urlRes,
 			headers,
-			...configRes
-		} = config
-
-		if (typeof headers !== 'function') {
-			const _temp = headers
-			headers = () => _temp
-		}
+			configRes
+		} = normalizeConfig(url, defaultConfig, config)
 
 		const {
 			keyName,
@@ -206,23 +213,24 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 			closeLoading = null
 		}
 
-		return promisifyRequest('uploadFile', {
-				cancelToken: source.token,
-				url: url.startsWith('http') ? url : config.baseURL ? config.baseURL + url : url,
-				filePath,
-				name: keyName,
-				formData,
-				header: {
-					...headers()
-				},
-				...configRes
-			})
+		const finalArgvs = options.reqInterceptor({
+			cancelToken: source.token,
+			url: urlRes,
+			filePath,
+			name: keyName,
+			formData,
+			header: {
+				...headers()
+			},
+			...configRes
+		})
+
+		return promisifyRequest('uploadFile', finalArgvs)
 			.then(res => {
 				closeLoading()
 				try {
 					res.data = JSON.parse(res.data)
-					return options.resInterceptor ? options.resInterceptor(res, options, () => _uploadFile(...
-						argumentsCache)) : res
+					return options.resInterceptor(res, options, reloadFn)
 				} catch (e) {
 					return Promise.reject({
 						type: 'code error',
@@ -231,8 +239,8 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 				}
 			})
 			.catch(e => {
-				options.errInterceptor && options.errInterceptor(e)
-				closeLoading && closeLoading()
+				closeLoading()
+				options.errInterceptor(e)
 				return Promise.reject(e)
 			})
 
@@ -243,28 +251,13 @@ export function createDownloadFile(defaultConfig, defaultOpts) {
 	return function _downloadFile(url, params, config, options) {
 		const source = CancelToken.source()
 
-		options = {
-			loading: true,
-			loadingText: '下载中...',
-			errInterceptor: () => void 0,
-			...defaultOpts,
-			...options
-		}
+		options = normalizeOpts('下载中...', defaultOpts, options)
 
-		config = {
-			...defaultConfig,
-			...config
-		}
-
-		let {
+		const {
+			urlRes,
 			headers,
-			...configRes
-		} = config
-
-		if (typeof headers !== 'function') {
-			const _temp = headers
-			headers = () => _temp
-		}
+			configRes
+		} = normalizeConfig(url, defaultConfig, config)
 
 		const hasParams = typeof params === 'object' && params !== null
 		if (hasParams) {
@@ -274,25 +267,29 @@ export function createDownloadFile(defaultConfig, defaultOpts) {
 				return prev
 			}, []).join('&')
 		}
+
 		options.loading && startLoading(options.loadingText)
 		let closeLoading = () => {
 			options.loading && endLoading()
 			closeLoading = null
 		}
-		return promisifyRequest('downloadFile', {
+
+		const finalArgvs = options.reqInterceptor({
 			cancelToken: source.token,
-			url: (url.startsWith('http') ? url : config.baseURL ? config.baseURL + url : url) + (hasParams ?
+			url: urlRes + (hasParams ?
 				'?' + params : ''),
 			header: {
 				...headers()
 			},
 			...configRes
-		}).then((res) => {
+		})
+
+		return promisifyRequest('downloadFile', finalArgvs).then((res) => {
 			closeLoading()
-			return res
+			return options.resInterceptor(res, options)
 		}).catch((e) => {
-			options.errInterceptor && options.errInterceptor(e)
-			closeLoading && closeLoading()
+			closeLoading()
+			options.errInterceptor(e)
 			return Promise.reject(e)
 		})
 	}
