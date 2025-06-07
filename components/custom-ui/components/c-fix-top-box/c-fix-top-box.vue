@@ -54,7 +54,7 @@
 			}
 		},
 		computed: {
-			...mapState('statusBar', ['statusBarHeight', 'MenuButton', 'titleHeight']),
+			...mapState('statusBar', ['statusBarHeight', 'MenuButton', 'titleHeight', 'titleContentHeight']),
 			occupySpaceHeight() {
 				if (this.occupySpace) {
 					return this.otherHeight ? `calc(${this.titleHeight}px + ${this.otherHeight})` : `${this.titleHeight}px`
@@ -68,7 +68,7 @@
 				return this.MenuButton.marginTop + 'px'
 			},
 			minHeight() {
-				return this.titleHeight - this.statusBarHeight + 'px'
+				return this.titleContentHeight + 'px'
 			},
 			getStyle() {
 				const statusBarHeight = this.statusBarHeight;
