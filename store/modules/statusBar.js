@@ -5,6 +5,7 @@ export default {
 			statusBarHeight: 0,
 			MenuButton: {},
 			titleHeight: 0,
+			titleContentHeight: 0
 		}
 	},
 	mutations: {
@@ -21,6 +22,7 @@ export default {
 				...MenuButton
 			};
 			state.titleHeight = MenuButton.height + MenuButton.top + state.MenuButton.marginTop
+			state.titleContentHeight = state.titleHeight - statusBarHeight
 		}
 	}
 }
