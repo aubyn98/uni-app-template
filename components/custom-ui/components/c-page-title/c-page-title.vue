@@ -8,15 +8,16 @@
 					<view class="_left-container">
 						<view class="_left-icon-wrapper" @tap.stop="goBack" v-if="back">
 							<image class="_left-icon" :style="imageStyle" :class="imageClass"
-								:src="`${imagePath}icon_fh@2x.png`" mode="aspectFit"></image>
+								:src="`${imagePath}${backIcon}.png`" mode="aspectFit"></image>
 						</view>
 						<view class="_left-icon-wrapper _left-home" @tap.stop="goHome" v-if="home">
 							<image class="_left-icon" :style="imageStyle" :class="imageClass"
-								:src="`${imagePath}icon_sy@2x.png`" mode="aspectFit"></image>
+								:src="`${imagePath}${homeIcon}.png`" mode="aspectFit"></image>
 						</view>
 					</view>
 					<slot name="title">
-						<view class="title-text" :style="[{ minWidth: `calc(100% - calc(${paddingX} - 24rpx))`}, textStyle]"
+						<view class="title-text"
+							:style="[{ minWidth: `calc(100% - calc(${paddingX} - 24rpx))`}, textStyle]"
 							:class="textClass">
 							<slot>{{title}}</slot>
 						</view>
@@ -67,9 +68,17 @@
 				type: Boolean,
 				default: false
 			},
+			homeIcon: {
+				type: String,
+				default: 'icon_sy@2x'
+			},
 			back: { // 是否显示图片
 				type: Boolean,
 				default: false
+			},
+			backIcon: {
+				type: String,
+				default: 'icon_fh@2x'
 			},
 			customBack: {
 				type: Boolean,
@@ -184,6 +193,6 @@
 	}
 
 	.custom-page-title-bg {
-		background: $color-primary !important;
+		background: $primary-color !important;
 	}
 </style>
