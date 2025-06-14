@@ -67,23 +67,35 @@ export function promisifyRequest(type, {
 	})
 }
 
+let isLoading = false;
+
+export function showLoading(title) {
+	if (!isLoading) {
+		isLoading = true;
+		uni.showLoading({
+			title,
+			mask: true
+		});
+	}
+}
+
+export function hideLoading() {
+	if (isLoading) {
+		isLoading = false;
+		uni.hideLoading();
+	}
+}
+
 let loadingCount = 0
 
 export function startLoading(title = '加载中...') {
 	loadingCount++
-	if (loadingCount === 1) {
-		uni.showLoading({
-			mask: true,
-			title
-		})
-	}
+	if (loadingCount === 1) showLoading(title)
 }
 
 export function endLoading() {
 	if (loadingCount > 0) loadingCount--
-	if (loadingCount === 0) {
-		uni.hideLoading()
-	}
+	if (loadingCount === 0) hideLoading()
 }
 
 function simplify(_request, type) {

@@ -14,6 +14,10 @@ import {
 	createUploadFile,
 	createDownloadFile
 } from './helper'
+export {
+	showLoading,
+	hideLoading
+} from './helper'
 
 function errInterceptor(e) {
 	const pages = uni.$u.page()
