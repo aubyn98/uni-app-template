@@ -71,10 +71,12 @@ let loadingCount = 0
 
 export function startLoading(title = '加载中...') {
 	loadingCount++
-	uni.showLoading({
-		mask: true,
-		title
-	})
+	if (loadingCount === 1) {
+		uni.showLoading({
+			mask: true,
+			title
+		})
+	}
 }
 
 export function endLoading() {
