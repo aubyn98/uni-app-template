@@ -30,6 +30,9 @@
 </template>
 
 <script>
+	import {
+		throttle
+	} from '@/common/utils/magic';
 	export default {
 		props: {
 			position: {
@@ -127,16 +130,16 @@
 			}
 		},
 		methods: {
-			goBack() {
+			goBack: throttle(function() {
 				if (this.customBack) this.$emit('goBack')
 				else uni.navigateBack()
-			},
-			goHome() {
+			}, 1000),
+			goHome: throttle(function() {
 				if (this.customHome) this.$emit('goHome')
 				else uni.switchTab({
 					url: '/pages/home/home'
 				})
-			}
+			}, 1000)
 		}
 	};
 </script>
