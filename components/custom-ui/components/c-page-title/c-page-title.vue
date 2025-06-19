@@ -6,7 +6,7 @@
 				<view class="title-container"
 					:style="[{ padding:`${paddingY} ${paddingX} ${paddingY} 24rpx`, minHeight },customStyle]">
 					<view class="_left-container">
-						<view class="_left-icon-wrapper" @tap.stop="goBack" v-if="back">
+						<view class="_left-icon-wrapper" @tap.stop="goBack" v-if="hasBack">
 							<image class="_left-icon" :style="imageStyle" :class="imageClass"
 								:src="`${imagePath}${backIcon}.png`" mode="aspectFit"></image>
 						</view>
@@ -121,6 +121,9 @@
 				if (typeof customClass === 'object') Object.keys(customClass).forEach(key => customClass[key] && classList
 					.push(key));
 				return classList;
+			},
+			hasBack() {
+				return this.back && getCurrentPages().length > 1
 			}
 		},
 		methods: {
@@ -167,10 +170,10 @@
 
 		._left-icon-wrapper {
 			flex-shrink: 0;
-			width: 56rpx;
-			height: 56rpx;
+			width: 40rpx;
+			height: 40rpx;
 			font-size: 0;
-			line-height: 56rpx;
+			line-height: 40rpx;
 			margin-right: 12rpx;
 
 			&:last-child {
@@ -179,8 +182,8 @@
 		}
 
 		._left-icon {
-			width: 48rpx;
-			height: 48rpx;
+			width: 40rpx;
+			height: 40rpx;
 			vertical-align: middle;
 		}
 
