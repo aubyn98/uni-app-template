@@ -126,7 +126,7 @@
 			},
 			// 内容盒子的样式
 			contentStyle() {
-				const windowHeight = uni.$u.sys().windowHeight, style = {}
+				const windowHeight = uni.$u.sys('getWindowInfo').windowHeight, style = {}
 				let value = 0
 				// 根据top和bottom，对Y轴进行窗体高度的百分比偏移
 				if(this.tmpConfig.position === 'top') {

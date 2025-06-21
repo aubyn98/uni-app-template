@@ -146,7 +146,7 @@
 				// scroll-view的高度
 				scrollViewHeight: 0,
 				// 系统信息
-				sys: uni.$u.sys(),
+				sys: uni.$u.sys('getWindowInfo'),
 				scrolling: false,
 				scrollIntoView: '',
 			}
@@ -251,7 +251,7 @@
 					const {
 						height
 					} = size
-					const sys = uni.$u.sys()
+					const sys = uni.$u.sys('getWindowInfo')
 					const windowHeight = sys.windowHeight
 					let customNavHeight = 0
 					// 消除各端导航栏非原生和原生导致的差异，让索引列表字母对屏幕垂直居中
@@ -283,7 +283,7 @@
 				} = this.letterInfo
 				// 对H5的pageY进行修正，这是由于uni-app自作多情在H5中将触摸点的坐标跟H5的导航栏结合导致的问题
 				// #ifdef H5
-				pageY += uni.$u.sys().windowTop
+				pageY += uni.$u.sys('getWindowInfo').windowTop
 				// #endif
 				// 对第一和最后一个字母做边界处理，因为用户可能在字母列表上触摸到两端的尽头后依然继续滑动
 				if (pageY < top) {

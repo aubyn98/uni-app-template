@@ -1,5 +1,7 @@
 import test from './test.js'
-import { round } from './digit.js'
+import {
+	round
+} from './digit.js'
 /**
  * @description 如果value小于min，取min；如果value大于max，取max
  * @param {number} min
@@ -45,14 +47,22 @@ function sleep(value = 30) {
  * @link 运行期判断平台 https://uniapp.dcloud.io/frame?id=判断平台
  */
 function os() {
-	return uni.getSystemInfoSync().platform.toLowerCase()
+	return sys('getDeviceInfo').platform.toLowerCase()
 }
 /**
  * @description 获取系统信息同步接口
+ * @param {string} infoKey 兼容性新接口名称
  * @link 获取系统信息同步接口 https://uniapp.dcloud.io/api/system/info?id=getsysteminfosync
  */
-function sys() {
-	return uni.getSystemInfoSync()
+function sys(infoKey) {
+	const flag = uni.canIUse('getSystemInfoSync')
+	return flag ? uni.getSystemInfoSync() : infoKey ? uni[infoKey]() : {
+		...uni.getSystemSetting(),
+		...uni.getAppAuthorizeSetting(),
+		...uni.getDeviceInfo(),
+		...uni.getWindowInfo(),
+		...uni.getAppBaseInfo(),
+	}
 }
 
 /**
@@ -293,20 +303,20 @@ if (!String.prototype.padStart) {
  * @param {String} fmt 格式化规则 yyyy:mm:dd|yyyy:mm|yyyy年mm月dd日|yyyy年mm月dd日 hh时MM分等,可自定义组合 默认yyyy-mm-dd
  * @returns {string} 返回格式化后的字符串
  */
- function timeFormat(dateTime = null, formatStr = 'yyyy-mm-dd') {
-  let date
+function timeFormat(dateTime = null, formatStr = 'yyyy-mm-dd') {
+	let date
 	// 若传入时间为假值，则取当前时间
-  if (!dateTime) {
-    date = new Date()
-  }
-  // 若为unix秒时间戳，则转为毫秒时间戳（逻辑有点奇怪，但不敢改，以保证历史兼容）
-  else if (/^\d{10}$/.test(dateTime?.toString().trim())) {
-    date = new Date(dateTime * 1000)
-  }
-  // 若用户传入字符串格式时间戳，new Date无法解析，需做兼容
-  else if (typeof dateTime === 'string' && /^\d+$/.test(dateTime.trim())) {
-    date = new Date(Number(dateTime))
-  }
+	if (!dateTime) {
+		date = new Date()
+	}
+	// 若为unix秒时间戳，则转为毫秒时间戳（逻辑有点奇怪，但不敢改，以保证历史兼容）
+	else if (/^\d{10}$/.test(dateTime?.toString().trim())) {
+		date = new Date(dateTime * 1000)
+	}
+	// 若用户传入字符串格式时间戳，new Date无法解析，需做兼容
+	else if (typeof dateTime === 'string' && /^\d+$/.test(dateTime.trim())) {
+		date = new Date(Number(dateTime))
+	}
 	// 处理平台性差异，在Safari/Webkit中，new Date仅支持/作为分割符的字符串时间
 	// 处理 '2022-07-10 01:02:03'，跳过 '2022-07-10T01:02:03'
 	else if (typeof dateTime === 'string' && dateTime.includes('-') && !dateTime.includes('T')) {
@@ -327,16 +337,16 @@ if (!String.prototype.padStart) {
 		// 有其他格式化字符需求可以继续添加，必须转化成字符串
 	}
 
-  for (const key in timeSource) {
-    const [ret] = new RegExp(`${key}+`).exec(formatStr) || []
-    if (ret) {
-      // 年可能只需展示两位
-      const beginIndex = key === 'y' && ret.length === 2 ? 2 : 0
-      formatStr = formatStr.replace(ret, timeSource[key].slice(beginIndex))
-    }
-  }
+	for (const key in timeSource) {
+		const [ret] = new RegExp(`${key}+`).exec(formatStr) || []
+		if (ret) {
+			// 年可能只需展示两位
+			const beginIndex = key === 'y' && ret.length === 2 ? 2 : 0
+			formatStr = formatStr.replace(ret, timeSource[key].slice(beginIndex))
+		}
+	}
 
-  return formatStr
+	return formatStr
 }
 
 /**

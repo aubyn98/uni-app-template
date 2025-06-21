@@ -382,7 +382,7 @@
 			vm.$emit('init', vm.mescroll);
 			
 			// 设置高度
-			const sys = uni.getSystemInfoSync();
+			const sys = uni.$u.sys('getWindowInfo');
 			if(sys.windowTop) vm.windowTop = sys.windowTop;
 			if(sys.windowBottom) vm.windowBottom = sys.windowBottom;
 			if(sys.windowHeight) vm.windowHeight = sys.windowHeight;

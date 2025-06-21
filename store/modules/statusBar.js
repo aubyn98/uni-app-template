@@ -10,7 +10,7 @@ export default {
 	},
 	mutations: {
 		initBarInfo(state) {
-			const statusBarHeight = state.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
+			const statusBarHeight = state.statusBarHeight = uni.$u.sys('getWindowInfo').statusBarHeight;
 			const MenuButton = uni.getMenuButtonBoundingClientRect()
 			while (!MenuButton || MenuButton.left == 0 || MenuButton.right == 0 || MenuButton.top == 0 || MenuButton
 				.bottom == 0 ||

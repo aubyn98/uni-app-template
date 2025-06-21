@@ -135,7 +135,7 @@
 				// 不使用css方案，是因为nvue不支持css的iPhoneX安全区查询属性
 				const {
 					safeAreaInsets
-				} = uni.$u.sys()
+				} = uni.$u.sys('getWindowInfo')
 				if (this.mode !== 'center') {
 					style.flex = 1
 				}

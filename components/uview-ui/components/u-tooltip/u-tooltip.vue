@@ -162,7 +162,7 @@
 				const style = {
 						transform: `translateY(${this.direction === 'top' ? '-100%' : '100%'})`,
 					},
-					sys = uni.$u.sys(),
+					sys = uni.$u.sys('getWindowInfo'),
 					getPx = uni.$u.getPx,
 					addUnit = uni.$u.addUnit
 				if (this.tooltipInfo.width / 2 > this.textInfo.left + this.textInfo.width / 2 - this.screenGap) {

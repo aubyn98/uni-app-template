@@ -36,7 +36,7 @@
 				rect: {},
 				index: 0,
 				show: true,
-				sys: uni.$u.sys()
+				sys: uni.$u.sys('getWindowInfo')
 			}
 		},
 		computed: {

@@ -50,7 +50,7 @@ const config = {
 
     }
 }
-const { windowWidth } = uni.getSystemInfoSync()
+const { windowWidth } = uni.$u.sys('getWindowInfo')
 const blankChar = makeMap(' ,\r,\n,\t,\f')
 let idIndex = 0 // #ifdef H5 || APP-PLUS
 

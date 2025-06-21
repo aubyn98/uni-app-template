@@ -65,7 +65,7 @@
 			}
 		},
 		mounted() {
-			this.isIOS = (uni.getSystemInfoSync().platform === 'ios')
+			this.isIOS = (uni.$u.sys('getDeviceInfo').platform === 'ios')
 			uni.onNetworkStatusChange((res) => {
 				this.isConnected = res.isConnected
 				this.networkType = res.networkType
