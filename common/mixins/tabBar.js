@@ -20,7 +20,7 @@ export default {
 	onShow() {
 		this.$store.dispatch('cart/updateTabarCount')
 		if (typeof this.$mp.page.getTabBar == 'function') {
-			this.$mp.page.getTabBar().setData({
+			this.$mp.page.getTabBar()?.setData?.({
 				selected: this.tabBarIndex,
 				goodsCount: this.goodsCount
 			})

@@ -46,7 +46,7 @@
 			})
 
 			const updateManager = uni.getUpdateManager();
-			updateManager.onCheckForUpdate(function(res) {
+			updateManager?.onCheckForUpdate?.(function(res) {
 				// 请求完新版本信息的回调
 				if (res.hasUpdate) {
 					updateManager.onUpdateReady(function() {
