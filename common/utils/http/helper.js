@@ -117,7 +117,7 @@ function normalizeConfig(url, defaultConfig, config) {
 			...normalizeHeaders(config.headers)()
 		}
 	}
-	let {
+	const {
 		headers,
 		...configRes
 	} = tempConfig
