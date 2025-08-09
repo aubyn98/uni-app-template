@@ -104,20 +104,23 @@ function simplify(_request, type) {
 	}
 }
 
+function normalizeHeaders(headers) {
+	return typeof headers === 'function' ? headers : () => headers
+}
+
 function normalizeConfig(url, defaultConfig, config) {
 	const tempConfig = {
 		...defaultConfig,
-		...config
+		...config,
+		headers: {
+			...normalizeHeaders(defaultConfig.headers)(),
+			...normalizeHeaders(config.headers)()
+		}
 	}
 	let {
 		headers,
 		...configRes
 	} = tempConfig
-
-	if (typeof headers !== 'function') {
-		const _temp = headers
-		headers = () => _temp
-	}
 
 	const urlRes = url.startsWith('http') ? url : tempConfig.baseURL ? tempConfig.baseURL + url : url
 	return {
@@ -173,7 +176,7 @@ export function createRequest(defaultConfig, defaultOpts) {
 			header: {
 				'Content-Type': method.toUpperCase() === 'GET' ? CONTENT_TYPES.JSON : options.qs ?
 					CONTENT_TYPES.FORM_URLENCODED : CONTENT_TYPES.JSON,
-				...headers()
+				...headers
 			},
 			...configRes
 		})
@@ -234,7 +237,7 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 			name: keyName,
 			formData,
 			header: {
-				...headers()
+				...headers
 			},
 			...configRes
 		})
@@ -293,7 +296,7 @@ export function createDownloadFile(defaultConfig, defaultOpts) {
 			url: urlRes + (hasParams ?
 				'?' + params : ''),
 			header: {
-				...headers()
+				...headers
 			},
 			...configRes
 		})
