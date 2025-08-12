@@ -1,3 +1,7 @@
+import {
+	request,
+} from '@/common/utils'
+
 /** 微信小程序支付 */
 export function wxPayInMiniPrograms(data) {
 	return new Promise((resolve, reject) => {
