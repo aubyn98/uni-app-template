@@ -23,7 +23,7 @@ export function drawMultilineText({
 }) {
 	const lines = []; // 存储所有行文本
 	let currentLine = '';
-	const chars = text.split('');
+	const chars = String(text).split('');
 
 	// 先拆分所有行
 	for (let i = 0; i < chars.length; i++) {

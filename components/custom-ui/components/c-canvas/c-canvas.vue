@@ -99,6 +99,8 @@
 
 						for (let i = 0, len = list.length; i < len; i++) {
 							const item = list[i]
+							if (typeof item.getX === 'function') item.x = item.getX(ctx)
+							if (typeof item.getY === 'function') item.y = item.getY(ctx)
 							if (item.type === 'image') await this.drawImage(ctx, item, canvas)
 							if (item.type === 'text') this.drawText(ctx, item)
 							if (item.type === 'dash') this.drawDash(ctx, item)
