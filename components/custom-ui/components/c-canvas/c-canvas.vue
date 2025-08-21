@@ -22,11 +22,11 @@
 			},
 			width: {
 				type: Number,
-				default: 750
+				default: 1500
 			},
 			height: {
 				type: Number,
-				default: 1150
+				default: 2300
 			},
 			top: {
 				type: Number,
@@ -167,7 +167,7 @@
 			},
 			drawDash(ctx, item) {
 				ctx.save()
-				ctx.setLineDash([4, 4]); // 10px线段 + 5px间隙
+				ctx.setLineDash(item.steps); // 10px线段 + 5px间隙
 				// 绘制直线
 				ctx.beginPath();
 				ctx.moveTo(item.x, item.y); // 起点
