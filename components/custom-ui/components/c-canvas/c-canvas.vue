@@ -118,10 +118,43 @@
 					}
 				})
 			},
+			_roundRect(ctx, x, y, width, height, radius) {
+				const [tl, tr, br, bl] = radius;
+				// 1. 左上角圆角
+				// 起点：左上角圆角的右下角（x+tl, y）
+				ctx.moveTo(x + tl, y);
+				// 上边缘：从左上角圆角终点到右上角圆角起点（x+width-tr, y）
+				ctx.lineTo(x + width - tr, y);
+
+				// 2. 右上角圆角
+				// arcTo参数：(x1, y1, x2, y2, 半径)
+				// 从当前点（上边缘终点）绘制到右上角外侧，再弯曲到右边缘起点
+				ctx.arcTo(x + width, y, x + width, y + tr, tr);
+				// 右边缘：从右上角圆角终点到右下角圆角起点（x+width, y+height-br）
+				ctx.lineTo(x + width, y + height - br);
+
+				// 3. 右下角圆角
+				ctx.arcTo(x + width, y + height, x + width - br, y + height, br);
+				// 下边缘：从右下角圆角终点到左下角圆角起点（x+bl, y+height）
+				ctx.lineTo(x + bl, y + height);
+
+				// 4. 左下角圆角
+				ctx.arcTo(x, y + height, x, y + height - bl, bl);
+				// 左边缘：从左下角圆角终点到左上角圆角起点（x, y+tl）
+				ctx.lineTo(x, y + tl);
+
+				// 5. 左上角圆角闭合（连接到起点）
+				ctx.arcTo(x, y, x + tl, y, tl);
+			},
 			drawRoundRect(ctx, item) {
 				ctx.save()
 				ctx.beginPath();
-				ctx.roundRect(item.x, item.y, item.width, item.height, item.radius);
+				if (ctx.roundRect) {
+					ctx.roundRect(item.x, item.y, item.width, item.height, item.radius);
+				} else {
+					this._roundRect(ctx, item.x, item.y, item.width, item.height, item.radius)
+				}
+				ctx.closePath();
 				if (item.fillStyle) {
 					ctx.fillStyle = item.fillStyle
 					ctx.fill()
