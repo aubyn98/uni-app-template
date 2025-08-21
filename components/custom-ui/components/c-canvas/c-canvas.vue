@@ -167,7 +167,7 @@
 			},
 			drawDash(ctx, item) {
 				ctx.save()
-				ctx.setLineDash(item.steps); // 10px线段 + 5px间隙
+				ctx.setLineDash(item.steps); // [10,5] 10px线段 + 5px间隙
 				// 绘制直线
 				ctx.beginPath();
 				ctx.moveTo(item.x, item.y); // 起点
