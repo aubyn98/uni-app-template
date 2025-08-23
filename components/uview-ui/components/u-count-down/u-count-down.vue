@@ -109,7 +109,10 @@
 				this.remainTime = remain
 				// 根据剩余的毫秒时间，得出该有天，小时，分钟等的值，返回一个对象
 				const timeData = parseTimeData(remain)
-				this.timeData = timeData
+				this.timeData = Object.keys(timeData).reduce((_, k) => {
+					_[k] = String(timeData[k]).padEnd(2, 0)
+					return _
+				}, {})
 				this.$emit('change', timeData)
 				// 得出格式化后的时间
 				this.formattedTime = parseFormat(this.format, timeData)
