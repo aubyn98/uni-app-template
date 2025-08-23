@@ -1,6 +1,6 @@
 <template>
 	<view class="u-count-down">
-		<slot :timeData="timeData">
+		<slot :formatTimeData="formatTimeData" :timeData="timeData">
 			<text class="u-count-down__text">{{ formattedTime }}</text>
 		</slot>
 	</view>
@@ -47,6 +47,18 @@
 		watch: {
 			time(n) {
 				this.reset()
+			}
+		},
+		computed: {
+			formatTimeData() {
+				const keys = []
+				const vals = []
+				this.format.replace(/DD|HH|mm|ss|SSS/g, k => keys.push(k))
+				this.formattedTime.replace(/\d+/g, e => vals.push(e))
+				return keys.reduce((_, k, i) => {
+					_[k] = vals[i]
+					return _
+				}, {})
 			}
 		},
 		mounted() {
