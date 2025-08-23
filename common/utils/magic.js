@@ -97,7 +97,12 @@ export function getRandomStr(len = 8, $chars) {
 
 // 获取路径参数
 export function getSearchStr(params) {
-	return Object.keys(params).map((key) => `${key}=${params[key]}`).join('&')
+	return Object.keys(params)
+	    .map(key => {
+	      const v = params[key];
+	      return `${key}=${v && typeof v === 'object' ? JSON.stringify(v) : v}`;
+	    })
+	    .join('&');
 }
 
 // 获取页面参数
