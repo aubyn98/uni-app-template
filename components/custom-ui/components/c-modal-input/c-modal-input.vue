@@ -8,10 +8,10 @@
 					<slot name="title" :options="options">
 						<view class="c-model-input-title" v-if="options.showTitle">{{ options.title }}</view>
 					</slot>
-					<slot name="contentWrapper" :options="options" :focus="focus">
+					<slot name="content" :options="options" :focus="focus">
 						<view class="c-model-input-content">
 							<!-- 微信小程序不支持动态的type -->
-							<slot name="content" :options="options" :focus="focus">
+							<slot :options="options" :focus="focus">
 								<input v-if="options.type == 'text'" ref="input" type="text" :focus="focus"
 									:value="options.value" @keyboardheightchange="keyboardheightchange" @input="onInput"
 									:placeholder="options.placeholder" @confirm="confirm" />
@@ -44,7 +44,7 @@
 				</view>
 			</slot>
 		</u-popup>
-		<slot></slot>
+		<slot name="event"></slot>
 	</view>
 </template>
 

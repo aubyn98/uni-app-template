@@ -7,7 +7,7 @@
 				<text>{{text}}</text>
 			</view>
 		</view>
-		<slot></slot>
+		<slot name="event"></slot>
 	</view>
 </template>
 

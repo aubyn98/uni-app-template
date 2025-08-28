@@ -11,9 +11,9 @@
 								{{ options.title }}
 							</view>
 						</slot>
-						<slot name="contentWrapper" :options="options">
+						<slot name="content" :options="options">
 							<view class="c-modal-content" :style="[options.contentStyle]">
-								<slot :options="options" name="content">
+								<slot :options="options">
 									{{ options.content }}
 								</slot>
 							</view>
@@ -39,7 +39,7 @@
 				</view>
 			</slot>
 		</u-popup>
-		<slot></slot>
+		<slot name="event"></slot>
 	</view>
 </template>
 

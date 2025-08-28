@@ -2,7 +2,7 @@
 	<view style="display:contents">
 		<canvas v-if="!offscreen" type="2d" :id="canvasId"
 			:style="{ position:'fixed',top:top + 'px',width: width + 'px', height: height + 'px' }"></canvas>
-		<slot></slot>
+		<slot name="event"></slot>
 	</view>
 </template>
 
