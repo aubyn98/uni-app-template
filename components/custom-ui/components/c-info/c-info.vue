@@ -1,10 +1,13 @@
 <template>
-	<view v-if="visible" class="custom-info" :class="{'custom-info-mask':mask}" :style="{opacity:show ? 1 : 0}"
-	 @touchmove.stop @tap="mask && close()">
-		<view class="custom-info-container" :class="['_' + status]" @tap.stop="">
-			<image :src="`/static/images/${image}.png`" mode=""></image>
-			<text>{{text}}</text>
+	<view style="display:contents">
+		<view v-if="visible" class="custom-info" :class="{'custom-info-mask':mask}" :style="{opacity:show ? 1 : 0}"
+			@touchmove.stop @tap="mask && close()">
+			<view class="custom-info-container" :class="['_' + status]" @tap.stop="">
+				<image :src="`/static/images/${image}.png`" mode=""></image>
+				<text>{{text}}</text>
+			</view>
 		</view>
+		<slot></slot>
 	</view>
 </template>
 
@@ -18,6 +21,22 @@
 		}
 	}
 	export default {
+		props: {
+			openInfoEvent: {
+				type: String,
+			}
+		},
+		provide() {
+			return {
+				openInfo: this.open
+			}
+		},
+		mounted() {
+			if (!this.$slots.event && this.openInfoEvent) uni.$on(this.openInfoEvent, this.open)
+		},
+		destroyed() {
+			if (!this.$slots.event && this.openInfoEvent) uni.$off(this.openInfoEvent)
+		},
 		computed: {
 			image() {
 				return dict[this.status].image
@@ -119,7 +138,7 @@
 			color: #333;
 			font-size: 0;
 			text-align: center;
-			
+
 
 			text {
 				font-size: 34rpx;
@@ -133,17 +152,15 @@
 				margin: 0 auto 28rpx;
 				display: block;
 			}
-			
+
 			width: 420rpx;
 			padding: 42rpx 92rpx;
-			
+
 			&._success {
-				box-shadow: 0px 0px 6px rgba(203,203,203,0.40);
+				box-shadow: 0px 0px 6px rgba(203, 203, 203, 0.40);
 			}
 
-			&._error {
-			
-			}
+			&._error {}
 		}
 	}
 </style>

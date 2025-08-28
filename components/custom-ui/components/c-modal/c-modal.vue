@@ -1,40 +1,53 @@
 <template>
-	<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" :overlayStyle="options.overlayStyle"
-		:z-index="options.zIndex" :safeAreaInsetBottom="false" @close="close" @closed="closed" mode="center"
-		round="16rpx">
-		<slot name="container" :options="options">
-			<view class="c-modal">
-				<slot name="title" :options="options">
-					<view v-if="options.showTitle" class="c-modal-header">
-						{{ options.title }}
-					</view>
-				</slot>
-				<slot name="content" :options="options">
-					<view class="c-modal-content">
-						<slot :options="options">
-							{{ options.content }}
+	<view style="display:contents">
+		<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" :overlayStyle="options.overlayStyle"
+			:z-index="options.zIndex" :safeAreaInsetBottom="false" @close="close" @closed="closed" mode="center"
+			round="8rpx">
+			<slot name="container" :options="options">
+				<view class="c-modal">
+					<view style="padding: 36rpx 40rpx;min-height: 146rpx;" class="flex-center flex-col text-center">
+						<slot name="title" :options="options">
+							<view v-if="options.showTitle" class="c-modal-header">
+								{{ options.title }}
+							</view>
+						</slot>
+						<slot name="contentWrapper" :options="options">
+							<view class="c-modal-content" :style="[options.contentStyle]">
+								<slot :options="options" name="content">
+									{{ options.content }}
+								</slot>
+							</view>
 						</slot>
 					</view>
-				</slot>
-				<slot name="footer" :options="options">
-					<view class="c-modal-footer" :style="{ gridTemplateColumns: options.footerColumns }">
-						<slot name="cancel" :options="options">
-							<c-button v-if="options.showCancel" :width="options.cancelWidth" :text="options.cancelText"
-								size="small" type="info" plain @click="cancel" />
-						</slot>
-						<slot name="confirm" :options="options">
-							<c-button v-if="options.showConfirm" :width="options.confirmWidth"
-								:text="options.confirmText" size="small" @click="confirm" />
-						</slot>
-					</view>
-				</slot>
-			</view>
-		</slot>
-	</u-popup>
+					<slot name="footer" :options="options">
+						<view v-if="options.showFooter" class="c-modal-footer"
+							:style="{ gridTemplateColumns: options.footerColumns }">
+							<slot name="cancel" :options="options">
+								<view class="c-model-button" v-if="options.showCancel" :style="[options.cancelStyle]"
+									@click="cancel">
+									{{options.cancelText}}
+								</view>
+							</slot>
+							<slot name="confirm" :options="options">
+								<view class="c-model-button" v-if="options.showConfirm" :style="[options.confirmStyle]"
+									@click="confirm">
+									{{options.confirmText}}
+								</view>
+							</slot>
+						</view>
+					</slot>
+				</view>
+			</slot>
+		</u-popup>
+		<slot></slot>
+	</view>
 </template>
 
 <script>
 	export default {
+		options: {
+			virtualHost: true
+		},
 		props: {
 			title: {
 				type: String,
@@ -52,10 +65,6 @@
 				type: String,
 				default: '确定'
 			},
-			confirmWidth: {
-				type: String,
-				default: '100%'
-			},
 			showConfirm: {
 				type: Boolean,
 				default: true
@@ -63,10 +72,6 @@
 			cancelText: {
 				type: String,
 				default: '取消'
-			},
-			cancelWidth: {
-				type: String,
-				default: '100%'
 			},
 			showCancel: {
 				type: Boolean,
@@ -92,6 +97,36 @@
 				type: Boolean,
 				default: false
 			},
+			showFooter: {
+				type: Boolean,
+				default: true
+			},
+			confirmStyle: {
+				type: Object,
+				default: () => ({})
+			},
+			cancelStyle: {
+				type: Object,
+				default: () => ({})
+			},
+			contentStyle: {
+				type: Object,
+				default: () => ({})
+			},
+			openModalEvent: {
+				type: String,
+			}
+		},
+		provide() {
+			return {
+				openModal: this.open
+			}
+		},
+		mounted() {
+			if (!this.$slots.event && this.openModalEvent) uni.$on(this.openModalEvent, this.open)
+		},
+		destroyed() {
+			if (!this.$slots.event && this.openModalEvent) uni.$off(this.openModalEvent)
 		},
 		data() {
 			return {
@@ -117,22 +152,25 @@
 						content: opts
 					}
 				}
+
 				const res = {
 					title: this.title,
 					showTitle: this.showTitle,
 					footerColumns: this.footerColumns,
 					footerDisplay: this.footerDisplay,
 					confirmText: this.confirmText,
-					confirmWidth: this.confirmWidth,
+					confirmStyle: this.confirmStyle,
 					showConfirm: this.showConfirm,
 					cancelText: this.cancelText,
-					cancelWidth: this.cancelWidth,
+					cancelStyle: this.cancelStyle,
 					showCancel: this.showCancel,
 					zIndex: this.zIndex,
 					overlayStyle: this.overlayStyle,
 					closeOnClickOverlay: this.closeOnClickOverlay,
 					content: this.content,
 					asyncClose: this.asyncClose,
+					showFooter: this.showFooter,
+					contentStyle: this.contentStyle,
 					onConfirm: (e) => this.$emit('confirm', e),
 					onCancel: (e) => this.$emit('cancel', e),
 					...opts,
@@ -178,29 +216,37 @@
 </style>
 <style lang="scss" scoped>
 	.c-modal {
-		width: 542rpx;
-		padding: 48rpx;
+		width: 606rpx;
 		text-align: center;
 
 		.c-modal-header {
-			height: 48rpx;
-			line-height: 48rpx;
-			font-size: 34rpx;
-			color: #333333;
-			margin-bottom: 32rpx;
-
+			font-size: 28rpx;
+			color: #101010;
+			margin-bottom: 24rpx;
 		}
 
 		.c-modal-content {
 			line-height: 44rpx;
-			font-size: 26rpx;
+			font-size: 28rpx;
 			color: #666666;
-			margin-bottom: 32rpx;
 		}
 
 		.c-modal-footer {
+			border-top: 2rpx solid #f0f0f0;
 			display: grid;
-			grid-gap: 48rpx;
+			height: 88rpx;
+			line-height: 86rpx;
+
+			.c-model-button {
+				font-size: 28rpx;
+				text-align: CENTER;
+				color: #101010;
+				border-right: 2rpx solid #f0f0f0;
+
+				&:last-child {
+					border: none;
+				}
+			}
 		}
 	}
 </style>

@@ -1,6 +1,9 @@
 <template>
-	<canvas v-if="!offscreen" type="2d" :id="canvasId"
-		:style="{ position:'fixed',top:top + 'px',width: width + 'px', height: height + 'px' }"></canvas>
+	<view style="display:contents">
+		<canvas v-if="!offscreen" type="2d" :id="canvasId"
+			:style="{ position:'fixed',top:top + 'px',width: width + 'px', height: height + 'px' }"></canvas>
+		<slot></slot>
+	</view>
 </template>
 
 <script>
@@ -31,6 +34,18 @@
 			top: {
 				type: Number,
 				default: 60
+			},
+			drawEvent: {
+				type: String,
+			},
+			customDrawEvent: {
+				type: String,
+			}
+		},
+		provide() {
+			return {
+				draw: this.draw,
+				customDraw: this.customDraw,
 			}
 		},
 		data() {
@@ -39,8 +54,17 @@
 			}
 		},
 		computed: {},
-		mounted() {},
+		mounted() {
+			if (!this.$slots.event) {
+				this.drawEvent && uni.$on(this.drawEvent, this.draw)
+				this.customDrawEvent && uni.$on(this.customDrawEvent, this.customDraw)
+			}
+		},
 		destroyed() {
+			if (!this.$slots.event) {
+				this.drawEvent && uni.$off(this.drawEvent)
+				this.customDrawEvent && uni.$off(this.customDrawEvent)
+			}
 			cache = null
 			imgMap = {}
 		},
