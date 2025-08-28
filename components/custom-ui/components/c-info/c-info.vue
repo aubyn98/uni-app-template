@@ -1,14 +1,24 @@
 <template>
+	<!-- #ifndef MP-WEIXIN -->
 	<view class="C-INFO">
-		<view v-if="visible" class="custom-info" :class="{'custom-info-mask':mask}" :style="{opacity:show ? 1 : 0}"
-			@touchmove.stop @tap="mask && close()">
-			<view class="custom-info-container" :class="['_' + status]" @tap.stop="">
-				<image :src="`/static/images/${image}.png`" mode=""></image>
-				<text>{{text}}</text>
+		<!-- #endif -->
+		<!-- #ifdef MP-WEIXIN -->
+		<block>
+			<!-- #endif -->
+			<view v-if="visible" class="custom-info" :class="{'custom-info-mask':mask}" :style="{opacity:show ? 1 : 0}"
+				@touchmove.stop @tap="mask && close()">
+				<view class="custom-info-container" :class="['_' + status]" @tap.stop="">
+					<image :src="`/static/images/${image}.png`" mode=""></image>
+					<text>{{text}}</text>
+				</view>
 			</view>
-		</view>
-		<slot name="event"></slot>
+			<slot name="event"></slot>
+			<!-- #ifdef MP-WEIXIN -->
+		</block>
+		<!-- #endif -->
+		<!-- #ifndef MP-WEIXIN -->
 	</view>
+	<!-- #endif -->
 </template>
 
 <script>
@@ -112,9 +122,11 @@
 </script>
 
 <style lang="scss" scoped>
+	/* #ifndef MP-WEIXIN */
 	.C-INFO {
 		display: contents;
 	}
+	/* #endif */
 
 	.custom-info {
 		position: fixed;

@@ -1,9 +1,19 @@
 <template>
+	<!-- #ifndef MP-WEIXIN -->
 	<view class="C-CANVAS">
-		<canvas v-if="!offscreen" type="2d" :id="canvasId"
-			:style="{ position:'fixed',top:top + 'px',width: width + 'px', height: height + 'px' }"></canvas>
-		<slot name="event"></slot>
+		<!-- #endif -->
+		<!-- #ifdef MP-WEIXIN -->
+		<block>
+			<!-- #endif -->
+			<canvas v-if="!offscreen" type="2d" :id="canvasId"
+				:style="{ position:'fixed',top:top + 'px',width: width + 'px', height: height + 'px' }"></canvas>
+			<slot name="event"></slot>
+			<!-- #ifdef MP-WEIXIN -->
+		</block>
+		<!-- #endif -->
+		<!-- #ifndef MP-WEIXIN -->
 	</view>
+	<!-- #endif -->
 </template>
 
 <script>
@@ -288,7 +298,9 @@
 </script>
 
 <style lang="scss" scoped>
+	/* #ifndef MP-WEIXIN */
 	.C-CANVAS {
 		display: contents;
 	}
+	/* #endif */
 </style>
