@@ -247,7 +247,6 @@
 	.C-MODAL-INPUT {
 		display: contents;
 	}
-
 	/* #endif */
 
 	.c-modal-input {
