@@ -167,7 +167,6 @@
 					title: this.title,
 					showTitle: this.showTitle,
 					footerColumns: this.footerColumns,
-					footerDisplay: this.footerDisplay,
 					confirmText: this.confirmText,
 					confirmStyle: this.confirmStyle,
 					showConfirm: this.showConfirm,
