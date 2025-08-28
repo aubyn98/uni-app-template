@@ -1,5 +1,5 @@
 <template>
-	<view style="display:contents">
+	<view class="C-MODAL-INPUT">
 		<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" @close="close" @closed="closed"
 			mode="center" round="16rpx" :safeAreaInsetBottom="false" :z-index="options.zIndex"
 			:overlayStyle="options.overlayStyle" :customStyle="{ transform: 'translateY(-50%)' }">
@@ -50,6 +50,9 @@
 
 <script>
 	export default {
+		options: {
+			virtualHost: true
+		},
 		props: {
 			title: {
 				type: String,
@@ -229,6 +232,10 @@
 	}
 </style>
 <style lang="scss" scoped>
+	.C-MODAL-INPUT {
+		display: contents;
+	}
+
 	.c-modal-input {
 		width: 542rpx;
 		height: 332rpx;

@@ -1,5 +1,5 @@
 <template>
-	<view style="display:contents">
+	<view class="C-MODAL">
 		<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" :overlayStyle="options.overlayStyle"
 			:z-index="options.zIndex" :safeAreaInsetBottom="false" @close="close" @closed="closed" mode="center"
 			round="8rpx">
@@ -215,6 +215,10 @@
 	}
 </style>
 <style lang="scss" scoped>
+	.C-MODAL {
+		display: contents;
+	}
+
 	.c-modal {
 		width: 606rpx;
 		text-align: center;

@@ -1,5 +1,5 @@
 <template>
-	<view style="display:contents">
+	<view class="C-INFO">
 		<view v-if="visible" class="custom-info" :class="{'custom-info-mask':mask}" :style="{opacity:show ? 1 : 0}"
 			@touchmove.stop @tap="mask && close()">
 			<view class="custom-info-container" :class="['_' + status]" @tap.stop="">
@@ -21,6 +21,9 @@
 		}
 	}
 	export default {
+		options: {
+			virtualHost: true
+		},
 		props: {
 			openInfoEvent: {
 				type: String,
@@ -109,6 +112,10 @@
 </script>
 
 <style lang="scss" scoped>
+	.C-INFO {
+		display: contents;
+	}
+
 	.custom-info {
 		position: fixed;
 		z-index: 8001;

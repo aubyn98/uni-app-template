@@ -1,5 +1,5 @@
 <template>
-	<view style="display:contents">
+	<view class="C-CANVAS">
 		<canvas v-if="!offscreen" type="2d" :id="canvasId"
 			:style="{ position:'fixed',top:top + 'px',width: width + 'px', height: height + 'px' }"></canvas>
 		<slot name="event"></slot>
@@ -14,6 +14,9 @@
 		drawMultilineText
 	} from '../../libs/utils/canvas.js'
 	export default {
+		options: {
+			virtualHost: true
+		},
 		props: {
 			offscreen: {
 				type: Boolean,
@@ -285,5 +288,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+	.C-CANVAS {
+		display: contents;
+	}
 </style>
