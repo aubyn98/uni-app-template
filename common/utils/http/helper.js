@@ -137,8 +137,8 @@ function normalizeOpts(loadingText, defaultOpts, options) {
 		loadingText,
 		loading: true,
 		reqInterceptor: (e) => e,
-		resInterceptor: (res) => res,
-		errInterceptor: () => void 0,
+		resInterceptor: (e) => e,
+		errInterceptor: (e) => e,
 		...defaultOpts,
 		...options
 	}
