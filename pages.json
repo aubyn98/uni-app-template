@@ -77,6 +77,24 @@
 			}]
 		}
 	],
+	"preloadRule": {
+		"pages/home/home": {
+			"network": "all",
+			"packages": ["packageGoods", "packageMine"]
+		},
+		"pages/category/category": {
+			"network": "all",
+			"packages": ["packageGoods", "packageMine"]
+		},
+		"pages/myCart/myCart": {
+			"network": "all",
+			"packages": ["packageGoods", "packageMine"]
+		},
+		"pages/mine/mine": {
+			"network": "all",
+			"packages": ["packageGoods", "packageMine"]
+		}
+	},
 	"tabBar": {
 		"color": "#333333",
 		"selectedColor": "#04AA58",
