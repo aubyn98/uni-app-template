@@ -5,51 +5,53 @@
 		<!-- #ifdef MP-WEIXIN -->
 		<block>
 			<!-- #endif -->
-			<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" @close="close" @closed="closed"
-				mode="center" round="16rpx" :safeAreaInsetBottom="false" :z-index="options.zIndex"
-				:overlayStyle="options.overlayStyle" :customStyle="{ transform: 'translateY(-50%)' }">
-				<slot name="container" :options="options" :focus="focus">
-					<view class="c-modal-input">
-						<slot name="title" :options="options">
-							<view class="c-model-input-title" v-if="options.showTitle">{{ options.title }}</view>
-						</slot>
-						<slot name="content" :options="options" :focus="focus">
-							<view class="c-model-input-content">
-								<!-- 微信小程序不支持动态的type -->
-								<slot :options="options" :focus="focus">
-									<input v-if="options.type == 'text'" ref="input" type="text" :focus="focus"
-										:value="options.value" @keyboardheightchange="keyboardheightchange"
-										@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
-									<input v-if="options.type == 'number'" ref="input" type="number" :focus="focus"
-										:value="options.value" @keyboardheightchange="keyboardheightchange"
-										@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
-									<input v-if="options.type == 'idcard'" ref="input" type="idcard" :focus="focus"
-										:value="options.value" @keyboardheightchange="keyboardheightchange"
-										@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
-									<input v-if="options.type == 'digit'" ref="input" type="digit" :focus="focus"
-										:value="options.value" @keyboardheightchange="keyboardheightchange"
-										@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
-									<input v-if="options.type == 'safe-password'" ref="input" type="safe-password"
-										:focus="focus" :value="options.value"
-										@keyboardheightchange="keyboardheightchange" @input="onInput"
-										:placeholder="options.placeholder" @confirm="confirm" />
-									<input v-if="options.type == 'nickname'" ref="input" type="nickname" :focus="focus"
-										:value="options.value" @keyboardheightchange="keyboardheightchange"
-										@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
-								</slot>
-							</view>
-						</slot>
-						<slot name="footer" :options="options">
-							<view class="c-model-input-footer">
-								<c-button v-if="options.showCancel" :custom-style="{ flex: 1, marginRight: '48rpx' }"
-									:text="options.cancelText" size="small" type="info" plain @click="cancel" />
-								<c-button v-if="options.showConfirm" :custom-style="{ flex: 1 }"
-									:text="options.confirmText" size="small" @click="confirm" />
-							</view>
-						</slot>
-					</view>
-				</slot>
-			</u-popup>
+			<view>
+				<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay" @close="close" @closed="closed"
+					mode="center" round="16rpx" :safeAreaInsetBottom="false" :z-index="options.zIndex"
+					:overlayStyle="options.overlayStyle" :customStyle="{ transform: 'translateY(-50%)' }">
+					<slot name="container" :options="options" :focus="focus">
+						<view class="c-modal-input">
+							<slot name="title" :options="options">
+								<view class="c-model-input-title" v-if="options.showTitle">{{ options.title }}</view>
+							</slot>
+							<slot name="content" :options="options" :focus="focus">
+								<view class="c-model-input-content">
+									<!-- 微信小程序不支持动态的type -->
+									<slot :options="options" :focus="focus">
+										<input v-if="options.type == 'text'" ref="input" type="text" :focus="focus"
+											:value="options.value" @keyboardheightchange="keyboardheightchange"
+											@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
+										<input v-if="options.type == 'number'" ref="input" type="number" :focus="focus"
+											:value="options.value" @keyboardheightchange="keyboardheightchange"
+											@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
+										<input v-if="options.type == 'idcard'" ref="input" type="idcard" :focus="focus"
+											:value="options.value" @keyboardheightchange="keyboardheightchange"
+											@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
+										<input v-if="options.type == 'digit'" ref="input" type="digit" :focus="focus"
+											:value="options.value" @keyboardheightchange="keyboardheightchange"
+											@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
+										<input v-if="options.type == 'safe-password'" ref="input" type="safe-password"
+											:focus="focus" :value="options.value"
+											@keyboardheightchange="keyboardheightchange" @input="onInput"
+											:placeholder="options.placeholder" @confirm="confirm" />
+										<input v-if="options.type == 'nickname'" ref="input" type="nickname" :focus="focus"
+											:value="options.value" @keyboardheightchange="keyboardheightchange"
+											@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
+									</slot>
+								</view>
+							</slot>
+							<slot name="footer" :options="options">
+								<view class="c-model-input-footer">
+									<c-button v-if="options.showCancel" :custom-style="{ flex: 1, marginRight: '48rpx' }"
+										:text="options.cancelText" size="small" type="info" plain @click="cancel" />
+									<c-button v-if="options.showConfirm" :custom-style="{ flex: 1 }"
+										:text="options.confirmText" size="small" @click="confirm" />
+								</view>
+							</slot>
+						</view>
+					</slot>
+				</u-popup>
+			</view>
 			<slot name="event"></slot>
 			<!-- #ifdef MP-WEIXIN -->
 		</block>

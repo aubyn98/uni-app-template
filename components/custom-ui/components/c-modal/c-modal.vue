@@ -5,45 +5,47 @@
 		<!-- #ifdef MP-WEIXIN -->
 		<block>
 			<!-- #endif -->
-			<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay"
-				:overlayStyle="options.overlayStyle" :z-index="options.zIndex" :safeAreaInsetBottom="false"
-				@close="close" @closed="closed" mode="center" round="8rpx">
-				<slot name="container" :options="options">
-					<view class="c-modal">
-						<view style="padding: 36rpx 40rpx;min-height: 146rpx;" class="flex-center flex-col text-center">
-							<slot name="title" :options="options">
-								<view v-if="options.showTitle" class="c-modal-header">
-									{{ options.title }}
-								</view>
-							</slot>
-							<slot name="content" :options="options">
-								<view class="c-modal-content" :style="[options.contentStyle]">
-									<slot :options="options">
-										{{ options.content }}
+			<view>
+				<u-popup :show="show" :closeOnClickOverlay="options.closeOnClickOverlay"
+					:overlayStyle="options.overlayStyle" :z-index="options.zIndex" :safeAreaInsetBottom="false"
+					@close="close" @closed="closed" mode="center" round="8rpx">
+					<slot name="container" :options="options">
+						<view class="c-modal">
+							<view style="padding: 36rpx 40rpx;min-height: 146rpx;" class="flex-center flex-col text-center">
+								<slot name="title" :options="options">
+									<view v-if="options.showTitle" class="c-modal-header">
+										{{ options.title }}
+									</view>
+								</slot>
+								<slot name="content" :options="options">
+									<view class="c-modal-content" :style="[options.contentStyle]">
+										<slot :options="options">
+											{{ options.content }}
+										</slot>
+									</view>
+								</slot>
+							</view>
+							<slot name="footer" :options="options">
+								<view v-if="options.showFooter" class="c-modal-footer"
+									:style="{ gridTemplateColumns: options.footerColumns }">
+									<slot name="cancel" :options="options">
+										<view class="c-model-button" v-if="options.showCancel"
+											:style="[options.cancelStyle]" @click="cancel">
+											{{options.cancelText}}
+										</view>
+									</slot>
+									<slot name="confirm" :options="options">
+										<view class="c-model-button" v-if="options.showConfirm"
+											:style="[options.confirmStyle]" @click="confirm">
+											{{options.confirmText}}
+										</view>
 									</slot>
 								</view>
 							</slot>
 						</view>
-						<slot name="footer" :options="options">
-							<view v-if="options.showFooter" class="c-modal-footer"
-								:style="{ gridTemplateColumns: options.footerColumns }">
-								<slot name="cancel" :options="options">
-									<view class="c-model-button" v-if="options.showCancel"
-										:style="[options.cancelStyle]" @click="cancel">
-										{{options.cancelText}}
-									</view>
-								</slot>
-								<slot name="confirm" :options="options">
-									<view class="c-model-button" v-if="options.showConfirm"
-										:style="[options.confirmStyle]" @click="confirm">
-										{{options.confirmText}}
-									</view>
-								</slot>
-							</view>
-						</slot>
-					</view>
-				</slot>
-			</u-popup>
+					</slot>
+				</u-popup>
+			</view>
 			<slot name="event"></slot>
 			<!-- #ifdef MP-WEIXIN -->
 		</block>
