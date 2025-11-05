@@ -194,10 +194,6 @@
 					...config
 				}
 			},
-			confirmRes(res) {
-				this.resolve(res)
-				this.options.onConfirm(res)
-			},
 			confirm() {
 				const close = () => this.show = false
 				const res = {
@@ -205,11 +201,11 @@
 				}
 				if (this.options.asyncClose) {
 					res.close = close
-					this.confirmRes(res)
 				} else {
 					close()
-					this.confirmRes(res)
 				}
+				this.resolve(res)
+				this.options.onConfirm(res)
 			},
 			cancel() {
 				this._closeHandle('cancel')

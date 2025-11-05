@@ -192,18 +192,14 @@
 				}
 				return res
 			},
-			confirmRes(res) {
-				this.resolve(res)
-				this.options.onConfirm(res)
-			},
 			confirm() {
-				const close = () => this.show = false
-				if (this.options.asyncClose) {
-					this.confirmRes(close)
-				} else {
-					close()
-					this.confirmRes()
+				let close = () => {
+					this.show = false
+					close = null
 				}
+				if (!this.options.asyncClose) close()
+				this.resolve(close)
+				this.options.onConfirm(close)
 			},
 			cancel() {
 				this._closeHandle('cancel')
