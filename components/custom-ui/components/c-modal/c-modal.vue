@@ -11,7 +11,8 @@
 					@close="close" @closed="closed" mode="center" round="8rpx">
 					<slot name="container" :options="options">
 						<view class="c-modal">
-							<view style="padding: 36rpx 40rpx;min-height: 146rpx;" class="flex-center flex-col text-center">
+							<view style="padding: 36rpx 40rpx;min-height: 146rpx;"
+								class="flex-center flex-col text-center">
 								<slot name="title" :options="options">
 									<view v-if="options.showTitle" class="c-modal-header">
 										{{ options.title }}
@@ -25,16 +26,16 @@
 									</view>
 								</slot>
 							</view>
-							<slot name="footer" :options="options">
+							<slot name="footer" :options="options" :close="close" :cancel="cancel" :confirm="confirm">
 								<view v-if="options.showFooter" class="c-modal-footer"
 									:style="{ gridTemplateColumns: options.footerColumns }">
-									<slot name="cancel" :options="options">
+									<slot name="cancel" :options="options" :close="close" :cancel="cancel">
 										<view class="c-model-button" v-if="options.showCancel"
 											:style="[options.cancelStyle]" @click="cancel">
 											{{options.cancelText}}
 										</view>
 									</slot>
-									<slot name="confirm" :options="options">
+									<slot name="confirm" :options="options" :close="close" :confirm="confirm">
 										<view class="c-model-button" v-if="options.showConfirm"
 											:style="[options.confirmStyle]" @click="confirm">
 											{{options.confirmText}}
@@ -56,6 +57,7 @@
 </template>
 
 <script>
+	let ins
 	export default {
 		options: {
 			virtualHost: true
@@ -138,6 +140,7 @@
 			if (!this.$slots.event && this.openModalEvent) uni.$on(this.openModalEvent, this.open)
 		},
 		destroyed() {
+			ins = void 0
 			if (!this.$slots.event && this.openModalEvent) uni.$off(this.openModalEvent)
 		},
 		data() {
@@ -146,6 +149,9 @@
 				options: this.getOptions(),
 				resolve: () => void 0,
 				reject: () => void 0,
+				cls: {
+					b: () => void 0
+				}
 			}
 		},
 		methods: {
@@ -155,6 +161,7 @@
 					this.show = true
 					this.resolve = resolve
 					this.reject = reject
+					ins = this
 				})
 			},
 			getOptions(opts, config) {
@@ -193,19 +200,20 @@
 				return res
 			},
 			confirm() {
+				const vm = this || ins
 				let close = () => {
-					this.show = false
+					vm.show = false
 					close = null
 				}
-				if (!this.options.asyncClose) close()
-				this.resolve(close)
-				this.options.onConfirm(close)
+				if (!vm.options.asyncClose) close()
+				vm.resolve(close)
+				vm.options.onConfirm(close)
 			},
 			cancel() {
-				this._closeHandle('cancel')
+				(this || ins)._closeHandle('cancel')
 			},
 			close() {
-				this._closeHandle('close')
+				(this || ins)._closeHandle('close')
 			},
 			_closeHandle(code) {
 				this.show = false
@@ -226,6 +234,7 @@
 	.C-MODAL {
 		display: contents;
 	}
+
 	/* #endif */
 
 	.c-modal {

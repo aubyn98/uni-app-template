@@ -34,16 +34,18 @@
 											:focus="focus" :value="options.value"
 											@keyboardheightchange="keyboardheightchange" @input="onInput"
 											:placeholder="options.placeholder" @confirm="confirm" />
-										<input v-if="options.type == 'nickname'" ref="input" type="nickname" :focus="focus"
-											:value="options.value" @keyboardheightchange="keyboardheightchange"
-											@input="onInput" :placeholder="options.placeholder" @confirm="confirm" />
+										<input v-if="options.type == 'nickname'" ref="input" type="nickname"
+											:focus="focus" :value="options.value"
+											@keyboardheightchange="keyboardheightchange" @input="onInput"
+											:placeholder="options.placeholder" @confirm="confirm" />
 									</slot>
 								</view>
 							</slot>
-							<slot name="footer" :options="options">
+							<slot name="footer" :options="options" :close="close" :cancel="cancel" :confirm="confirm">
 								<view class="c-model-input-footer">
-									<c-button v-if="options.showCancel" :custom-style="{ flex: 1, marginRight: '48rpx' }"
-										:text="options.cancelText" size="small" type="info" plain @click="cancel" />
+									<c-button v-if="options.showCancel"
+										:custom-style="{ flex: 1, marginRight: '48rpx' }" :text="options.cancelText"
+										size="small" type="info" plain @click="cancel" />
 									<c-button v-if="options.showConfirm" :custom-style="{ flex: 1 }"
 										:text="options.confirmText" size="small" @click="confirm" />
 								</view>
@@ -62,6 +64,7 @@
 </template>
 
 <script>
+	let ins
 	export default {
 		options: {
 			virtualHost: true
@@ -131,6 +134,7 @@
 			if (!this.$slots.event && this.openModalInputEvent) uni.$on(this.openModalInputEvent, this.open)
 		},
 		destroyed() {
+			ins = void 0
 			if (!this.$slots.event && this.openModalInputEvent) uni.$off(this.openModalInputEvent)
 		},
 		data() {
@@ -166,6 +170,7 @@
 					this.show = true
 					this.resolve = resolve
 					this.reject = reject
+					ins = this
 				})
 			},
 			getOptions(opts, config) {
@@ -195,23 +200,24 @@
 				}
 			},
 			confirm() {
-				const close = () => this.show = false
+				const vm = this || ins
+				const close = () => vm.show = false
 				const res = {
-					value: this.options.value
+					value: vm.options.value
 				}
-				if (this.options.asyncClose) {
+				if (vm.options.asyncClose) {
 					res.close = close
 				} else {
 					close()
 				}
-				this.resolve(res)
-				this.options.onConfirm(res)
+				vm.resolve(res)
+				vm.options.onConfirm(res)
 			},
 			cancel() {
-				this._closeHandle('cancel')
+				(this || ins)._closeHandle('cancel')
 			},
 			close() {
-				this._closeHandle('close')
+				(this || ins)._closeHandle('close')
 			},
 			_closeHandle(code) {
 				this.show = false
@@ -245,6 +251,7 @@
 	.C-MODAL-INPUT {
 		display: contents;
 	}
+
 	/* #endif */
 
 	.c-modal-input {
