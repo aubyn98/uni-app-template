@@ -26,16 +26,16 @@
 									</view>
 								</slot>
 							</view>
-							<slot name="footer" :options="options" :close="close" :cancel="cancel" :confirm="confirm">
+							<slot name="footer" :options="options">
 								<view v-if="options.showFooter" class="c-modal-footer"
 									:style="{ gridTemplateColumns: options.footerColumns }">
-									<slot name="cancel" :options="options" :close="close" :cancel="cancel">
+									<slot name="cancel" :options="options">
 										<view class="c-model-button" v-if="options.showCancel"
 											:style="[options.cancelStyle]" @click="cancel">
 											{{options.cancelText}}
 										</view>
 									</slot>
-									<slot name="confirm" :options="options" :close="close" :confirm="confirm">
+									<slot name="confirm" :options="options">
 										<view class="c-model-button" v-if="options.showConfirm"
 											:style="[options.confirmStyle]" @click="confirm">
 											{{options.confirmText}}
@@ -57,7 +57,6 @@
 </template>
 
 <script>
-	let ins
 	export default {
 		options: {
 			virtualHost: true
@@ -140,7 +139,6 @@
 			if (!this.$slots.event && this.openModalEvent) uni.$on(this.openModalEvent, this.open)
 		},
 		destroyed() {
-			ins = void 0
 			if (!this.$slots.event && this.openModalEvent) uni.$off(this.openModalEvent)
 		},
 		data() {
@@ -148,10 +146,7 @@
 				show: false,
 				options: this.getOptions(),
 				resolve: () => void 0,
-				reject: () => void 0,
-				cls: {
-					b: () => void 0
-				}
+				reject: () => void 0
 			}
 		},
 		methods: {
@@ -161,7 +156,6 @@
 					this.show = true
 					this.resolve = resolve
 					this.reject = reject
-					ins = this
 				})
 			},
 			getOptions(opts, config) {
@@ -200,20 +194,19 @@
 				return res
 			},
 			confirm() {
-				const vm = this || ins
 				let close = () => {
-					vm.show = false
+					this.show = false
 					close = null
 				}
-				if (!vm.options.asyncClose) close()
-				vm.resolve(close)
-				vm.options.onConfirm(close)
+				if (!this.options.asyncClose) close()
+				this.resolve(close)
+				this.options.onConfirm(close)
 			},
 			cancel() {
-				(this || ins)._closeHandle('cancel')
+				this._closeHandle('cancel')
 			},
 			close() {
-				(this || ins)._closeHandle('close')
+				this._closeHandle('close')
 			},
 			_closeHandle(code) {
 				this.show = false

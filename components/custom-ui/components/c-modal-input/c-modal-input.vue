@@ -41,7 +41,7 @@
 									</slot>
 								</view>
 							</slot>
-							<slot name="footer" :options="options" :close="close" :cancel="cancel" :confirm="confirm">
+							<slot name="footer" :options="options">
 								<view class="c-model-input-footer">
 									<c-button v-if="options.showCancel"
 										:custom-style="{ flex: 1, marginRight: '48rpx' }" :text="options.cancelText"
@@ -64,7 +64,6 @@
 </template>
 
 <script>
-	let ins
 	export default {
 		options: {
 			virtualHost: true
@@ -134,7 +133,6 @@
 			if (!this.$slots.event && this.openModalInputEvent) uni.$on(this.openModalInputEvent, this.open)
 		},
 		destroyed() {
-			ins = void 0
 			if (!this.$slots.event && this.openModalInputEvent) uni.$off(this.openModalInputEvent)
 		},
 		data() {
@@ -170,7 +168,6 @@
 					this.show = true
 					this.resolve = resolve
 					this.reject = reject
-					ins = this
 				})
 			},
 			getOptions(opts, config) {
@@ -200,24 +197,23 @@
 				}
 			},
 			confirm() {
-				const vm = this || ins
-				const close = () => vm.show = false
+				const close = () => this.show = false
 				const res = {
-					value: vm.options.value
+					value: this.options.value
 				}
-				if (vm.options.asyncClose) {
+				if (this.options.asyncClose) {
 					res.close = close
 				} else {
 					close()
 				}
-				vm.resolve(res)
-				vm.options.onConfirm(res)
+				this.resolve(res)
+				this.options.onConfirm(res)
 			},
 			cancel() {
-				(this || ins)._closeHandle('cancel')
+				this._closeHandle('cancel')
 			},
 			close() {
-				(this || ins)._closeHandle('close')
+				this._closeHandle('close')
 			},
 			_closeHandle(code) {
 				this.show = false
