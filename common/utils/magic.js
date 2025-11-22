@@ -117,3 +117,55 @@ export function getOnLoadParams(e) {
 	}
 	return e
 }
+
+/**
+ * 设置本地缓存（带过期时间）
+ * @param {string} key 缓存键名
+ * @param {any} data 缓存数据
+ * @param {number} expire 过期时间（毫秒），默认1小时
+ * @returns {boolean} 设置成功返回true，失败返回false
+ */
+export function setCache(key, data, expire = 1000 * 60 * 60 * 1) {
+	try {
+		uni.setStorageSync(key, {
+			time: Date.now(),
+			expire,
+			data
+		})
+		return true
+	} catch (error) {
+		console.error(`设置缓存[${key}]失败：`, error);
+		return false
+	}
+}
+
+/**
+ * 获取本地缓存（自动校验有效性，过期自动清理）
+ * @param {string} key 缓存键名
+ * @returns {any|null} 有效数据返回数据，否则返回null
+ */
+export function getCache(key) {
+	try {
+		const cache = uni.getStorageSync(key);
+		const isInvalidCache = !cache ||
+			typeof cache !== 'object' ||
+			Array.isArray(cache) ||
+			!('time' in cache) ||
+			!('expire' in cache);
+
+		if (isInvalidCache) {
+			cache && uni.clearStorageSync(key);
+			return null;
+		}
+
+		if (Date.now() - cache.time >= cache.expire) {
+			uni.clearStorageSync(key);
+			return null;
+		}
+
+		return cache.data;
+	} catch (error) {
+		console.error(`获取缓存[${key}]失败：`, error);
+		return null;
+	}
+}
