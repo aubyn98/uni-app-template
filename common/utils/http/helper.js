@@ -1,6 +1,10 @@
 import {
 	cloneDeepWithDescriptors,
 } from '../object'
+import {
+	getCache,
+	setCache
+} from '../magic'
 export const CONTENT_TYPES = Object.freeze({
 	/** json */
 	JSON: 'application/json;charset=UTF-8',
@@ -134,11 +138,13 @@ function normalizeOpts(loadingText, defaultOpts, options) {
 	return {
 		qs: true,
 		showError: true,
+		isCache: false,
+		cacheExpire: 1000 * 60 * 60 * 1,
 		loadingText,
 		loading: true,
 		reqInterceptor: (e) => e,
-		resInterceptor: (e) => e,
-		errInterceptor: (e) => e,
+		resInterceptor: (res) => res,
+		errInterceptor: () => void 0,
 		...defaultOpts,
 		...options
 	}
@@ -162,6 +168,11 @@ export function createRequest(defaultConfig, defaultOpts) {
 			configRes
 		} = normalizeConfig(url, defaultConfig, config)
 
+		if (options.isCache) {
+			const cache = getCache(url)
+			if (cache) return Promise.resolve(cache)
+		}
+
 		options.loading && startLoading(options.loadingText)
 		let closeLoading = () => {
 			options.loading && endLoading()
@@ -181,14 +192,20 @@ export function createRequest(defaultConfig, defaultOpts) {
 			...configRes
 		})
 
-		return promisifyRequest('request', finalArgvs).then(res => {
-			closeLoading()
-			return options.resInterceptor(res, options, reloadFn)
-		}).catch(e => {
-			closeLoading && closeLoading()
-			options.errInterceptor(e)
-			return Promise.reject(e)
-		})
+		return promisifyRequest('request', finalArgvs)
+			.then(res => {
+				closeLoading()
+				return options.resInterceptor(res, options, reloadFn)
+			})
+			.then(temp => {
+				if (options.isCache) setCache(url, temp, options.cacheExpire)
+				return temp
+			})
+			.catch(e => {
+				closeLoading && closeLoading()
+				options.errInterceptor(e)
+				return Promise.reject(e)
+			})
 	}
 	_request.get = simplify(_request, 'get')
 	_request.post = simplify(_request, 'post')
