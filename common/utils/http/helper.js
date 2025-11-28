@@ -3,7 +3,8 @@ import {
 } from '../object'
 import {
 	getCache,
-	setCache
+	setCache,
+	compose
 } from '../magic'
 export const CONTENT_TYPES = Object.freeze({
 	/** json */
@@ -134,8 +135,15 @@ function normalizeConfig(url, defaultConfig, config) {
 	}
 }
 
+function normalizeInterceptor(interceptor) {
+	if (interceptor instanceof Array) {
+		return compose(...interceptor)
+	}
+	return interceptor
+}
+
 function normalizeOpts(loadingText, defaultOpts, options) {
-	return {
+	const opts = {
 		qs: true,
 		showError: true,
 		isCache: false,
@@ -147,7 +155,13 @@ function normalizeOpts(loadingText, defaultOpts, options) {
 		errInterceptor: () => void 0,
 		...defaultOpts,
 		...options
-	}
+	};
+
+	['reqInterceptor', 'resInterceptor', 'errInterceptor'].forEach(k => {
+		opts[k] = normalizeInterceptor(opts[k])
+	})
+	
+	return opts
 }
 
 function getReload(fn, argvs) {
