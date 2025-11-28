@@ -135,6 +135,14 @@
 	&[disabled]{
 		background: $disabled-color;
 		box-shadow: none;
+		color: white;
+		
+		&._plain {
+			color: white;
+			&::after {
+				border-color: $disabled-color;
+			}
+		}
 	}
 
 }
