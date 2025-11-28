@@ -135,13 +135,6 @@ function normalizeConfig(url, defaultConfig, config) {
 	}
 }
 
-function normalizeInterceptor(interceptor) {
-	if (interceptor instanceof Array) {
-		return compose(...interceptor)
-	}
-	return interceptor
-}
-
 function normalizeOpts(loadingText, defaultOpts, options) {
 	const opts = {
 		qs: true,
@@ -158,9 +151,10 @@ function normalizeOpts(loadingText, defaultOpts, options) {
 	};
 
 	['reqInterceptor', 'resInterceptor', 'errInterceptor'].forEach(k => {
-		opts[k] = normalizeInterceptor(opts[k])
+		const interceptor = opts[k]
+		opts[k] = compose.apply(this, typeof interceptor === 'function' ? [interceptor] : interceptor)
 	})
-	
+
 	return opts
 }
 
