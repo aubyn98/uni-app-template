@@ -136,10 +136,9 @@ function normalizeConfig(url, defaultConfig, config) {
 }
 
 function normalizeInterceptor(interceptor) {
-	if (interceptor instanceof Array) {
-		return compose(...interceptor)
-	}
-	return interceptor
+	if (typeof interceptor === 'function') return interceptor
+	if (interceptor instanceof Array) return compose(...interceptor)
+	return (e) => e
 }
 
 function normalizeOpts(loadingText, defaultOpts, options) {
@@ -160,7 +159,7 @@ function normalizeOpts(loadingText, defaultOpts, options) {
 	['reqInterceptor', 'resInterceptor', 'errInterceptor'].forEach(k => {
 		opts[k] = normalizeInterceptor(opts[k])
 	})
-	
+
 	return opts
 }
 
