@@ -4,7 +4,7 @@ import {
 import {
 	getCache,
 	setCache,
-	compose
+	composeAsync
 } from '../magic'
 export const CONTENT_TYPES = Object.freeze({
 	/** json */
@@ -161,7 +161,7 @@ function normalizeOpts(loadingText, defaultOpts = {}, options = {}) {
 			...normalizeInterceptor(defaultOpts[k]),
 			...normalizeInterceptor(options[k])
 		]
-		opts[k] = mergedInterceptors.length ? compose(...mergedInterceptors) : (e) => e
+		opts[k] = mergedInterceptors.length ? composeAsync(...mergedInterceptors) : (e) => e
 	})
 
 	return opts

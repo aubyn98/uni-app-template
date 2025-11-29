@@ -1,11 +1,31 @@
 // 组合函数
 export function compose(...fns) {
+	if (fns.some(fn => typeof fn !== 'function')) {
+		throw new TypeError('compose 参数必须是函数');
+	}
+	if (fns.length === 0) return (...args) => args.length === 1 ? args[0] : args;
 	return fns.reduce(
 		(l, r) =>
 		function(...argv) {
 			return r.call(this, () => l.apply(this, argv), ...argv)
 		}
 	)
+}
+
+export function composeAsync(...fns) {
+	if (fns.some(fn => typeof fn !== 'function')) {
+		throw new TypeError('composeAsync 参数必须是函数');
+	}
+
+	if (fns.length === 0) {
+		return async (...args) => args.length === 1 ? args[0] : args;
+	}
+
+	return fns.reduce((l, r) => {
+		return async function(...argv) {
+			return r.call(this, async () => l.apply(this, argv), ...argv);
+		};
+	});
 }
 
 // 防抖
@@ -85,24 +105,24 @@ export function getSearchParams(str) {
 }
 
 export function getRandomStr(len = 8, $chars) {
-  len = len || 32;
-  $chars ||= 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
-  const maxPos = $chars.length;
-  let pwd = '';
-  for (let i = 0; i < len; i++) {
-    pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
-  }
-  return pwd;
+	len = len || 32;
+	$chars ||= 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+	const maxPos = $chars.length;
+	let pwd = '';
+	for (let i = 0; i < len; i++) {
+		pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+	}
+	return pwd;
 }
 
 // 获取路径参数
 export function getSearchStr(params) {
 	return Object.keys(params)
-	    .map(key => {
-	      const v = params[key];
-	      return `${key}=${v && typeof v === 'object' ? JSON.stringify(v) : v}`;
-	    })
-	    .join('&');
+		.map(key => {
+			const v = params[key];
+			return `${key}=${v && typeof v === 'object' ? JSON.stringify(v) : v}`;
+		})
+		.join('&');
 }
 
 // 获取页面参数
