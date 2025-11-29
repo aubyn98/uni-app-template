@@ -136,12 +136,12 @@ function normalizeConfig(url, defaultConfig, config) {
 }
 
 function normalizeInterceptor(interceptor) {
-	if (typeof interceptor === 'function') return interceptor
-	if (interceptor instanceof Array) return compose(...interceptor)
-	return (e) => e
+	if (typeof interceptor === 'function') return [interceptor]
+	if (interceptor instanceof Array) return interceptor.filter(item => typeof item === 'function')
+	return []
 }
 
-function normalizeOpts(loadingText, defaultOpts, options) {
+function normalizeOpts(loadingText, defaultOpts = {}, options = {}) {
 	const opts = {
 		qs: true,
 		showError: true,
@@ -157,7 +157,11 @@ function normalizeOpts(loadingText, defaultOpts, options) {
 	};
 
 	['reqInterceptor', 'resInterceptor', 'errInterceptor'].forEach(k => {
-		opts[k] = normalizeInterceptor(opts[k])
+		const mergedInterceptors = [
+			...normalizeInterceptor(defaultOpts[k]),
+			...normalizeInterceptor(options[k])
+		]
+		opts[k] = mergedInterceptors.length ? compose(...mergedInterceptors) : (e) => e
 	})
 
 	return opts
