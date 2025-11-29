@@ -28,6 +28,37 @@ export function composeAsync(...fns) {
 	});
 }
 
+export function pipe(...fns) {
+	if (fns.some(fn => typeof fn !== 'function')) {
+		throw new TypeError('pipe 参数必须是函数');
+	}
+	if (fns.length === 0) return (...args) => args.length === 1 ? args[0] : args;
+	return fns.reduce(
+		(l, r) =>
+		function(...argv) {
+			return l.call(this, () => r.apply(this, argv), ...argv)
+		}
+	)
+}
+
+export function pipeAsync(...fns) {
+	if (fns.some(fn => typeof fn !== 'function')) {
+		throw new TypeError('pipeAsync 参数必须是函数');
+	}
+
+	if (fns.length === 0) {
+		return async (...args) => args.length === 1 ? args[0] : args;
+	}
+
+	return fns.reduce((l, r) => {
+		return async function(...argv) {
+			return l.call(this, async () => r.apply(this, argv), ...argv);
+		};
+	});
+}
+
+
+
 // 防抖
 export function debounce(fn, delay) {
 	let timer = null;
