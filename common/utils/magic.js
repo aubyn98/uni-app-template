@@ -6,8 +6,8 @@ export function compose(...fns) {
 	if (fns.length === 0) return (...args) => args.length === 1 ? args[0] : args;
 	return fns.reduce(
 		(l, r) =>
-		function(...argv) {
-			return r.call(this, () => l.apply(this, argv), ...argv)
+		function(...args) {
+			return r.call(this, (...nArgs) => l.apply(this, nArgs.concat(args)), ...args)
 		}
 	)
 }
@@ -22,8 +22,8 @@ export function composeAsync(...fns) {
 	}
 
 	return fns.reduce((l, r) => {
-		return async function(...argv) {
-			return r.call(this, async () => l.apply(this, argv), ...argv);
+		return async function(...args) {
+			return r.call(this, async (...nArgs) => l.apply(this, nArgs.concat(args)), ...args);
 		};
 	});
 }
@@ -35,8 +35,8 @@ export function pipe(...fns) {
 	if (fns.length === 0) return (...args) => args.length === 1 ? args[0] : args;
 	return fns.reduce(
 		(l, r) =>
-		function(...argv) {
-			return l.call(this, () => r.apply(this, argv), ...argv)
+		function(...args) {
+			return l.call(this, (...nArgs) => r.apply(this, nArgs.concat(args)), ...args)
 		}
 	)
 }
@@ -51,13 +51,11 @@ export function pipeAsync(...fns) {
 	}
 
 	return fns.reduce((l, r) => {
-		return async function(...argv) {
-			return l.call(this, async () => r.apply(this, argv), ...argv);
+		return async function(...args) {
+			return l.call(this, async (...nArgs) => r.apply(this, nArgs.concat(args)), ...args);
 		};
 	});
 }
-
-
 
 // 防抖
 export function debounce(fn, delay) {
