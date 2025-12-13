@@ -141,11 +141,15 @@ function normalizeInterceptor(interceptor) {
 	return []
 }
 
-function normalizeOpts(loadingText, defaultOpts = {}, options = {}) {
+function normalizeOpts({
+	url,
+	loadingText
+}, defaultOpts = {}, options = {}) {
 	const opts = {
 		qs: true,
 		showError: true,
 		isCache: false,
+		cacheKey: `api:${url}`,
 		cacheExpire: 1000 * 60 * 60 * 1,
 		loadingText,
 		loading: true,
@@ -177,7 +181,10 @@ export function createRequest(defaultConfig, defaultOpts) {
 		const source = CancelToken.source()
 		const reloadFn = getReload(_request, arguments)
 
-		options = normalizeOpts('加载中...', defaultOpts, options)
+		options = normalizeOpts({
+			url,
+			loadingText: '加载中...'
+		}, defaultOpts, options)
 
 		const {
 			urlRes,
@@ -186,7 +193,7 @@ export function createRequest(defaultConfig, defaultOpts) {
 		} = normalizeConfig(url, defaultConfig, config)
 
 		if (options.isCache) {
-			const cache = getCache(url)
+			const cache = getCache(options.cacheKey)
 			if (cache) return Promise.resolve(cache)
 		}
 
@@ -215,7 +222,7 @@ export function createRequest(defaultConfig, defaultOpts) {
 				return options.resInterceptor(res, options, reloadFn)
 			})
 			.then(temp => {
-				if (options.isCache) setCache(url, temp, options.cacheExpire)
+				if (options.isCache) setCache(options.cacheKey, temp, options.cacheExpire)
 				return temp
 			})
 			.catch(e => {
@@ -240,7 +247,9 @@ export function createUploadFile(defaultConfig, defaultOpts) {
 			...params
 		}
 
-		options = normalizeOpts('上传中...', defaultOpts, options)
+		options = normalizeOpts({
+			loadingText: '上传中...'
+		}, defaultOpts, options)
 
 		const {
 			urlRes,
@@ -302,7 +311,9 @@ export function createDownloadFile(defaultConfig, defaultOpts) {
 	return function _downloadFile(url, params, config, options) {
 		const source = CancelToken.source()
 
-		options = normalizeOpts('下载中...', defaultOpts, options)
+		options = normalizeOpts({
+			loadingText: '下载中...'
+		}, defaultOpts, options)
 
 		const {
 			urlRes,
