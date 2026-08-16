@@ -203,12 +203,12 @@ export function getCache(key) {
 			!('expire' in cache);
 
 		if (isInvalidCache) {
-			cache && uni.clearStorageSync(key);
+			cache && uni.removeStorageSync(key);
 			return null;
 		}
 
 		if (Date.now() - cache.time >= cache.expire) {
-			uni.clearStorageSync(key);
+			uni.removeStorageSync(key);
 			return null;
 		}
 
