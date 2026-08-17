@@ -218,3 +218,50 @@ export function getCache(key) {
 		return null;
 	}
 }
+
+/**
+ * 续期缓存，重置过期倒计时（沿用原有expire时长）
+ * @param {string} key 缓存键名
+ * @returns {boolean} 续期成功返回true；缓存不存在/已过期返回false
+ */
+export function renewCache(key) {
+	try {
+		const cache = uni.getStorageSync(key);
+		const isInvalidCache = !cache ||
+			typeof cache !== 'object' ||
+			Array.isArray(cache) ||
+			!('time' in cache) ||
+			!('expire' in cache);
+
+		if (isInvalidCache) return false;
+
+		// 判断是否已经过期
+		if (Date.now() - cache.time >= cache.expire) {
+			uni.removeStorageSync(key);
+			return false;
+		}
+
+		// 重置创建时间，实现续期
+		cache.time = Date.now();
+		uni.setStorageSync(key, cache);
+		return true;
+	} catch (error) {
+		console.error(`续期缓存[${key}]失败：`, error);
+		return false;
+	}
+}
+
+/**
+ * 删除指定缓存
+ * @param {string} key 缓存键名
+ * @returns {boolean}
+ */
+export function removeCache(key) {
+	try {
+		uni.removeStorageSync(key);
+		return true;
+	} catch (error) {
+		console.error(`删除缓存[${key}]失败：`, error);
+		return false;
+	}
+}
