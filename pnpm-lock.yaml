@@ -1,0 +1,16 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  utils-uniapp:
+    specifier: ^1.0.0
+    version: 1.0.0
+
+packages:
+
+  /utils-uniapp@1.0.0:
+    resolution: {integrity: sha512-I19a0HTQdYBvLwB+QDEo69+MzIGF38lsqu9IwVLb4koWNanDc/OzwEDMYrDyelSdck7TJ/jgYU2HPIbBHGvm6A==}
+    dev: false

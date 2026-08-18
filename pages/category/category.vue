@@ -369,7 +369,6 @@
 						}]
 					})
 					this.goodsCategoryTree = Object.freeze(data)
-					console.log(this.goodsCategoryTree)
 					return data
 				})
 			}

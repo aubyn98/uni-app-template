@@ -1,8 +1,8 @@
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
 export const API_ADDRESS = Object.freeze({
-	DEV: 'http://192.168.42.106:11081',
-	PRO: 'https://mp.api.360hwj.com'
+	DEV: 'http://mall.api.pnbly.com/',
+	PRO: 'http://mall.api.pnbly.com/'
 })
 
 export const BASE_URL = API_ADDRESS[IS_DEV ? 'DEV' : 'PRO']

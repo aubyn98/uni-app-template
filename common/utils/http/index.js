@@ -4,20 +4,14 @@ import {
 } from '../../config'
 import store from '@/store'
 import {
-	hasOwnProperty,
-} from '../object'
-import {
 	showToast
 } from '../project'
 import {
+	hasOwnProperty,
 	createRequest,
 	createUploadFile,
 	createDownloadFile
-} from './helper'
-export {
-	showLoading,
-	hideLoading
-} from './helper'
+} from 'utils-uniapp'
 
 function errInterceptor(e) {
 	const pages = uni.$u.page()
@@ -100,5 +94,4 @@ export const request = createRequest({
 	resInterceptor,
 	errInterceptor
 })
-
 export default request
