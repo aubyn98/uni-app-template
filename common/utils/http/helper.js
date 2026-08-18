@@ -113,7 +113,7 @@ function normalizeHeaders(headers) {
 	return typeof headers === 'function' ? headers : () => headers
 }
 
-function normalizeConfig(url, defaultConfig, config) {
+function normalizeConfig(url, defaultConfig = {}, config = {}) {
 	const tempConfig = {
 		...defaultConfig,
 		...config,
