@@ -6,11 +6,11 @@ settings:
 
 dependencies:
   utils-uniapp:
-    specifier: ^1.0.1
-    version: 1.0.1
+    specifier: ^1.0.2
+    version: 1.0.2
 
 packages:
 
-  /utils-uniapp@1.0.1:
-    resolution: {integrity: sha512-hfa72jrBeJoYxKqPgWsrrzBo24O+zwCtZHWQhWix8w4Q8N6oDLlVZykpYtECSkyChb0/r4tVjxcFCEAJjxi3oA==}
+  /utils-uniapp@1.0.2:
+    resolution: {integrity: sha512-A/klXa5WT/egtbS3dKXuIxVpq/NutqxLg+ebimHmsIiPtk+LwJ03M2nnxrnMxtg+PvasaQZFgCJ/oFfMGkYEZg==}
     dev: false
