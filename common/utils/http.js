@@ -59,6 +59,18 @@ export const downloadFile = createDownloadFile({
 
 
 
+function uploadResInterceptor(next, res, options, reloadFn) {
+	try {
+		res.data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data
+		return next(res, options, reloadFn)
+	} catch (err) {
+		return Promise.reject({
+			type: 'code error',
+			res: err
+		})
+	}
+}
+
 export const uploadFile = createUploadFile({
 	baseURL: BASE_URL,
 	headers() {
@@ -70,7 +82,7 @@ export const uploadFile = createUploadFile({
 		}
 	}
 }, {
-	resInterceptor,
+	resInterceptor: [resInterceptor, uploadResInterceptor],
 	errInterceptor
 })
 
