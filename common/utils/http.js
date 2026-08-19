@@ -1,11 +1,11 @@
 import {
 	BASE_URL,
 	TOKEN_KEY
-} from '../../config'
+} from '../config'
 import store from '@/store'
 import {
 	showToast
-} from '../project'
+} from './project'
 import {
 	hasOwnProperty,
 	createRequest,
