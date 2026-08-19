@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/aubyn98/uni-app-template#readme",
   "dependencies": {
-    "utils-uniapp": "^1.0.6"
+    "utils-uniapp": "^1.0.8"
   }
 }
