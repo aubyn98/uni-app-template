@@ -1,35 +1,33 @@
-import * as apis from '@/common/apis';
+import {
+	get_payment_order_params,
+	get_payment_charge_params,
+	get_order_supplement_payment_params
+} from '@/common/apis';
+import {
+	alipaySubmit
+} from 'utils-uniapp'
 
-function createNode(key, data, form) {
-	const node = document.createElement('input')
-	node.name = key
-	node.value = data[key]
-	form.append(node)
-}
+const PAYMENT_PARAM_APIS = {
+	'order/payment/order/params': get_payment_order_params,
+	'order/payment/charge/params': get_payment_charge_params,
+	'order/orderSupplement/payment/params': get_order_supplement_payment_params
+};
 
-
-export function aliPay(params, type = 'pay') {
-
-	return apis.get_alipay(params).then(res => {
-		if (!res.status) {
-			return uni.showToast({
-				icon: 'none',
-				title: res.message
+export function aliPay(opts) {
+	const type = opts.type || 'pay' //pay,charge
+	return new Promise((resolve, reject) => {
+		uni.showLoading({
+			title: '请稍候...'
+		});
+		return PAYMENT_PARAM_APIS[opts.url](opts.data).then(body => {
+			let data = body.data;
+			delete data.alipayUrl
+			alipaySubmit(data, {
+				type
 			})
-		}
-
-		const data = res.data;
-		delete data.alipayUrl
-		const form = document.createElement('form')
-		form.action = 'https://mapi.alipay.com/gateway.do'
-		type == 'pay' ? Object.keys(data).forEach((key, i) => (key != 'sn' && key != 'id') &&
-			createNode(key, data, form)) : Object.keys(data).forEach((key, i) => createNode(key,
-			data, form))
-		document.getElementsByTagName('body')[0].append(form)
-		form.submit()
+			uni.hideLoading()
+		}).catch(e => {
+			uni.hideLoading()
+		})
 	})
-}
-
-export default {
-	aliPay
 }
