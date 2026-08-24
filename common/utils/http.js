@@ -26,7 +26,10 @@ function errInterceptor(e) {
 	}
 }
 
-function resInterceptor(res, options, reloadFn) {
+function resInterceptor(res, {
+	options,
+	reloadFn
+}) {
 	const data = res.data
 	if (hasOwnProperty(data, 'status') && !data.status) {
 		if (['invalidAuthorization' /* , 'parameterMustBeNotnull' */ ].includes(data.responseCode)) {
@@ -59,10 +62,16 @@ export const downloadFile = createDownloadFile({
 
 
 
-function uploadResInterceptor(next, res, options, reloadFn) {
+function uploadResInterceptor(next, res, {
+	options,
+	reloadFn
+}) {
 	try {
 		res.data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data
-		return next(res, options, reloadFn)
+		return next(res, {
+			options,
+			reloadFn
+		})
 	} catch (err) {
 		return Promise.reject({
 			type: 'code error',
