@@ -71,7 +71,8 @@
 			"pages": [{
 				"path": "pages/errorPage/errorPage",
 				"style": {
-					"navigationBarTitleText": "",
+					"navigationBarTitleText": "错误",
+					"navigationStyle": "custom",
 					"enablePullDownRefresh": false
 				}
 			}]

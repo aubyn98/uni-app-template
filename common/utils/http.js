@@ -8,32 +8,41 @@ import {
 } from './project'
 import {
 	hasOwnProperty,
+	getCurrentPage,
 	createRequest,
 	createUploadFile,
 	createDownloadFile
 } from 'utils-uniapp'
 
-function errInterceptor(e) {
-	const pages = uni.$u.page()
-	if ((e.type == 'fail' || e.res.statusCode == 502) && pages != '/pages/errorPage/errorPage') {
+function errInterceptor({
+	err
+}) {
+	const page = getCurrentPage()
+	if ((err.type == 'fail' || err.res.statusCode == 502) && page.navUrl != '/pages/errorPage/errorPage') {
 		uni.$u.route({
-			url: '/pages/errorPage/errorPage',
+			url: '/packageOther/pages/errorPage/errorPage',
 			type: 'redirectTo',
 			params: {
-				type: e.res.statusCode == 502 ? '502' : 'fail'
+				type: err.res.statusCode == 502 ? '502' : 'fail',
+				redirectUrl: encodeURIComponent(page.navUrl)
 			}
 		})
 	}
 }
 
-function resInterceptor(res, {
+function resInterceptor({
+	res,
 	options,
-	reloadFn
+	reload
 }) {
-	const data = res.data
-	if (hasOwnProperty(data, 'status') && !data.status) {
-		if (['invalidAuthorization' /* , 'parameterMustBeNotnull' */ ].includes(data.responseCode)) {
-			return store.dispatch('user/login').then(reloadFn)
+	let data = res.data
+	if (res.header['x-encrypt-response']) {
+		const aseData = decryptAesCbc(data.encrypted, AesKey)
+		data = JSON.parse(aseData)
+	}
+	if (hasOwnProperty(data, 'status') && data.status !== 200) {
+		if (['TokenInvalidException'].includes(data.data)) {
+			return store.dispatch('user/login').then(() => reload())
 		}
 		if (hasOwnProperty(data, 'message') && options.showError) showToast(data.message)
 		return Promise.reject({
@@ -62,16 +71,12 @@ export const downloadFile = createDownloadFile({
 
 
 
-function uploadResInterceptor(next, res, {
-	options,
-	reloadFn
-}) {
+function uploadResInterceptor({
+	res
+}, next) {
 	try {
 		res.data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data
-		return next(res, {
-			options,
-			reloadFn
-		})
+		return next()
 	} catch (err) {
 		return Promise.reject({
 			type: 'code error',
