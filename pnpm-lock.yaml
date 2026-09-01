@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       utils-uniapp:
-        specifier: ^1.2.1
-        version: 1.2.1
+        specifier: ^1.2.2
+        version: 1.2.2
 
 packages:
 
-  utils-uniapp@1.2.1:
-    resolution: {integrity: sha512-foFpNJvXfuv0Dc2MfMFE3QuYhBe3lhRkMOzj2YbDiaK++k8dyald55VIhlqwdw0eQcTAEAh+ekRvNAHpkRu19g==}
+  utils-uniapp@1.2.2:
+    resolution: {integrity: sha512-wlxAYK/kEsUIPtPhtsUQXZJl1KZJzLJkwkBBNIQT7Gnqbr+W3iJpsYSvLrvp2KjoMOw2eo6yxuSZLdD0CimgEA==}
 
 snapshots:
 
-  utils-uniapp@1.2.1: {}
+  utils-uniapp@1.2.2: {}
