@@ -10,15 +10,21 @@ export default {
 	},
 	mutations: {
 		initBarInfo(state) {
-			const statusBarHeight = state.statusBarHeight = uni.$u.sys('getWindowInfo').statusBarHeight;
+			let statusBarHeight = uni.$u.sys('getWindowInfo').statusBarHeight;
 			const MenuButton = uni.getMenuButtonBoundingClientRect()
 			while (!MenuButton || MenuButton.left == 0 || MenuButton.right == 0 || MenuButton.top == 0 || MenuButton
 				.bottom == 0 ||
 				MenuButton.width == 0 || MenuButton.height == 0) {
 				MenuButton = uni.getMenuButtonBoundingClientRect()
 			}
+			let marginTop = MenuButton.top - statusBarHeight
+			if (marginTop < 0) {
+				marginTop = 4
+				statusBarHeight = statusBarHeight - marginTop * 2
+			}
+			state.statusBarHeight = statusBarHeight
 			state.MenuButton = {
-				marginTop: MenuButton.top - statusBarHeight,
+				marginTop,
 				...MenuButton
 			};
 			state.titleHeight = MenuButton.height + MenuButton.top + state.MenuButton.marginTop
