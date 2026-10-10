@@ -96,6 +96,7 @@ export const uploadFile = createUploadFile({
 		}
 	}
 }, {
+	showError: true,
 	resInterceptor: [resInterceptor, uploadResInterceptor],
 	errInterceptor
 })
@@ -117,6 +118,7 @@ export const request = createRequest({
 		}
 	}
 }, {
+	showError: true,
 	resInterceptor,
 	errInterceptor
 })
