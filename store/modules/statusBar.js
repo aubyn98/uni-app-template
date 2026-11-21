@@ -1,3 +1,6 @@
+import {
+	isH5
+} from '@/common/config/index.js'
 export default {
 	namespaced: true,
 	state() {
@@ -38,12 +41,22 @@ export default {
 	mutations: {
 		initBarInfo(state) {
 			const windowInfo = uni.$u.sys('getWindowInfo')
+			const screenWidth = windowInfo.screenWidth
 			let statusBarHeight = windowInfo.statusBarHeight;
-			const MenuButton = uni.getMenuButtonBoundingClientRect()
-			while (!MenuButton || MenuButton.left == 0 || MenuButton.right == 0 || MenuButton.top == 0 || MenuButton
-				.bottom == 0 ||
-				MenuButton.width == 0 || MenuButton.height == 0) {
-				MenuButton = uni.getMenuButtonBoundingClientRect()
+			const MenuButton = isH5 ? {
+				width: 0,
+				height: 32,
+				top: 5,
+				right: screenWidth,
+				bottom: 40,
+				left: screenWidth,
+			} : uni.getMenuButtonBoundingClientRect?.()
+			if (!isH5) {
+				while (!MenuButton || MenuButton.left == 0 || MenuButton.right == 0 || MenuButton.top == 0 || MenuButton
+					.bottom == 0 ||
+					MenuButton.width == 0 || MenuButton.height == 0) {
+					MenuButton = uni.getMenuButtonBoundingClientRect?.()
+				}
 			}
 			let marginTop = MenuButton.top - statusBarHeight
 			if (marginTop < 0) {
@@ -53,7 +66,7 @@ export default {
 			state.statusBarHeight = statusBarHeight
 			state.MenuButton = {
 				marginTop,
-				marginRight: windowInfo.screenWidth - MenuButton.right,
+				marginRight: screenWidth - MenuButton.right,
 				...MenuButton
 			};
 			state.titleHeight = MenuButton.height + MenuButton.top + state.MenuButton.marginTop

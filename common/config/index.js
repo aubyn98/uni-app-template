@@ -1,5 +1,12 @@
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
+// #ifdef H5
+export const isH5 = true
+// #endif
+// #ifndef H5
+export const isH5 = false
+// #endif
+
 export const API_ADDRESS = Object.freeze({
 	DEV: 'http://mall.api.pnbly.com/',
 	PRO: 'http://mall.api.pnbly.com/'
