@@ -62,7 +62,7 @@
 				return 0
 			},
 			paddingX() {
-				return (this.MenuButton.width + 12) + 'px'
+				return (this.MenuButton.width + this.MenuButton.marginRight * 2) + 'px'
 			},
 			paddingY() {
 				return this.MenuButton.marginTop + 'px'
